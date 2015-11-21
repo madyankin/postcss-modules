@@ -1,0 +1,8 @@
+.title {
+    color: black;
+    font-size: 40px;
+}
+
+.figure {
+    composes: another-mixin from "test/fixtures/a.css";
+}

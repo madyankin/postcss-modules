@@ -1,0 +1,14 @@
+._title_188o0_1 {
+    font-size: 40px;
+    color: black;
+    color: green;
+}
+
+._article_188o0_6 {
+    font-size: 16px;
+}
+
+:export {
+  title: _title_188o0_1;
+  article: _article_188o0_6;
+}

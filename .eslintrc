@@ -1,0 +1,17 @@
+{
+  "extends": "airbnb/base",
+  "ecmaFeatures": {
+    "modules": true
+  },
+  "env": {
+    "node": true,
+    "mocha": true,
+  },
+  "parser": "babel-eslint",
+  "rules": {
+    "quotes": [2, "single"],
+    "max-len": [2, 80, 4],
+    "key-spacing": 0,
+    "no-multi-spaces": 0,
+  }
+}

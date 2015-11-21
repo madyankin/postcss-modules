@@ -1,0 +1,43 @@
+{
+  "name": "postcss-modules",
+  "version": "0.1.0",
+  "description": "PostCSS plugin to use CSS Modules everywhere",
+  "main": "build/index.js",
+  "keywords": [
+    "postcss",
+    "css",
+    "postcss-plugin",
+    "modules",
+    "css modules",
+    "components"
+  ],
+  "author": "Alexander Madyankin <alexander@madyankin.name>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/outpunk/postcss-modules.git"
+  },
+  "dependencies": {
+    "css-modules-loader-core": "^1.0.0",
+    "postcss": "^5.0.12",
+    "postcss-import": "^7.1.3",
+    "string-hash": "^1.1.0"
+  },
+  "devDependencies": {
+    "babel": "^6.1.18",
+    "babel-cli": "^6.2.0",
+    "babel-core": "^6.2.1",
+    "babel-eslint": "^4.1.5",
+    "babel-preset-es2015": "^6.1.18",
+    "eslint": "^1.9.0",
+    "eslint-config-airbnb": "^1.0.0",
+    "mocha": "^2.3.4"
+  },
+  "scripts": {
+    "_pretest": "$(npm bin)/eslint index.js test",
+    "test": "$(npm bin)/mocha --require babel-core/register",
+    "transpile": "$(npm bin)/babel src -d build",
+    "prepublish": "npm run transpile",
+    "postpublish": "rm *.es5.js && git push --follow-tags"
+  }
+}

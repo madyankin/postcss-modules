@@ -1,0 +1,10 @@
+node_modules/
+test/
+
+.gitignore
+.travis.yml
+.eslintrc
+.babelrc
+.editorconfig
+
+gulpfile.js
