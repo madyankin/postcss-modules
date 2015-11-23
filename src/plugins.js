@@ -9,9 +9,4 @@ export default [
   Core.scope,
   importModules,
   applyImports,
-  // css => {
-  //   console.log('/*==========================================*/');
-  //   console.log('/* ' + css.source.input.file + ' */');
-  //   console.log(css.toString());
-  // },
 ];

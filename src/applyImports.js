@@ -1,5 +1,13 @@
-import { list }       from 'postcss';
-import { getImports } from './utils';
+function getImports(css) {
+  const imports = {};
+
+  css.each(importRule => {
+    if (importRule.selector.indexOf(':import') === -1) return;
+    importRule.walkDecls(decl => imports[decl.prop] = decl.value);
+  });
+
+  return imports;
+}
 
 
 function connectExportsWithImports(css) {
@@ -31,7 +39,7 @@ export default function applyImports(css) {
     if (exportRule.selector !== ':export') return;
 
     exportRule.walkDecls(decl => {
-      const exportedClasses = list.space(decl.value);
+      const exportedClasses = decl.value.split(' ');
 
       importedClasses.forEach(importedClass => {
         const index = exportedClasses.indexOf(importedClass);

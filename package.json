@@ -34,7 +34,7 @@
     "mocha": "^2.3.4"
   },
   "scripts": {
-    "_pretest": "$(npm bin)/eslint index.js test",
+    "pretest": "$(npm bin)/eslint src test",
     "test": "$(npm bin)/mocha --require babel-core/register",
     "transpile": "$(npm bin)/babel src -d build",
     "prepublish": "npm run transpile",
