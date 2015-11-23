@@ -15,20 +15,22 @@ function generateScopedName(name, filename, css) {
   return `_${ file }_${ numLines }_${ name }`;
 }
 
+it('works', () => {
+  const cssFileName          = path.join(FIXTURES, 'in/styles.css');
+  const cssFileNameExpected  = path.join(FIXTURES, 'out/styles.css');
+  const jsonFilenameExpected = path.join(FIXTURES, 'out/styles.json');
+  const css                  = fs.readFileSync(cssFileName).toString();
+  const cssExpected          = fs.readFileSync(cssFileNameExpected).toString();
+  const jsonExpected         = fs.readFileSync(jsonFilenameExpected).toString();
 
-describe('postcss-modules', () => {
-  it('transforms css', () => {
-    const fileName          = path.join(FIXTURES, 'in/styles.css');
-    const fileNameExpected  = path.join(FIXTURES, 'out/styles.css');
-    const css               = fs.readFileSync(fileName).toString();
-    const cssExpected       = fs.readFileSync(fileNameExpected).toString();
+  const processor = postcss([
+    plugin({
+      generateScopedName,
+      getJSON: json => assert.deepEqual(json, JSON.parse(jsonExpected)),
+    }),
+  ]);
 
-    const processor = postcss([
-      plugin({ generateScopedName }),
-    ]);
+  const result = processor.process(css, { from: cssFileName });
 
-    const result = processor.process(css, { from: fileName });
-
-    assert.equal(result.css, cssExpected);
-  });
+  assert.equal(result.css, cssExpected);
 });
