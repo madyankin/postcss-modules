@@ -1,18 +1,8 @@
-import atImport from 'postcss-import';
+import atImport                          from 'postcss-import';
+import plugins                           from './plugins';
+import { getImports, getNodeBySelector } from './utils';
 
-const importRegexp = /\:import\(['"](.*)['"]\)/;
-
-
-function getImportedClasses(css) {
-  const importedClasses = {};
-
-  css.each(importRule => {
-    if (!importRegexp.test(importRule.selector)) return;
-    importRule.walkDecls(decl => importedClasses[decl.prop] = decl.value);
-  });
-
-  return importedClasses;
-}
+export const importRegexp = /\:import\(['"](.*)['"]\)/;
 
 
 function selectClassesFromImportedCss(importedClasses) {
@@ -21,21 +11,21 @@ function selectClassesFromImportedCss(importedClasses) {
 
   return importedCss => {
     importedCss.each(node => {
-      const nodeSelector = node.selector.replace('.', '');
-      const selectorIndex = originalClasses.indexOf(nodeSelector);
+      if (node.selector !== ':export') return;
 
-      if (selectorIndex > -1) {
-        node.selector = `.${ transformedClasses[selectorIndex] }`;
-      } else {
-        node.remove();
-      }
+      node.walkDecls(decl => {
+        if (originalClasses.indexOf(decl.prop) > -1) return;
+
+        const rule = getNodeBySelector(importedCss, `.${ decl.value }`);
+        if (rule) rule.remove();
+      });
     });
   };
 }
 
 
 export default function importModule(css, result) {
-  const importedClasses = getImportedClasses(css);
+  const imports = getImports(css);
 
   css.each(importRule => {
     const match = importRegexp.exec(importRule.selector);
@@ -44,15 +34,13 @@ export default function importModule(css, result) {
 
     const moduleName = match[1];
     css.prepend({ name: 'import', params: `"${ moduleName }"` });
-
-    importRule.remove();
   });
 
   // Replace @import directives with imported modules
   atImport({
     plugins: [
-      // ...result.processor.plugins,
-      selectClassesFromImportedCss(importedClasses),
+      ...plugins,
+      selectClassesFromImportedCss(imports),
     ],
   })(css, result);
 }

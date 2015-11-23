@@ -1,23 +1,15 @@
-import postcss                from 'postcss';
-import Core                   from 'css-modules-loader-core';
-import importModules          from './importModules';
-import applyMixins            from './applyMixins';
-import { generateScopedName } from './utils';
-
+import postcss                   from 'postcss';
+import Core                      from 'css-modules-loader-core';
+import { generateScopedName }    from './utils';
+import plugins                   from './plugins';
+import cleanImportAndExportRules from './cleanImportAndExportRules';
 
 export default postcss.plugin('postcss-modules', (opts = {}) => {
   const scope = Core.scope;
-
   scope.generateScopedName = opts.generateScopedName || generateScopedName;
 
-  const processor = postcss([
-    // Core.values,
-    Core.localByDefault,
-    Core.extractImports,
-    scope,
-    importModules,
-    applyMixins,
+  return postcss([
+    ...plugins,
+    cleanImportAndExportRules,
   ]);
-
-  return processor;
 });

@@ -1,0 +1,24 @@
+._a_1_another-mixin {
+    height: 100px;
+    width: 200px;
+}
+
+._mixins_1_title {
+    color: black;
+    font-size: 40px;
+}
+
+._mixins_6_figure {
+    text-align: center
+}
+
+._styles_1_title {
+    color: green;
+}
+
+._styles_6_article {
+    font-size: 16px;
+}
+
+._styles_10_figure {
+}

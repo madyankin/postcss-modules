@@ -1,0 +1,12 @@
+.title {
+    composes: title from "test/fixtures/in/mixins.css";
+    color: green;
+}
+
+.article {
+    font-size: 16px;
+}
+
+.figure {
+    composes: figure from "test/fixtures/in/mixins.css";
+}
