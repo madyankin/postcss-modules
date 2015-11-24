@@ -1,4 +1,4 @@
-# postcss-each [![Build Status][ci-img]][ci]
+# postcss-modules [![Build Status][ci-img]][ci]
 
 A [PostCSS] plugin for css modules.
 
