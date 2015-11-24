@@ -1,3 +1,7 @@
+:global .page {
+    padding: 20px;
+}
+
 .title {
     composes: title from "test/fixtures/in/mixins.css";
     color: green;

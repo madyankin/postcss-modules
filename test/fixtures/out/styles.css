@@ -21,13 +21,17 @@
     border: 1px solid red;
 }
 
-._styles_1_title {
+.page {
+    padding: 20px;
+}
+
+._styles_5_title {
     color: green;
 }
 
-._styles_6_article {
+._styles_10_article {
     font-size: 16px;
 }
 
-._styles_10_figure {
+._styles_14_figure {
 }
