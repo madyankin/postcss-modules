@@ -8,8 +8,17 @@
     font-size: 40px;
 }
 
-._mixins_6_figure {
+._mixins_1_title:hover {
+    color: red;
+}
+
+._mixins_10_figure {
     text-align: center
+}
+
+._mixins_1_title:focus, ._mixins_10_figure:focus {
+    outline: none;
+    border: 1px solid red;
 }
 
 ._styles_1_title {

@@ -22,15 +22,17 @@ it('works', () => {
   const css                  = fs.readFileSync(cssFileName).toString();
   const cssExpected          = fs.readFileSync(cssFileNameExpected).toString();
   const jsonExpected         = fs.readFileSync(jsonFilenameExpected).toString();
+  let resultJson;
 
   const processor = postcss([
     plugin({
       generateScopedName,
-      getJSON: json => assert.deepEqual(json, JSON.parse(jsonExpected)),
+      getJSON: json => resultJson = json,
     }),
   ]);
 
   const result = processor.process(css, { from: cssFileName });
 
   assert.equal(result.css, cssExpected);
+  assert.deepEqual(resultJson, JSON.parse(jsonExpected));
 });

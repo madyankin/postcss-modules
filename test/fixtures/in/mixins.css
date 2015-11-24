@@ -3,7 +3,16 @@
     font-size: 40px;
 }
 
+.title:hover {
+    color: red;
+}
+
 .figure {
     composes: another-mixin from "test/fixtures/in/a.css";
     text-align: center
+}
+
+.title:focus, .figure:focus {
+    outline: none;
+    border: 1px solid red;
 }

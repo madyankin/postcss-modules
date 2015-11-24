@@ -20,11 +20,18 @@ function getUsedClasses(css) {
 
 
 export default function cleanUnusedClasses(css) {
-  const classes = getUsedClasses(css);
+  const usedClasses = getUsedClasses(css);
 
   css.each(node => {
-    const className = node.selector.replace('.', '');
-    const isUnused  = classes.indexOf(className) === -1;
-    if (isUnused) node.remove();
+    if (node.selector.indexOf('.') !== 0) return;
+
+    const nodeClass = node.selector.replace('.', '');
+    let used = false;
+
+    usedClasses.forEach(usedClass => {
+      if (nodeClass.indexOf(usedClass) > -1) used = true;
+    });
+
+    if (!used) node.remove();
   });
 }
