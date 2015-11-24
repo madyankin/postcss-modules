@@ -38,6 +38,6 @@
     "test": "$(npm bin)/mocha --require babel-core/register",
     "transpile": "$(npm bin)/babel src -d build",
     "prepublish": "npm run transpile",
-    "postpublish": "rm *.es5.js && git push --follow-tags"
+    "postpublish": "rm -rf build && git push --follow-tags"
   }
 }
