@@ -1,7 +1,7 @@
 import atImport from 'postcss-import';
 import plugins  from './plugins';
 
-export const importRegexp = /\:import\(['"](.*)['"]\)/;
+const importRegexp = /\:import\(['"](.*)['"]\)/;
 
 export default function importModule(css, result) {
   css.each(importRule => {
