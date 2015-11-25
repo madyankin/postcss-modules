@@ -13,4 +13,5 @@
 
 .figure {
     composes: figure from "test/fixtures/in/mixins.css";
+    display: flex;
 }

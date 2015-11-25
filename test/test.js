@@ -1,8 +1,9 @@
-import postcss from 'postcss';
-import assert  from 'assert';
-import fs      from 'fs';
-import path    from 'path';
-import plugin  from '../src';
+import postcss      from 'postcss';
+import autoprefixer from 'autoprefixer';
+import assert       from 'assert';
+import fs           from 'fs';
+import path         from 'path';
+import plugin       from '../src';
 
 const FIXTURES = './test/fixtures/';
 
@@ -25,6 +26,7 @@ it('works', () => {
   let resultJson;
 
   const processor = postcss([
+    autoprefixer,
     plugin({
       generateScopedName,
       getJSON: json => resultJson = json,

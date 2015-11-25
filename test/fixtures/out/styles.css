@@ -1,4 +1,8 @@
 ._a_1_another-mixin {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
     height: 100px;
     width: 200px;
 }
@@ -34,4 +38,8 @@
 }
 
 ._styles_14_figure {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
 }
