@@ -17,24 +17,28 @@ function generateScopedName(name, filename, css) {
 }
 
 it('works', () => {
-  const cssFileName          = path.join(FIXTURES, 'in/styles.css');
-  const cssFileNameExpected  = path.join(FIXTURES, 'out/styles.css');
-  const jsonFilenameExpected = path.join(FIXTURES, 'out/styles.json');
+  const cssFileName          = path.resolve(FIXTURES, 'in/styles.css');
+  const cssFileNameExpected  = path.resolve(FIXTURES, 'out/styles.css');
+  const jsonFilenameExpected = path.resolve(FIXTURES, 'out/styles.json');
   const css                  = fs.readFileSync(cssFileName).toString();
   const cssExpected          = fs.readFileSync(cssFileNameExpected).toString();
   const jsonExpected         = fs.readFileSync(jsonFilenameExpected).toString();
   let resultJson;
+  let passedCssFileName;
 
   const processor = postcss([
     autoprefixer,
     plugin({
       generateScopedName,
-      getJSON: json => resultJson = json,
+      getJSON: (cssFile, json) => {
+        passedCssFileName = cssFile;
+        resultJson = json;
+      },
     }),
   ]);
 
   const result = processor.process(css, { from: cssFileName });
-
   assert.equal(result.css, cssExpected);
+  assert.equal(passedCssFileName, cssFileName);
   assert.deepEqual(resultJson, JSON.parse(jsonExpected));
 });

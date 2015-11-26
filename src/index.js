@@ -20,8 +20,10 @@ export default postcss.plugin('postcss-modules', (opts = {}) => {
     Core.scope(),
     importModules,
     applyImports,
+
     css => {
-      if (opts.getJSON) opts.getJSON(getExports(css));
+      const filename = css.source.input.file;
+      if (opts.getJSON) opts.getJSON(filename, getExports(css));
     },
     cleanUnusedClasses,
     cleanImportAndExportRules,
