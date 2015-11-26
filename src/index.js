@@ -1,10 +1,12 @@
 import postcss                   from 'postcss';
 import Core                      from 'css-modules-loader-core';
 import generateScopedName        from './generateScopedName';
-import plugins                   from './plugins';
+import getExports                from './getExports';
+import addGlobalComments         from './addGlobalComments';
 import cleanImportAndExportRules from './cleanImportAndExportRules';
 import cleanUnusedClasses        from './cleanUnusedClasses';
-import getExports                from './getExports';
+import importModules             from './importModules';
+import applyImports              from './applyImports';
 
 
 export default postcss.plugin('postcss-modules', (opts = {}) => {
@@ -12,7 +14,12 @@ export default postcss.plugin('postcss-modules', (opts = {}) => {
   scope.generateScopedName = opts.generateScopedName || generateScopedName;
 
   return postcss([
-    ...plugins,
+    addGlobalComments,
+    Core.localByDefault(),
+    Core.extractImports(),
+    Core.scope(),
+    importModules,
+    applyImports,
     css => {
       if (opts.getJSON) opts.getJSON(getExports(css));
     },

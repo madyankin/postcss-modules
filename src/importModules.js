@@ -1,9 +1,9 @@
+import postcss  from 'postcss';
 import atImport from 'postcss-import';
-import plugins  from './plugins';
 
 const importRegexp = /\:import\(['"](.*)['"]\)/;
 
-export default function importModule(css, result) {
+function importModule(css, result) {
   css.each(importRule => {
     const match = importRegexp.exec(importRule.selector);
 
@@ -13,6 +13,20 @@ export default function importModule(css, result) {
     css.prepend({ name: 'import', params: `"${ moduleName }"` });
   });
 
+
+  const plugins = result.processor.plugins.filter(plugin => {
+    return [
+      'postcss-modules:cleanUnusedClasses',
+      'postcss-modules:cleanImportAndExportRules',
+      'postcss-modules',
+    ].indexOf(plugin.postcssPlugin) === -1;
+  });
+
   // Replace @import directives with imported modules
   atImport({ plugins })(css, result);
 }
+
+
+export default postcss.plugin('postcss-modules:importModule', () => {
+  return importModule;
+});

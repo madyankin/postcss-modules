@@ -1,3 +1,5 @@
+import postcss from 'postcss';
+
 function getImports(css) {
   const imports = {};
 
@@ -29,7 +31,7 @@ function connectExportsWithImports(css) {
 }
 
 
-export default function applyImports(css) {
+function applyImports(css) {
   connectExportsWithImports(css);
 
   const imports         = getImports(css);
@@ -52,3 +54,7 @@ export default function applyImports(css) {
     });
   });
 }
+
+export default postcss.plugin('postcss-modules:applyImports', () => {
+  return applyImports;
+});

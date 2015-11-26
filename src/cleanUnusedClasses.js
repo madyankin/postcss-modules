@@ -1,3 +1,4 @@
+import postcss    from 'postcss';
 import getExports from './getExports';
 
 
@@ -26,7 +27,7 @@ function isGlobal(node) {
 }
 
 
-export default function cleanUnusedClasses(css) {
+function cleanUnusedClasses(css) {
   const usedClasses = getUsedClasses(css);
 
   css.each(node => {
@@ -47,3 +48,8 @@ export default function cleanUnusedClasses(css) {
     if (!used) node.remove();
   });
 }
+
+
+export default postcss.plugin('postcss-modules:cleanUnusedClasses', () => {
+  return cleanUnusedClasses;
+});
