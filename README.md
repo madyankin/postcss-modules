@@ -1,4 +1,4 @@
-# postcss-modules [![Build Status][ci-img]][ci]
+# WIP: postcss-modules [![Build Status][ci-img]][ci]
 
 A [PostCSS] plugin for css modules.
 
