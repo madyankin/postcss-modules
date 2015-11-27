@@ -97,11 +97,11 @@ postcss([
   require('postcss-modules')({
     getJSON: function(cssFileName, json) {},
     generateScopedName: function(name, filename, css) {
-      const i         = css.indexOf('.' + name);
-      const numLines  = css.substr(0, i).split(/[\r\n]/).length;
-      const file      = path.basename(filename, '.css');
+      var i         = css.indexOf('.' + name);
+      var numLines  = css.substr(0, i).split(/[\r\n]/).length;
+      var file      = path.basename(filename, '.css');
 
-      return `_${ file }_${ numLines }_${ name }`;
+      return '_' + file + '_' + numLines + '_' + name;
     }
   });
 ]);
