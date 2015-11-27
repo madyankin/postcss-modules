@@ -21,10 +21,13 @@ export default postcss.plugin('postcss-modules', (opts = {}) => {
     importModules,
     applyImports,
 
-    css => {
-      const filename = css.source.input.file;
-      if (opts.getJSON) opts.getJSON(filename, getExports(css));
-    },
+    postcss.plugin('postcss-modules:getExports', () => {
+      return css => {
+        const filename = css.source.input.file;
+        if (opts.getJSON) opts.getJSON(filename, getExports(css));
+      };
+    }),
+
     cleanUnusedClasses,
     cleanImportAndExportRules,
   ]);

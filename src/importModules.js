@@ -18,6 +18,7 @@ function importModule(css, result) {
     return [
       'postcss-modules:cleanUnusedClasses',
       'postcss-modules:cleanImportAndExportRules',
+      'postcss-modules:getExports',
       'postcss-modules',
     ].indexOf(plugin.postcssPlugin) === -1;
   });
