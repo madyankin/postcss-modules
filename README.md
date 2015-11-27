@@ -7,7 +7,7 @@ A [PostCSS] plugin to use [CSS Modules] everywhere. Not only at the client side.
 [ci]:           https://travis-ci.org/outpunk/postcss-modules
 [CSS Modules]:  https://github.com/css-modules/css-modules
 
-<a href="https://evilmartians.com/?utm_source=postcss-each">
+<a href="https://evilmartians.com/?utm_source=postcss-modules">
 <img src="https://evilmartians.com/badges/sponsored-by-evil-martians.svg" alt="Sponsored by Evil Martians" width="236" height="54">
 </a>
 
