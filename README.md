@@ -114,6 +114,3 @@ npm install --save-dev postcss-modules
 ```
 
 
-## TODO
-* Example
-* Importing/exporting values
