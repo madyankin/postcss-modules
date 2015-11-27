@@ -83,7 +83,8 @@ use the `getJSON` callback. For example, save data about classes into a correspo
 postcss([
   require('postcss-modules')({
     getJSON: function(cssFileName, json) {
-      var jsonFileName = cssFileName + '.json';
+      var cssName       = path.basename(cssFileName, '.css');
+      var jsonFileName  = path.resolve('./build' + cssName + '.json');
       fs.writeFileSync(jsonFileName, JSON.stringify(json));
     }
   });
