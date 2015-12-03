@@ -9,7 +9,7 @@ import importModules             from './importModules';
 import applyImports              from './applyImports';
 
 
-export default postcss.plugin('postcss-modules', (opts = {}) => {
+module.exports = postcss.plugin('postcss-modules', (opts = {}) => {
   const scope = Core.scope;
   scope.generateScopedName = opts.generateScopedName || generateScopedName;
 
