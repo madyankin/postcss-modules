@@ -16,12 +16,9 @@ const cases = {
 };
 
 
-function generateScopedName(name, filename, css) {
-  const i         = css.indexOf('.' + name);
-  const numLines  = css.substr(0, i).split(/[\r\n]/).length;
-  const file      = path.basename(filename, '.css').replace('.', '_');
-
-  return `_${ file }_${ numLines }_${ name }`;
+function generateScopedName(name, filename) {
+  const file = path.basename(filename, '.css').replace('.', '_');
+  return `_${ file }_${ name }`;
 }
 
 

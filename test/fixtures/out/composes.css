@@ -1,4 +1,4 @@
-._composes_a_1_another-mixin {
+._composes_a_another-mixin {
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
@@ -7,20 +7,20 @@
     width: 200px;
 }
 
-._composes_mixins_1_title {
+._composes_mixins_title {
     color: black;
     font-size: 40px;
 }
 
-._composes_mixins_1_title:hover {
+._composes_mixins_title:hover {
     color: red;
 }
 
-._composes_mixins_10_figure {
+._composes_mixins_figure {
     text-align: center
 }
 
-._composes_mixins_1_title:focus, ._composes_mixins_10_figure:focus {
+._composes_mixins_title:focus, ._composes_mixins_figure:focus {
     outline: none;
     border: 1px solid red;
 }
@@ -29,15 +29,15 @@
     padding: 20px;
 }
 
-._composes_5_title {
+._composes_title {
     color: green;
 }
 
-._composes_10_article {
+._composes_article {
     font-size: 16px;
 }
 
-._composes_14_figure {
+._composes_figure {
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;

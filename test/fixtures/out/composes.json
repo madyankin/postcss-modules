@@ -1,5 +1,5 @@
 {
-  "title": "_composes_5_title _composes_mixins_1_title",
-  "article": "_composes_10_article",
-  "figure": "_composes_14_figure _composes_mixins_10_figure _composes_a_1_another-mixin"
+  "title": "_composes_title _composes_mixins_title",
+  "article": "_composes_article",
+  "figure": "_composes_figure _composes_mixins_figure _composes_a_another-mixin"
 }
