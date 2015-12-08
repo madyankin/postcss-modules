@@ -1,0 +1,11 @@
+:global .page {
+    padding: 20px;
+}
+
+.title {
+    color: green;
+}
+
+.article {
+    color: black;
+}

@@ -10,7 +10,9 @@ const noop = () => {};
 const fixturesPath = path.resolve(__dirname, './fixtures');
 
 const cases = {
-  'composes': 'composes',
+  'plugins': 'saves origin plugins',
+  'classes': 'processes classes',
+  'composes': 'composes rules',
 };
 
 
