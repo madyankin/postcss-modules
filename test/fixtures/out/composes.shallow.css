@@ -1,0 +1,44 @@
+._composes_shallow_mixins_title {
+  font: 24px/1 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: bold;
+}
+
+._composes_shallow_mixins_paragraph {
+  margin: 0 20px;
+  font: 16px/1.5 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+._composes_shallow_mixins_figure {
+  text-align: center;
+  margin: 20px 0;
+}
+
+._composes_shallow_title {
+}
+
+._composes_shallow_article {
+  max-width: 600px;
+  margin: 40px auto;
+}
+
+._composes_shallow_figure {
+}
+
+._composes_shallow_image {
+  max-width: 80%;
+}
+
+._composes_shallow_first {
+}
+
+._composes_shallow_first {
+  color: #000;
+}
+
+._composes_shallow_second {
+  color: #444;
+}
+
+._composes_shallow_third {
+  color: #777;
+}

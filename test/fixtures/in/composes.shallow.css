@@ -1,0 +1,32 @@
+.title {
+  composes: title from 'test/fixtures/in/composes.shallow.mixins.css';
+}
+
+.article {
+  max-width: 600px;
+  margin: 40px auto;
+}
+
+.figure {
+  composes: figure from 'test/fixtures/in/composes.shallow.mixins.css';
+}
+
+.image {
+  max-width: 80%;
+}
+
+.first {
+  composes: paragraph from 'test/fixtures/in/composes.shallow.mixins.css';
+}
+
+.first {
+  color: #000;
+}
+
+.second {
+  color: #444;
+}
+
+.third {
+  color: #777;
+}

@@ -12,12 +12,13 @@ const fixturesPath = path.resolve(__dirname, './fixtures');
 const cases = {
   'plugins': 'saves origin plugins',
   'classes': 'processes classes',
-  'composes': 'composes rules',
+  'composes': 'composes rules with deep imports',
+  'composes.shallow': 'composes rules with shallow imports',
 };
 
 
 function generateScopedName(name, filename) {
-  const file = path.basename(filename, '.css').replace('.', '_');
+  const file = path.basename(filename, '.css').replace(/\./g, '_');
   return `_${ file }_${ name }`;
 }
 
