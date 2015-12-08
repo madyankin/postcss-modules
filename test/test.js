@@ -5,40 +5,65 @@ import fs           from 'fs';
 import path         from 'path';
 import plugin       from '../src';
 
-const FIXTURES = './test/fixtures/';
+const noop = () => {};
+
+const fixturesPath = path.resolve(__dirname, './fixtures');
+
+const cases = {
+  'composes': 'composes',
+};
 
 
 function generateScopedName(name, filename, css) {
   const i         = css.indexOf('.' + name);
   const numLines  = css.substr(0, i).split(/[\r\n]/).length;
-  const file      = path.basename(filename, '.css');
+  const file      = path.basename(filename, '.css').replace('.', '_');
 
   return `_${ file }_${ numLines }_${ name }`;
 }
 
-it('works', () => {
-  const cssFileName          = path.resolve(FIXTURES, 'in/styles.css');
-  const cssFileNameExpected  = path.resolve(FIXTURES, 'out/styles.css');
-  const jsonFilenameExpected = path.resolve(FIXTURES, 'out/styles.json');
-  const css                  = fs.readFileSync(cssFileName).toString();
-  const cssExpected          = fs.readFileSync(cssFileNameExpected).toString();
-  const jsonExpected         = fs.readFileSync(jsonFilenameExpected).toString();
+
+function testCss(name) {
+  const sourceFile   = path.join(fixturesPath, 'in', `${ name }.css`);
+  const expectedFile = path.join(fixturesPath, 'out', `${ name }.css`);
+  const source       = fs.readFileSync(sourceFile).toString();
+  const expected     = fs.readFileSync(expectedFile).toString();
+
+  const result = postcss([
+    autoprefixer,
+    plugin({ generateScopedName }),
+  ]).process(source, { from: sourceFile });
+
+  assert.equal(result.css, expected);
+}
+
+
+Object.keys(cases).forEach(caseName => {
+  const description = cases[caseName];
+  it(description, () => testCss(caseName));
+});
+
+
+it('exports JSON', () => {
+  const name         = 'composes';
+  const sourceFile   = path.join(fixturesPath, 'in', `${ name }.css`);
+  const expectedFile = path.join(fixturesPath, 'out', `${ name }.json`);
+  const source       = fs.readFileSync(sourceFile).toString();
+  const expected     = fs.readFileSync(expectedFile).toString();
   let resultJson;
-  let passedCssFileName;
 
   const processor = postcss([
     autoprefixer,
     plugin({
       generateScopedName,
       getJSON: (cssFile, json) => {
-        passedCssFileName = cssFile;
         resultJson = json;
       },
     }),
   ]);
 
-  const result = processor.process(css, { from: cssFileName });
-  assert.equal(result.css, cssExpected);
-  assert.equal(passedCssFileName, cssFileName);
-  assert.deepEqual(resultJson, JSON.parse(jsonExpected));
+  const result = processor.process(source, { from: sourceFile });
+  noop(result.css);
+
+  assert.deepEqual(resultJson, JSON.parse(expected));
 });

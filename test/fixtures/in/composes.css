@@ -3,7 +3,7 @@
 }
 
 .title {
-    composes: title from "test/fixtures/in/mixins.css";
+    composes: title from "test/fixtures/in/composes.mixins.css";
     color: green;
 }
 
@@ -12,6 +12,6 @@
 }
 
 .figure {
-    composes: figure from "test/fixtures/in/mixins.css";
+    composes: figure from "test/fixtures/in/composes.mixins.css";
     display: flex;
 }
