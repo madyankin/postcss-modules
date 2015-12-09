@@ -5,8 +5,6 @@ import fs           from 'fs';
 import path         from 'path';
 import plugin       from '../src';
 
-const noop = () => {};
-
 const fixturesPath = path.resolve(__dirname, './fixtures');
 
 const cases = {
@@ -25,34 +23,13 @@ function generateScopedName(name, filename) {
 
 function testCss(name) {
   const sourceFile   = path.join(fixturesPath, 'in', `${ name }.css`);
-  const expectedFile = path.join(fixturesPath, 'out', `${ name }.css`);
+  const expectedFile = path.join(fixturesPath, 'out', name);
   const source       = fs.readFileSync(sourceFile).toString();
-  const expected     = fs.readFileSync(expectedFile).toString();
-
-  const result = postcss([
-    autoprefixer,
-    plugin({ generateScopedName }),
-  ]).process(source, { from: sourceFile });
-
-  assert.equal(result.css, expected);
-}
-
-
-Object.keys(cases).forEach(caseName => {
-  const description = cases[caseName];
-  it(description, () => testCss(caseName));
-});
-
-
-it('exports JSON', () => {
-  const name         = 'composes';
-  const sourceFile   = path.join(fixturesPath, 'in', `${ name }.css`);
-  const expectedFile = path.join(fixturesPath, 'out', `${ name }.json`);
-  const source       = fs.readFileSync(sourceFile).toString();
-  const expected     = fs.readFileSync(expectedFile).toString();
+  const expectedCSS  = fs.readFileSync(expectedFile + '.css').toString();
+  const expectedJSON = fs.readFileSync(expectedFile + '.json').toString();
   let resultJson;
 
-  const processor = postcss([
+  const result = postcss([
     autoprefixer,
     plugin({
       generateScopedName,
@@ -60,10 +37,14 @@ it('exports JSON', () => {
         resultJson = json;
       },
     }),
-  ]);
+  ]).process(source, { from: sourceFile });
 
-  const result = processor.process(source, { from: sourceFile });
-  noop(result.css);
+  assert.equal(result.css, expectedCSS);
+  assert.deepEqual(resultJson, JSON.parse(expectedJSON));
+}
 
-  assert.deepEqual(resultJson, JSON.parse(expected));
+
+Object.keys(cases).forEach(caseName => {
+  const description = cases[caseName];
+  it(description, () => testCss(caseName));
 });

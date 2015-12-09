@@ -1,0 +1,9 @@
+{
+  "article": "_composes_shallow_article",
+  "figure": "_composes_shallow_figure _composes_shallow_mixins_figure",
+  "first": "_composes_shallow_first _composes_shallow_mixins_paragraph",
+  "image": "_composes_shallow_image",
+  "second": "_composes_shallow_second",
+  "third": "_composes_shallow_third",
+  "title": "_composes_shallow_title _composes_shallow_mixins_title"
+}
