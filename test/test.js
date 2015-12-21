@@ -10,6 +10,7 @@ const fixturesPath = path.resolve(__dirname, './fixtures');
 const cases = {
   'plugins': 'saves origin plugins',
   'classes': 'processes classes',
+  'comments': 'preserves comments',
   'composes': 'composes rules with deep imports',
   'composes.shallow': 'composes rules with shallow imports',
 };

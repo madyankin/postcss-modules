@@ -4,7 +4,8 @@ function getImports(css) {
   const imports = {};
 
   css.each(importRule => {
-    if (importRule.selector.indexOf(':import') === -1) return;
+    const { selector } = importRule;
+    if (!selector || selector.indexOf(':import') === -1) return;
     importRule.walkDecls(decl => imports[decl.prop] = decl.value);
   });
 
@@ -14,7 +15,8 @@ function getImports(css) {
 
 function connectExportsWithImports(css) {
   css.each(importRule => {
-    if (importRule.selector.indexOf(':import') === -1) return;
+    const { selector } = importRule;
+    if (!selector || selector.indexOf(':import') === -1) return;
 
     const exportRule = importRule.prev();
     if (!exportRule || !exportRule.selector === ':export') return;
