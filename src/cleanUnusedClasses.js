@@ -31,7 +31,7 @@ function cleanUnusedClasses(css) {
   const usedClasses = getUsedClasses(css);
 
   css.each(node => {
-    if (node.selector.indexOf('.') !== 0) return;
+    if (!node.selector || node.selector.indexOf('.') !== 0) return;
 
     if (isGlobal(node)) {
       node.nodes[0].remove();
