@@ -1,6 +1,6 @@
 {
   "name": "postcss-modules",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "PostCSS plugin to use CSS Modules everywhere",
   "main": "build/index.js",
   "keywords": [
