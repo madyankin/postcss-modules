@@ -1,3 +1,6 @@
+## 0.1.3
+Fixed failing on comments by @dfreeman (https://github.com/outpunk/postcss-modules/pull/14)
+
 ## 0.1.2
 Fixed module export for ES5 (https://github.com/outpunk/postcss-modules/issues/9)
 
