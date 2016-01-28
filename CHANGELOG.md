@@ -1,3 +1,9 @@
+## 0.2.3
+* Fixed JSON export with shallow imports (https://github.com/outpunk/postcss-modules/issues/12)
+* Fixed lookup paths (https://github.com/outpunk/postcss-modules/issues/13)
+* Fixed imports overriding (https://github.com/outpunk/postcss-modules/issues/15)
+* Global refactoring under the hood
+
 ## 0.1.3
 Fixed failing on comments by @dfreeman (https://github.com/outpunk/postcss-modules/pull/14)
 
