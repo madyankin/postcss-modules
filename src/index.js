@@ -10,18 +10,17 @@ module.exports = postcss.plugin('postcss-modules', (opts = {}) => {
 
   const loader  = new FileSystemLoader('/', Core.defaultPlugins);
   const parser  = new Parser(loader.fetch.bind(loader));
+  const plugins = [
+    Core.values,
+    Core.localByDefault,
+    Core.extractImports,
+    Core.scope,
+    parser.plugin,
+  ];
 
   return css => {
     const promise = new Promise(resolve => {
-      const plugins = [
-        Core.values,
-        Core.localByDefault,
-        Core.extractImports,
-        Core.scope,
-        parser.plugin,
-      ];
-
-      return postcss(plugins)
+      postcss(plugins)
         .process(css, { from: css.source.input.file })
         .then(() => {
           Object.keys(loader.sources).forEach(key => {
