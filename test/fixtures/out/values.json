@@ -1,0 +1,7 @@
+{
+  "colors":"\"./values.colors.css\"",
+  "primary":"green",
+  "secondary":"blue",
+  "title":"_values_title",
+  "article":"_values_article"
+}

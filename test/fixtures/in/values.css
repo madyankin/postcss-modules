@@ -1,0 +1,10 @@
+@value colors: "./values.colors.css";
+@value primary, secondary from colors;
+
+.title {
+    color: primary;
+}
+
+.article {
+    color: secondary;
+}

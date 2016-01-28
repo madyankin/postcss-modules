@@ -8,10 +8,11 @@ import plugin       from '../src';
 const fixturesPath = path.resolve(__dirname, './fixtures');
 
 const cases = {
-  plugins: 'saves origin plugins',
-  classes: 'processes classes',
+  plugins:  'saves origin plugins',
+  classes:  'processes classes',
   comments: 'preserves comments',
   composes: 'composes rules with deep imports',
+  values:   'processes values',
 };
 
 
