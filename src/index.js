@@ -1,34 +1,41 @@
-import postcss                   from 'postcss';
-import Core                      from 'css-modules-loader-core';
-import generateScopedName        from './generateScopedName';
-import getExports                from './getExports';
-import addGlobalComments         from './addGlobalComments';
-import cleanImportAndExportRules from './cleanImportAndExportRules';
-import cleanUnusedClasses        from './cleanUnusedClasses';
-import importModules             from './importModules';
-import applyImports              from './applyImports';
+import postcss            from 'postcss';
+import Core               from 'css-modules-loader-core';
+import Parser             from 'css-modules-loader-core/lib/parser';
+import FileSystemLoader   from 'css-modules-loader-core/lib/file-system-loader';
+import generateScopedName from './generateScopedName';
 
 
 module.exports = postcss.plugin('postcss-modules', (opts = {}) => {
-  const scope = Core.scope;
-  scope.generateScopedName = opts.generateScopedName || generateScopedName;
+  Core.scope.generateScopedName = opts.generateScopedName || generateScopedName;
 
-  return postcss([
-    addGlobalComments,
-    Core.localByDefault(),
-    Core.extractImports(),
-    Core.scope(),
-    importModules,
-    applyImports,
+  const loader  = new FileSystemLoader('/', Core.defaultPlugins);
+  const parser  = new Parser(loader.fetch.bind(loader));
 
-    postcss.plugin('postcss-modules:getExports', () => {
-      return css => {
-        const filename = css.source.input.file;
-        if (opts.getJSON) opts.getJSON(filename, getExports(css));
-      };
-    }),
+  return css => {
+    const promise = new Promise(resolve => {
+      const plugins = [
+        Core.values,
+        Core.localByDefault,
+        Core.extractImports,
+        Core.scope,
+        parser.plugin,
+      ];
 
-    cleanUnusedClasses,
-    cleanImportAndExportRules,
-  ]);
+      return postcss(plugins)
+        .process(css, { from: css.source.input.file })
+        .then(() => {
+          Object.keys(loader.sources).forEach(key => {
+            css.prepend(loader.sources[key]);
+          });
+
+          if (opts.getJSON) {
+            opts.getJSON(css.source.input.file, parser.exportTokens);
+          }
+
+          resolve();
+        });
+    });
+
+    return promise;
+  };
 });

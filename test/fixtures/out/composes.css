@@ -1,12 +1,3 @@
-._composes_a_another-mixin {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    height: 100px;
-    width: 200px;
-}
-
 ._composes_mixins_title {
     color: black;
     font-size: 40px;
@@ -17,12 +8,22 @@
 }
 
 ._composes_mixins_figure {
-    text-align: center
+    text-align: center;
 }
 
 ._composes_mixins_title:focus, ._composes_mixins_figure:focus {
     outline: none;
     border: 1px solid red;
+}
+
+._composes_a_another-mixin {
+    display: flex;
+    height: 100px;
+    width: 200px;
+}
+
+._composes_a_hello {
+    foo: bar;
 }
 
 .page {

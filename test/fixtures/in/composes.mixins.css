@@ -8,7 +8,7 @@
 }
 
 .figure {
-    composes: another-mixin from "test/fixtures/in/composes.a.css";
+    composes: another-mixin from "composes.a.css";
     text-align: center
 }
 
