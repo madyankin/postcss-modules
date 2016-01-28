@@ -1,4 +1,4 @@
-## 0.2.3
+## 0.2.0
 * Fixed JSON export with shallow imports (https://github.com/outpunk/postcss-modules/issues/12)
 * Fixed lookup paths (https://github.com/outpunk/postcss-modules/issues/13)
 * Fixed imports overriding (https://github.com/outpunk/postcss-modules/issues/15)
