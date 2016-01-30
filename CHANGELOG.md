@@ -1,3 +1,7 @@
+## 0.3.0
+* Fixed processing for imported CSS
+* Added default callback for saving exported JSON
+
 ## 0.2.0
 * Fixed JSON export with shallow imports (https://github.com/outpunk/postcss-modules/issues/12)
 * Fixed lookup paths (https://github.com/outpunk/postcss-modules/issues/13)
