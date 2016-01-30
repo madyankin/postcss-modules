@@ -76,7 +76,8 @@ And the plugin will give you a JSON object for transformed classes:
 
 ## Usage
 
-You have a freedom to make everything you want with exported classes, just
+By default, a JSON file with exported classes will be placed next to corresponding CSS.
+But you have a freedom to make everything you want with exported classes, just
 use the `getJSON` callback. For example, save data about classes into a corresponding JSON file:
 
 ```js
@@ -97,7 +98,6 @@ Generate custom classes with the `generateScopedName` callback:
 ```js
 postcss([
   require('postcss-modules')({
-    getJSON: function(cssFileName, json) {},
     generateScopedName: function(name, filename, css) {
       var path      = require('path');
       var i         = css.indexOf('.' + name);
