@@ -12,7 +12,7 @@ const cases = {
   plugins:  'saves origin plugins',
   classes:  'processes classes',
   comments: 'preserves comments',
-  composes: 'composes rules with deep imports',
+  composes: 'composes rules',
   values:   'processes values',
 };
 

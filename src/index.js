@@ -10,19 +10,23 @@ module.exports = postcss.plugin('postcss-modules', (opts = {}) => {
   Core.scope.generateScopedName = opts.generateScopedName || generateScopedName;
   const getJSON = opts.getJSON || saveJSON;
 
-  const loader  = new FileSystemLoader('/', Core.defaultPlugins);
-  const parser  = new Parser(loader.fetch.bind(loader));
-  const plugins = [
-    Core.values,
-    Core.localByDefault,
-    Core.extractImports,
-    Core.scope,
-    parser.plugin,
-  ];
+  return (css, result) => {
+    const resultPlugins = result.processor.plugins
+      .filter(plugin => plugin.postcssPlugin !== 'postcss-modules');
 
-  return css => {
+    const plugins = [
+      Core.values,
+      Core.localByDefault,
+      Core.extractImports,
+      Core.scope,
+      ...resultPlugins,
+    ];
+
+    const loader  = new FileSystemLoader('/', plugins);
+    const parser  = new Parser(loader.fetch.bind(loader));
+
     const promise = new Promise(resolve => {
-      postcss(plugins)
+      postcss([...plugins, parser.plugin])
         .process(css, { from: css.source.input.file })
         .then(() => {
           Object.keys(loader.sources).forEach(key => {

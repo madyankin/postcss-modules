@@ -17,6 +17,9 @@
 }
 
 ._composes_a_another-mixin {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
     display: flex;
     height: 100px;
     width: 200px;
