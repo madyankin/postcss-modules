@@ -3,6 +3,7 @@ import postcss      from 'postcss';
 import autoprefixer from 'autoprefixer';
 import fs           from 'fs';
 import path         from 'path';
+import fileExists   from 'file-exists';
 import plugin       from '../src';
 
 const fixturesPath = path.resolve(__dirname, './fixtures');
@@ -50,4 +51,22 @@ Object.keys(cases).forEach(name => {
         t.same(resultJson, JSON.parse(expectedJSON));
       });
   });
+});
+
+
+test('saves JSON next to CSS by default', t => {
+  const sourceFile = path.join(fixturesPath, 'in', 'saveJSON.css');
+  const source     = fs.readFileSync(sourceFile).toString();
+  const jsonFile   = path.join(fixturesPath, 'in', 'saveJSON.css.json');
+
+  if (fileExists(jsonFile)) fs.unlinkSync(jsonFile);
+
+  return postcss([plugin({ generateScopedName })])
+    .process(source, { from: sourceFile })
+    .then(() => {
+      const json = fs.readFileSync(jsonFile).toString();
+      fs.unlinkSync(jsonFile);
+
+      t.same(JSON.parse(json), { title: '_saveJSON_title' });
+    });
 });

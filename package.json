@@ -31,7 +31,8 @@
     "babel-eslint": "^5.0.0-beta6",
     "babel-preset-es2015": "^6.3.13",
     "eslint": "^1.10.3",
-    "eslint-config-airbnb": "^4.0.0"
+    "eslint-config-airbnb": "^4.0.0",
+    "file-exists": "^1.0.0"
   },
   "scripts": {
     "pretest": "$(npm bin)/eslint src test",
