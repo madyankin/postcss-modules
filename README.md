@@ -110,6 +110,9 @@ postcss([
 ]);
 ```
 
+## May I see the plugin in action?
+Sure! Take a look at the [example](https://github.com/outpunk/postcss-modules-example).
+
 See [PostCSS] docs for examples for your environment and don't forget to run
 ```
 npm install --save-dev postcss-modules
