@@ -147,6 +147,41 @@ And you'll get the following HTML:
 ```
 
 
+### HTML
+For HTML transformation we'll use [PostHTML](https://github.com/posthtml/posthtml) and [PostHTML CSS Modules](https://github.com/maltsev/posthtml-css-modules):
+```bash
+npm install --save posthtml posthtml-css-modules
+```
+
+Here is our template `about.html`:
+```html
+<h1 css-module="title">postcss-modules</h1>
+<article css-module="article">A PostCSS plugin to use CSS Modules everywhere</article>
+```
+
+Transform it:
+```js
+var fs = require('fs');
+var posthtml = require('posthtml');
+var posthtmlCssModules = require('posthtml-css-modules');
+var template = fs.readFileSync('./about.html', 'utf8');
+
+posthtml([posthtmlCssModules('./cssModules.json')])
+    .process(template)
+    .then(function (result) {
+        console.log(result.html);
+    });
+```
+(for using other build systems please check [the documentation of PostHTML](https://github.com/posthtml/posthtml/blob/master/README.md))
+
+
+And you'll get the following HTML:
+```html
+<h1 class="_title_xkpkl_5 _title_116zl_1">postcss-modules</h1>
+<article class="_article_xkpkl_10">A PostCSS plugin to use CSS Modules everywhere</article>
+```
+
+
 ## May I see the plugin in action?
 Sure! Take a look at the [example](https://github.com/outpunk/postcss-modules-example).
 
