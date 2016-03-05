@@ -1,3 +1,6 @@
+## 0.4.0
+* Added support for custom loaders by Björn Brauer (@ZauberNerd)
+
 ## 0.3.0
 * Fixed processing for imported CSS
 * Added default callback for saving exported JSON

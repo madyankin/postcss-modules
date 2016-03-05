@@ -110,6 +110,16 @@ postcss([
 ]);
 ```
 
+If you need, you can pass a custom loader (see [FileSystemLoader] for example):
+
+```js
+postcss([
+  require('postcss-modules')({
+    Loader: CustomLoader,
+  });
+]);
+```
+
 ## Integration with templates
 The plugin only transforms CSS classes to CSS modules.
 But you probably want to integrate these CSS modules with your templates.
@@ -189,3 +199,5 @@ See [PostCSS] docs for examples for your environment and don't forget to run
 ```
 npm install --save-dev postcss-modules
 ```
+
+[FileSystemLoader]: https://github.com/css-modules/css-modules-loader-core/blob/master/src/file-system-loader.js
