@@ -22,7 +22,10 @@ module.exports = postcss.plugin('postcss-modules', (opts = {}) => {
       ...resultPlugins,
     ];
 
-    const loader  = new FileSystemLoader('/', plugins);
+    const loader  = typeof opts.Loader === 'function' ?
+      new opts.Loader('/', plugins) :
+      new FileSystemLoader('/', plugins);
+
     const parser  = new Parser(loader.fetch.bind(loader));
 
     const promise = new Promise(resolve => {
