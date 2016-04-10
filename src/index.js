@@ -28,7 +28,7 @@ module.exports = postcss.plugin('postcss-modules', (opts = {}) => {
 
     const parser  = new Parser(loader.fetch.bind(loader));
 
-    const promise = new Promise(resolve => {
+    const promise = new Promise((resolve, reject) => {
       postcss([...plugins, parser.plugin])
         .process(css, { from: css.source.input.file })
         .then(() => {
@@ -39,7 +39,7 @@ module.exports = postcss.plugin('postcss-modules', (opts = {}) => {
           getJSON(css.source.input.file, parser.exportTokens);
 
           resolve();
-        });
+        }, reject);
     });
 
     return promise;
