@@ -1,3 +1,6 @@
+## 0.4.1
+* Fixed processing errors capturing by Boris Serdiuk (@just-boris)
+
 ## 0.4.0
 * Added support for custom loaders by Björn Brauer (@ZauberNerd)
 
