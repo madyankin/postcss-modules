@@ -18,7 +18,6 @@
 
 ._composes_a_another-mixin {
     display: -webkit-box;
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
     height: 100px;
@@ -43,7 +42,6 @@
 
 ._composes_figure {
     display: -webkit-box;
-    display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
 }
