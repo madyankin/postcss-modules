@@ -2,13 +2,22 @@ import postcss            from 'postcss';
 import Core               from 'css-modules-loader-core';
 import Parser             from 'css-modules-loader-core/lib/parser';
 import FileSystemLoader   from 'css-modules-loader-core/lib/file-system-loader';
+import genericNames       from 'generic-names';
 import generateScopedName from './generateScopedName';
 import saveJSON           from './saveJSON';
 
 
 module.exports = postcss.plugin('postcss-modules', (opts = {}) => {
-  Core.scope.generateScopedName = opts.generateScopedName || generateScopedName;
+  const scopedNameGenerator = opts.generateScopedName || generateScopedName;
   const getJSON = opts.getJSON || saveJSON;
+
+  if (typeof scopedNameGenerator === 'function') {
+    Core.scope.generateScopedName = scopedNameGenerator;
+  } else {
+    Core.scope.generateScopedName = genericNames(scopedNameGenerator, {
+      context: process.cwd(),
+    });
+  }
 
   return (css, result) => {
     const resultPlugins = result.processor.plugins
@@ -22,11 +31,11 @@ module.exports = postcss.plugin('postcss-modules', (opts = {}) => {
       ...resultPlugins,
     ];
 
-    const loader  = typeof opts.Loader === 'function' ?
+    const loader = typeof opts.Loader === 'function' ?
       new opts.Loader('/', plugins) :
       new FileSystemLoader('/', plugins);
 
-    const parser  = new Parser(loader.fetch.bind(loader));
+    const parser = new Parser(loader.fetch.bind(loader));
 
     const promise = new Promise((resolve, reject) => {
       postcss([...plugins, parser.plugin])

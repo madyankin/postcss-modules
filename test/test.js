@@ -9,11 +9,12 @@ import plugin       from '../src';
 const fixturesPath = path.resolve(__dirname, './fixtures');
 
 const cases = {
-  plugins:  'saves origin plugins',
-  classes:  'processes classes',
-  comments: 'preserves comments',
-  composes: 'composes rules',
-  values:   'processes values',
+  plugins:      'saves origin plugins',
+  classes:      'processes classes',
+  comments:     'preserves comments',
+  composes:     'composes rules',
+  values:       'processes values',
+  interpolated: 'generates scoped name with interpolated string',
 };
 
 
@@ -26,6 +27,10 @@ function generateScopedName(name, filename) {
 Object.keys(cases).forEach(name => {
   const description = cases[name];
 
+  const scopedNameGenerator = name === 'interpolated'
+    ? '[name]__[local]___[hash:base64:5]'
+    : generateScopedName;
+
   test(description, t => {
     const sourceFile   = path.join(fixturesPath, 'in', `${ name }.css`);
     const expectedFile = path.join(fixturesPath, 'out', name);
@@ -37,7 +42,7 @@ Object.keys(cases).forEach(name => {
     const plugins = [
       autoprefixer,
       plugin({
-        generateScopedName,
+        generateScopedName: scopedNameGenerator,
         getJSON: (cssFile, json) => {
           resultJson = json;
         },

@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "css-modules-loader-core": "^1.0.0",
+    "generic-names": "^1.0.1",
     "postcss": "^5.0.21",
     "string-hash": "^1.1.0"
   },
