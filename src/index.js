@@ -1,15 +1,22 @@
-import postcss            from 'postcss';
-import Core               from 'css-modules-loader-core';
-import Parser             from 'css-modules-loader-core/lib/parser';
-import FileSystemLoader   from 'css-modules-loader-core/lib/file-system-loader';
-import genericNames       from 'generic-names';
-import generateScopedName from './generateScopedName';
-import saveJSON           from './saveJSON';
+import postcss                              from 'postcss';
+import Core                                 from 'css-modules-loader-core';
+import Parser                               from 'css-modules-loader-core/lib/parser';
+import FileSystemLoader                     from 'css-modules-loader-core/lib/file-system-loader';
+import genericNames                         from 'generic-names';
+import generateScopedName                   from './generateScopedName';
+import saveJSON                             from './saveJSON';
+import { defaultPlugins, isValidBehaviour } from './behaviours';
 
 
 module.exports = postcss.plugin('postcss-modules', (opts = {}) => {
   const scopedNameGenerator = opts.generateScopedName || generateScopedName;
-  const getJSON = opts.getJSON || saveJSON;
+  const getJSON             = opts.getJSON || saveJSON;
+  let scopeBehaviour        = 'local';
+
+  if (opts.scopeBehaviour && isValidBehaviour(opts.scopeBehaviour)) {
+    scopeBehaviour = opts.scopeBehaviour;
+  }
+
 
   if (typeof scopedNameGenerator === 'function') {
     Core.scope.generateScopedName = scopedNameGenerator;
@@ -23,13 +30,7 @@ module.exports = postcss.plugin('postcss-modules', (opts = {}) => {
     const resultPlugins = result.processor.plugins
       .filter(plugin => plugin.postcssPlugin !== 'postcss-modules');
 
-    const plugins = [
-      Core.values,
-      Core.localByDefault,
-      Core.extractImports,
-      Core.scope,
-      ...resultPlugins,
-    ];
+    const plugins = [...defaultPlugins[scopeBehaviour], ...resultPlugins];
 
     const loader = typeof opts.Loader === 'function' ?
       new opts.Loader('/', plugins) :

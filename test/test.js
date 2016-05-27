@@ -15,6 +15,7 @@ const cases = {
   composes:     'composes rules',
   values:       'processes values',
   interpolated: 'generates scoped name with interpolated string',
+  global:       'allows to make CSS global',
 };
 
 
@@ -31,6 +32,8 @@ Object.keys(cases).forEach(name => {
     ? '[name]__[local]___[hash:base64:5]'
     : generateScopedName;
 
+  const scopeBehaviour = name === 'global' ? 'global' : 'local';
+
   test(description, t => {
     const sourceFile   = path.join(fixturesPath, 'in', `${ name }.css`);
     const expectedFile = path.join(fixturesPath, 'out', name);
@@ -42,6 +45,7 @@ Object.keys(cases).forEach(name => {
     const plugins = [
       autoprefixer,
       plugin({
+        scopeBehaviour,
         generateScopedName: scopedNameGenerator,
         getJSON: (cssFile, json) => {
           resultJson = json;
