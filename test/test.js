@@ -47,8 +47,8 @@ Object.keys(cases).forEach(name => {
     return postcss(plugins)
       .process(source, { from: sourceFile })
       .then(result => {
-        t.same(result.css, expectedCSS);
-        t.same(resultJson, JSON.parse(expectedJSON));
+        t.deepEqual(result.css, expectedCSS);
+        t.deepEqual(resultJson, JSON.parse(expectedJSON));
       });
   });
 });
@@ -67,6 +67,6 @@ test('saves JSON next to CSS by default', t => {
       const json = fs.readFileSync(jsonFile).toString();
       fs.unlinkSync(jsonFile);
 
-      t.same(JSON.parse(json), { title: '_saveJSON_title' });
+      t.deepEqual(JSON.parse(json), { title: '_saveJSON_title' });
     });
 });
