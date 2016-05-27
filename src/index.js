@@ -17,7 +17,6 @@ module.exports = postcss.plugin('postcss-modules', (opts = {}) => {
     scopeBehaviour = opts.scopeBehaviour;
   }
 
-
   if (typeof scopedNameGenerator === 'function') {
     Core.scope.generateScopedName = scopedNameGenerator;
   } else {

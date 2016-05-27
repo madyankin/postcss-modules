@@ -1,3 +1,8 @@
+## 0.5.0
+* Added `scopeBehaviour` option (https://github.com/css-modules/postcss-modules/issues/22)
+* Added ability to pass a string to `generateScopedName` (https://github.com/css-modules/postcss-modules/issues/21)
+* Updated dependencies
+
 ## 0.4.1
 * Fixed processing errors capturing by Boris Serdiuk (@just-boris)
 

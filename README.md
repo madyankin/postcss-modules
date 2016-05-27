@@ -76,6 +76,8 @@ And the plugin will give you a JSON object for transformed classes:
 
 ## Usage
 
+### Saving exported classes
+
 By default, a JSON file with exported classes will be placed next to corresponding CSS.
 But you have a freedom to make everything you want with exported classes, just
 use the `getJSON` callback. For example, save data about classes into a corresponding JSON file:
@@ -93,22 +95,47 @@ postcss([
 ]);
 ```
 
-Generate custom classes with the `generateScopedName` callback:
+### Generating scoped names
+
+By default, the plugin assumes that all the classes are local. You can change
+this behaviour using the `scopeBehaviour` option:
+
+```js
+postcss([
+  require('postcss-modules')({
+    scopeBehaviour: 'global' // can be 'global' or 'local',
+  });
+]);
+```
+
+To generate custom classes, use the `generateScopedName` callback:
 
 ```js
 postcss([
   require('postcss-modules')({
     generateScopedName: function(name, filename, css) {
-      var path      = require('path');
-      var i         = css.indexOf('.' + name);
-      var numLines  = css.substr(0, i).split(/[\r\n]/).length;
-      var file      = path.basename(filename, '.css');
+      var path  = require('path');
+      var i     = css.indexOf('.' + name);
+      var line  = css.substr(0, i).split(/[\r\n]/).length;
+      var file  = path.basename(filename, '.css');
 
-      return '_' + file + '_' + numLines + '_' + name;
+      return '_' + file + '_' + line + '_' + name;
     }
   });
 ]);
 ```
+
+Or just pass an interpolated string to the `generateScopedName` option (see webpack's `interpolateName` for more details):
+
+```js
+postcss([
+  require('postcss-modules')({
+    generateScopedName: '[name]__[local]___[hash:base64:5]',
+  });
+]);
+```
+
+### Loading source files
 
 If you need, you can pass a custom loader (see [FileSystemLoader] for example):
 
@@ -201,3 +228,4 @@ npm install --save-dev postcss-modules
 ```
 
 [FileSystemLoader]: https://github.com/css-modules/css-modules-loader-core/blob/master/src/file-system-loader.js
+[webpack's `interpolateName`]: https://github.com/webpack/loader-utils#interpolatename
