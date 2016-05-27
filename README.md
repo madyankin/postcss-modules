@@ -125,7 +125,8 @@ postcss([
 ]);
 ```
 
-Or just pass an interpolated string to the `generateScopedName` option (see webpack's `interpolateName` for more details):
+Or just pass an interpolated string to the `generateScopedName` option
+(More details [here](https://github.com/webpack/loader-utils#interpolatename)):
 
 ```js
 postcss([
@@ -228,4 +229,3 @@ npm install --save-dev postcss-modules
 ```
 
 [FileSystemLoader]: https://github.com/css-modules/css-modules-loader-core/blob/master/src/file-system-loader.js
-[webpack's `interpolateName`]: https://github.com/webpack/loader-utils#interpolatename
