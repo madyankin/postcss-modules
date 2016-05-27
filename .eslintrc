@@ -10,7 +10,7 @@
   "rules": {
     "quotes": [2, "single"],
     "template-curly-spacing": [2, "always"],
-    "max-len": [2, 80, 4],
+    "max-len": [2, 100, 4],
     "key-spacing": 0,
     "no-multi-spaces": 0,
   }
