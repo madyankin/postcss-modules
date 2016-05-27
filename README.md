@@ -3,8 +3,8 @@
 A [PostCSS] plugin to use [CSS Modules] everywhere. Not only at the client side.
 
 [PostCSS]:      https://github.com/postcss/postcss
-[ci-img]:       https://travis-ci.org/outpunk/postcss-modules.svg
-[ci]:           https://travis-ci.org/outpunk/postcss-modules
+[ci-img]:       https://travis-ci.org/css-modules/postcss-modules.svg
+[ci]:           https://travis-ci.org/css-modules/postcss-modules
 [CSS Modules]:  https://github.com/css-modules/css-modules
 
 <a href="https://evilmartians.com/?utm_source=postcss-modules">
