@@ -41,9 +41,10 @@ module.exports = postcss.plugin('postcss-modules', (opts = {}) => {
       postcss([...plugins, parser.plugin])
         .process(css, { from: css.source.input.file })
         .then(() => {
-          Object.keys(loader.sources).forEach(key => {
-            css.prepend(loader.sources[key]);
-          });
+          const out = loader.finalSource;
+          if (out) {
+            css.prepend(out);
+          }
 
           getJSON(css.source.input.file, parser.exportTokens);
 
