@@ -1,3 +1,6 @@
+## 0.5.1
+* Fixed sorting for composed dependencies by Josh Johnston (@joshwnj) (https://github.com/css-modules/postcss-modules/issues/38)
+
 ## 0.5.0
 * Added `scopeBehaviour` option (https://github.com/css-modules/postcss-modules/issues/22)
 * Added ability to pass a string to `generateScopedName` (https://github.com/css-modules/postcss-modules/issues/21)
