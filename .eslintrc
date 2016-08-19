@@ -13,5 +13,6 @@
     "max-len": [2, 100, 4],
     "key-spacing": 0,
     "no-multi-spaces": 0,
+    "import/no-extraneous-dependencies": 0
   }
 }
