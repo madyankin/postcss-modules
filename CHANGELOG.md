@@ -1,3 +1,6 @@
+## 0.5.2
+* Updated dependencies
+
 ## 0.5.1
 * Fixed sorting for composed dependencies by Josh Johnston (@joshwnj) (https://github.com/css-modules/postcss-modules/issues/38)
 
