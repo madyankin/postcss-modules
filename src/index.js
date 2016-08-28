@@ -37,7 +37,9 @@ module.exports = postcss.plugin('postcss-modules', (opts = {}) => {
     let pluginList = defaultPlugins[defaultScopeBehaviour];
 
     if (globalModulePathWhitelist) {
-      const isGlobalModule = globalModulePathWhitelist.filter(regex => inputFile.match(regex)).length !== 0;
+      const isGlobalModule = globalModulePathWhitelist
+        .filter(regex => inputFile.match(regex))
+        .length !== 0;
       pluginList = defaultPlugins[isGlobalModule ? 'global' : 'local'];
     }
 
