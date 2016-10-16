@@ -91,7 +91,7 @@ postcss([
       var jsonFileName  = path.resolve('./build' + cssName + '.json');
       fs.writeFileSync(jsonFileName, JSON.stringify(json));
     }
-  });
+  })
 ]);
 ```
 
@@ -104,7 +104,7 @@ this behaviour using the `scopeBehaviour` option:
 postcss([
   require('postcss-modules')({
     scopeBehaviour: 'global' // can be 'global' or 'local',
-  });
+  })
 ]);
 ```
 
@@ -121,7 +121,7 @@ postcss([
 
       return '_' + file + '_' + line + '_' + name;
     }
-  });
+  })
 ]);
 ```
 
@@ -132,7 +132,7 @@ Or just pass an interpolated string to the `generateScopedName` option
 postcss([
   require('postcss-modules')({
     generateScopedName: '[name]__[local]___[hash:base64:5]',
-  });
+  })
 ]);
 ```
 
@@ -144,7 +144,7 @@ If you need, you can pass a custom loader (see [FileSystemLoader] for example):
 postcss([
   require('postcss-modules')({
     Loader: CustomLoader,
-  });
+  })
 ]);
 ```
 
