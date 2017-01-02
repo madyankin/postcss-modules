@@ -25,7 +25,7 @@ function generateScopedName(name, filename) {
 }
 
 
-Object.keys(cases).forEach(name => {
+Object.keys(cases).forEach((name) => {
   const description = cases[name];
 
   const scopedNameGenerator = name === 'interpolated'
@@ -34,7 +34,7 @@ Object.keys(cases).forEach(name => {
 
   const scopeBehaviour = name === 'global' ? 'global' : 'local';
 
-  test(description, t => {
+  test(description, (t) => {
     const sourceFile   = path.join(fixturesPath, 'in', `${ name }.css`);
     const expectedFile = path.join(fixturesPath, 'out', name);
     const source       = fs.readFileSync(sourceFile).toString();
@@ -55,7 +55,7 @@ Object.keys(cases).forEach(name => {
 
     return postcss(plugins)
       .process(source, { from: sourceFile })
-      .then(result => {
+      .then((result) => {
         t.deepEqual(result.css, expectedCSS);
         t.deepEqual(resultJson, JSON.parse(expectedJSON));
       });
@@ -63,7 +63,7 @@ Object.keys(cases).forEach(name => {
 });
 
 
-test('saves JSON next to CSS by default', t => {
+test('saves JSON next to CSS by default', (t) => {
   const sourceFile = path.join(fixturesPath, 'in', 'saveJSON.css');
   const source     = fs.readFileSync(sourceFile).toString();
   const jsonFile   = path.join(fixturesPath, 'in', 'saveJSON.css.json');
