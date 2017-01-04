@@ -79,3 +79,22 @@ test('saves JSON next to CSS by default', (t) => {
       t.deepEqual(JSON.parse(json), { title: '_saveJSON_title' });
     });
 });
+
+
+test('processes globalModulePaths option', (t) => {
+  const sourceFile  = path.join(fixturesPath, 'in', 'globalModulePaths.css');
+  const source      = fs.readFileSync(sourceFile).toString();
+
+  const outFile     = path.join(fixturesPath, 'out', 'globalModulePaths.css');
+  const out         = fs.readFileSync(outFile).toString();
+
+  const thePlugin = plugin({
+    generateScopedName,
+    globalModulePaths:  [/globalModulePaths/],
+    getJSON:            () => {},
+  });
+
+  return postcss([thePlugin])
+    .process(source, { from: sourceFile })
+    .then(result => t.deepEqual(result.css, out));
+});
