@@ -1,3 +1,7 @@
+## 0.6.0
+* Added `globalModulePaths` option (Thanks to @pospi).
+* Refactored all the things.
+
 ## 0.5.2
 * Updated dependencies
 
