@@ -11,10 +11,13 @@ import { defaultPlugins, isValidBehaviour } from './behaviours';
 module.exports = postcss.plugin('postcss-modules', (opts = {}) => {
   const scopedNameGenerator = opts.generateScopedName || generateScopedName;
   const getJSON             = opts.getJSON || saveJSON;
-  let scopeBehaviour        = 'local';
+
+  const globalModulePathWhitelist = opts.globalModulePaths || null;
+
+  let defaultScopeBehaviour = 'local';
 
   if (opts.scopeBehaviour && isValidBehaviour(opts.scopeBehaviour)) {
-    scopeBehaviour = opts.scopeBehaviour;
+    defaultScopeBehaviour = opts.scopeBehaviour;
   }
 
   if (typeof scopedNameGenerator === 'function') {
@@ -26,10 +29,21 @@ module.exports = postcss.plugin('postcss-modules', (opts = {}) => {
   }
 
   return (css, result) => {
+    const inputFile = css.source.input.file;
+
     const resultPlugins = result.processor.plugins
       .filter(plugin => plugin.postcssPlugin !== 'postcss-modules');
 
-    const plugins = [...defaultPlugins[scopeBehaviour], ...resultPlugins];
+    let pluginList = defaultPlugins[defaultScopeBehaviour];
+
+    if (globalModulePathWhitelist) {
+      const isGlobalModule = globalModulePathWhitelist
+        .filter(regex => inputFile.match(regex))
+        .length !== 0;
+      pluginList = defaultPlugins[isGlobalModule ? 'global' : 'local'];
+    }
+
+    const plugins = [...pluginList, ...resultPlugins];
 
     const loader = typeof opts.Loader === 'function' ?
       new opts.Loader('/', plugins) :
@@ -39,7 +53,7 @@ module.exports = postcss.plugin('postcss-modules', (opts = {}) => {
 
     const promise = new Promise((resolve, reject) => {
       postcss([...plugins, parser.plugin])
-        .process(css, { from: css.source.input.file })
+        .process(css, { from: inputFile })
         .then(() => {
           const out = loader.finalSource;
           if (out) {
