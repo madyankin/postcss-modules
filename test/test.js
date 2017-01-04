@@ -1,10 +1,11 @@
-import test         from 'ava';
-import postcss      from 'postcss';
-import autoprefixer from 'autoprefixer';
-import fs           from 'fs';
-import path         from 'path';
-import fileExists   from 'file-exists';
-import plugin       from '../src';
+import test           from 'ava';
+import postcss        from 'postcss';
+import autoprefixer   from 'autoprefixer';
+import fs             from 'fs';
+import path           from 'path';
+import fileExists     from 'file-exists';
+import plugin         from '../src';
+import { behaviours } from '../src/behaviours';
 
 const fixturesPath = path.resolve(__dirname, './fixtures');
 
@@ -32,7 +33,9 @@ Object.keys(cases).forEach((name) => {
     ? '[name]__[local]___[hash:base64:5]'
     : generateScopedName;
 
-  const scopeBehaviour = name === 'global' ? 'global' : 'local';
+  const scopeBehaviour = name === behaviours.GLOBAL
+    ? behaviours.GLOBAL
+    : behaviours.LOCAL;
 
   test(description, (t) => {
     const sourceFile   = path.join(fixturesPath, 'in', `${ name }.css`);

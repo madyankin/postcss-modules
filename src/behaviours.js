@@ -1,14 +1,20 @@
 import Core from 'css-modules-loader-core';
 
+export const behaviours = {
+  LOCAL:  'local',
+  GLOBAL: 'global',
+};
+
+
 export const defaultPlugins = {
-  local: [
+  [behaviours.LOCAL]: [
     Core.values,
     Core.localByDefault,
     Core.extractImports,
     Core.scope,
   ],
 
-  global: [
+  [behaviours.GLOBAL]: [
     Core.values,
     Core.extractImports,
     Core.scope,
@@ -17,5 +23,5 @@ export const defaultPlugins = {
 
 
 export function isValidBehaviour(behaviour) {
-  return behaviour === 'local' || behaviour === 'global';
+  return Object.values(behaviours).includes(behaviour);
 }
