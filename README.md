@@ -108,17 +108,16 @@ postcss([
 ]);
 ```
 
-
 To define paths for global modules, use the `globalModulePaths` option. 
 It is an array with regular expressions defining the paths:
-``js
+
+```js
 postcss([
   require('postcss-modules')({
     globalModulePaths: [/path\/to\/legacy-styles/, /another\/paths/],
   });
 ]);
 ```
-
 
 To generate custom classes, use the `generateScopedName` callback:
 
