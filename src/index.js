@@ -37,16 +37,18 @@ function getLoader(opts, plugins) {
 }
 
 
+function isGlobalModule(globalModules, inputFile) {
+  return globalModules.some(regex => inputFile.match(regex));
+}
+
+
 function getDefaultPluginsList(opts, inputFile) {
-  const globalModulesWhitelist = opts.globalModulePaths || null;
-  const defaultBehaviour       = getDefaultScopeBehaviour(opts);
-  const generateName           = getScopedNameGenerator(opts);
+  const globalModulesList = opts.globalModulePaths || null;
+  const defaultBehaviour  = getDefaultScopeBehaviour(opts);
+  const generateName      = getScopedNameGenerator(opts);
 
-  if (globalModulesWhitelist) {
-    const isGlobalModule  = globalModulesWhitelist.some(regex => inputFile.match(regex));
-    const moduleBehaviour = isGlobalModule ? behaviours.GLOBAL : behaviours.LOCAL;
-
-    return getDefaultPlugins(moduleBehaviour, generateName);
+  if (globalModulesList && isGlobalModule(globalModulesList, inputFile)) {
+    return getDefaultPlugins(behaviours.GLOBAL, generateName);
   }
 
   return getDefaultPlugins(defaultBehaviour, generateName);
