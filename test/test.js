@@ -99,5 +99,33 @@ test('processes globalModulePaths option', (t) => {
 
   return postcss([thePlugin])
     .process(source, { from: sourceFile })
-    .then(result => t.deepEqual(result.css, out));
+    .then(result => t.is(result.css, out));
+});
+
+
+test('different instances have different generateScopedName functions', (t) => {
+  const one = plugin({
+    generateScopedName: () => 'one',
+    getJSON:            () => {},
+  });
+
+  const two = plugin({
+    generateScopedName: () => 'two',
+    getJSON:            () => {},
+  });
+
+  const css     = '.foo {}';
+  const params  = { from: 'test.css' };
+
+  return postcss([one])
+    .process(css, params)
+    .then((resultOne) => {
+      postcss([two])
+        .process(css, params)
+        .then((resultTwo) => {
+          t.is(resultOne.css, '.one {}');
+          t.is(resultTwo.css, '.two {}');
+          t.not(resultOne.css, resultTwo.css);
+        });
+    });
 });

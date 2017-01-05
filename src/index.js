@@ -1,12 +1,11 @@
 import postcss            from 'postcss';
-import Core               from 'css-modules-loader-core';
 import Parser             from 'css-modules-loader-core/lib/parser';
 import FileSystemLoader   from 'css-modules-loader-core/lib/file-system-loader';
 import genericNames       from 'generic-names';
 import generateScopedName from './generateScopedName';
 import saveJSON           from './saveJSON';
 import {
-  defaultPlugins,
+  getDefaultPlugins,
   isValidBehaviour,
   behaviours,
 } from './behaviours';
@@ -32,21 +31,25 @@ function getScopedNameGenerator(opts) {
 
 
 function getLoader(opts, plugins) {
-  return typeof opts.Loader === 'function' ?
-    new opts.Loader('/', plugins) :
-    new FileSystemLoader('/', plugins);
+  return typeof opts.Loader === 'function'
+    ? new opts.Loader('/', plugins)
+    : new FileSystemLoader('/', plugins);
 }
 
 
-function getDefaultPlugins(opts, behaviour, inputFile) {
+function getDefaultPluginsList(opts, inputFile) {
   const globalModulesWhitelist = opts.globalModulePaths || null;
+  const defaultBehaviour       = getDefaultScopeBehaviour(opts);
+  const generateName           = getScopedNameGenerator(opts);
 
   if (globalModulesWhitelist) {
-    const isGlobalModule = globalModulesWhitelist.some(regex => inputFile.match(regex));
-    return defaultPlugins[isGlobalModule ? behaviours.GLOBAL : behaviours.LOCAL];
+    const isGlobalModule  = globalModulesWhitelist.some(regex => inputFile.match(regex));
+    const moduleBehaviour = isGlobalModule ? behaviours.GLOBAL : behaviours.LOCAL;
+
+    return getDefaultPlugins(moduleBehaviour, generateName);
   }
 
-  return defaultPlugins[behaviour];
+  return getDefaultPlugins(defaultBehaviour, generateName);
 }
 
 
@@ -56,14 +59,12 @@ function isResultPlugin(plugin) {
 
 
 module.exports = postcss.plugin(PLUGIN_NAME, (opts = {}) => {
-  const getJSON                   = opts.getJSON || saveJSON;
-  const defaultScopeBehaviour     = getDefaultScopeBehaviour(opts);
-  Core.scope.generateScopedName   = getScopedNameGenerator(opts);
+  const getJSON = opts.getJSON || saveJSON;
 
   return (css, result) => {
     const inputFile     = css.source.input.file;
     const resultPlugins = result.processor.plugins.filter(isResultPlugin);
-    const pluginList    = getDefaultPlugins(opts, defaultScopeBehaviour, inputFile);
+    const pluginList    = getDefaultPluginsList(opts, inputFile);
     const plugins       = [...pluginList, ...resultPlugins];
     const loader        = getLoader(opts, plugins);
     const parser        = new Parser(loader.fetch.bind(loader));

@@ -6,20 +6,26 @@ export const behaviours = {
 };
 
 
-export const defaultPlugins = {
-  [behaviours.LOCAL]: [
-    Core.values,
-    Core.localByDefault,
-    Core.extractImports,
-    Core.scope,
-  ],
+export function getDefaultPlugins(behaviour, generateScopedName) {
+  const scope = Core.scope({ generateScopedName });
 
-  [behaviours.GLOBAL]: [
-    Core.values,
-    Core.extractImports,
-    Core.scope,
-  ],
-};
+  const plugins = {
+    [behaviours.LOCAL]: [
+      Core.values,
+      Core.localByDefault,
+      Core.extractImports,
+      scope,
+    ],
+
+    [behaviours.GLOBAL]: [
+      Core.values,
+      Core.extractImports,
+      scope,
+    ],
+  };
+
+  return plugins[behaviour];
+}
 
 
 export function isValidBehaviour(behaviour) {
