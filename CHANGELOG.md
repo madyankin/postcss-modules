@@ -1,3 +1,6 @@
+## 0.6.2
+* Refactored `getDefaultPluginsList` function
+
 ## 0.6.1
 * Fixed `generateScopedName` bug with multiple postcss-modules instances (https://github.com/css-modules/postcss-modules/issues/37)
 
