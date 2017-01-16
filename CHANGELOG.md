@@ -1,3 +1,6 @@
+## 0.6.3
+* Fixed regression in `isValidBehaviour` function (https://github.com/css-modules/postcss-modules/issues/53)
+
 ## 0.6.2
 * Refactored `getDefaultPluginsList` function
 

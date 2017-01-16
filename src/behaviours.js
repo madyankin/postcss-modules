@@ -29,5 +29,8 @@ export function getDefaultPlugins(behaviour, generateScopedName) {
 
 
 export function isValidBehaviour(behaviour) {
-  return Object.values(behaviours).includes(behaviour);
+  return Object
+    .keys(behaviours)
+    .map(key => behaviours[key])
+    .indexOf(behaviour) > -1;
 }
