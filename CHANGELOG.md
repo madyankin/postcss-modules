@@ -1,3 +1,6 @@
+## 0.6.4
+* Added the `root` option to pass the root path by Sharon Rolel (@Mosho1) (https://github.com/css-modules/postcss-modules/pull/55)
+
 ## 0.6.3
 * Fixed regression in `isValidBehaviour` function (https://github.com/css-modules/postcss-modules/issues/53)
 

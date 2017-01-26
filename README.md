@@ -159,6 +159,16 @@ postcss([
 ]);
 ```
 
+You can also pass any needed root path:
+```js
+postcss([
+  require('postcss-modules')({
+    root: 'C:\',
+  });
+]);
+```
+
+
 ## Integration with templates
 The plugin only transforms CSS classes to CSS modules.
 But you probably want to integrate these CSS modules with your templates.
