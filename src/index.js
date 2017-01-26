@@ -31,9 +31,10 @@ function getScopedNameGenerator(opts) {
 
 
 function getLoader(opts, plugins) {
+  const root = opts.root || '/';
   return typeof opts.Loader === 'function'
-    ? new opts.Loader('/', plugins)
-    : new FileSystemLoader('/', plugins);
+    ? new opts.Loader(root, plugins)
+    : new FileSystemLoader(root, plugins);
 }
 
 
