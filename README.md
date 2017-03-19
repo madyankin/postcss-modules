@@ -88,7 +88,7 @@ postcss([
     getJSON: function(cssFileName, json) {
       var path          = require('path');
       var cssName       = path.basename(cssFileName, '.css');
-      var jsonFileName  = path.resolve('./build' + cssName + '.json');
+      var jsonFileName  = path.resolve('./build/' + cssName + '.json');
       fs.writeFileSync(jsonFileName, JSON.stringify(json));
     }
   })
