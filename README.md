@@ -95,6 +95,8 @@ postcss([
 ]);
 ```
 
+`getJSON` may also return a `Promise`.
+
 ### Generating scoped names
 
 By default, the plugin assumes that all the classes are local. You can change
