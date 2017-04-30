@@ -72,17 +72,14 @@ module.exports = postcss.plugin(PLUGIN_NAME, (opts = {}) => {
     const loader        = getLoader(opts, plugins);
     const parser        = new Parser(loader.fetch.bind(loader));
 
-    return new Promise((resolve, reject) => {
-      postcss([...plugins, parser.plugin])
-        .process(css, { from: inputFile })
-        .then(() => {
-          const out = loader.finalSource;
-          if (out) css.prepend(out);
+    return postcss([...plugins, parser.plugin])
+      .process(css, { from: inputFile })
+      .then(() => {
+        const out = loader.finalSource;
+        if (out) css.prepend(out);
 
-          getJSON(css.source.input.file, parser.exportTokens);
-
-          resolve();
-        }, reject);
-    });
+        // getJSON may return a thenable
+        return getJSON(css.source.input.file, parser.exportTokens);
+      });
   };
 });
