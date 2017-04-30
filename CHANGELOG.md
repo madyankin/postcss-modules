@@ -1,3 +1,7 @@
+
+## 0.7.0
+* Allow async getJSON by Philipp A. (@flying-sheep) https://github.com/css-modules/postcss-modules/pull/59
+
 ## 0.6.4
 * Added the `root` option to pass the root path by Sharon Rolel (@Mosho1) (https://github.com/css-modules/postcss-modules/pull/55)
 
