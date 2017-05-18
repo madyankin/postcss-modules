@@ -165,7 +165,7 @@ You can also pass any needed root path:
 ```js
 postcss([
   require('postcss-modules')({
-    root: 'C:\',
+    root: 'C:\\',
   });
 ]);
 ```
