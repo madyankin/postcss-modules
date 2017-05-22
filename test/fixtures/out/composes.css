@@ -4,26 +4,16 @@
     display: flex;
     height: 100px;
     width: 200px;
-}
-
-._composes_a_hello {
+}._composes_a_hello {
     foo: bar;
-}
-
-._composes_mixins_title {
+}._composes_mixins_title {
     color: black;
     font-size: 40px;
-}
-
-._composes_mixins_title:hover {
+}._composes_mixins_title:hover {
     color: red;
-}
-
-._composes_mixins_figure {
-    text-align: center;
-}
-
-._composes_mixins_title:focus, ._composes_mixins_figure:focus {
+}._composes_mixins_figure {
+    text-align: center
+}._composes_mixins_title:focus, ._composes_mixins_figure:focus {
     outline: none;
     border: 1px solid red;
 }
