@@ -1,6 +1,8 @@
+## 0.8.0
+* Updated PostCSS to 6 by Alexey Litvinov (@sullenor) https://github.com/css-modules/postcss-modules/pull/65
+
 ## 0.7.1
 * Allowed empty string as opts.root by Sharon Rolel (@Mosho1) https://github.com/css-modules/postcss-modules/pull/56
-
 
 ## 0.7.0
 * Allow async getJSON by Philipp A. (@flying-sheep) https://github.com/css-modules/postcss-modules/pull/59
