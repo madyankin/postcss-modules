@@ -1,3 +1,7 @@
+## 1.0.0
+* Dropped support for Node < 6
+* Updated dependencies
+
 ## 0.8.0
 * Updated PostCSS to 6 by Alexey Litvinov (@sullenor) https://github.com/css-modules/postcss-modules/pull/65
 
