@@ -3,7 +3,6 @@ import postcss        from 'postcss';
 import autoprefixer   from 'autoprefixer';
 import fs             from 'fs';
 import path           from 'path';
-import fileExists     from 'file-exists';
 import plugin         from '../src';
 import { behaviours } from '../src/behaviours';
 
@@ -37,7 +36,7 @@ Object.keys(cases).forEach((name) => {
     ? behaviours.GLOBAL
     : behaviours.LOCAL;
 
-  test(description, (t) => {
+  test(description, async (t) => {
     const sourceFile   = path.join(fixturesPath, 'in', `${ name }.css`);
     const expectedFile = path.join(fixturesPath, 'out', name);
     const source       = fs.readFileSync(sourceFile).toString();
@@ -56,31 +55,28 @@ Object.keys(cases).forEach((name) => {
       }),
     ];
 
-    return postcss(plugins)
-      .process(source, { from: sourceFile })
-      .then((result) => {
-        t.deepEqual(result.css, expectedCSS);
-        t.deepEqual(resultJson, JSON.parse(expectedJSON));
-      });
+    const result = await postcss(plugins).process(source, { from: sourceFile });
+
+    t.deepEqual(result.css, expectedCSS);
+    t.deepEqual(resultJson, JSON.parse(expectedJSON));
   });
 });
 
 
-test('saves JSON next to CSS by default', (t) => {
+test('saves JSON next to CSS by default', async (t) => {
   const sourceFile = path.join(fixturesPath, 'in', 'saveJSON.css');
   const source     = fs.readFileSync(sourceFile).toString();
   const jsonFile   = path.join(fixturesPath, 'in', 'saveJSON.css.json');
 
-  if (fileExists(jsonFile)) fs.unlinkSync(jsonFile);
+  if (fs.existsSync(jsonFile)) fs.unlinkSync(jsonFile);
 
-  return postcss([plugin({ generateScopedName })])
-    .process(source, { from: sourceFile })
-    .then(() => {
-      const json = fs.readFileSync(jsonFile).toString();
-      fs.unlinkSync(jsonFile);
+  await postcss([plugin({ generateScopedName })])
+    .process(source, { from: sourceFile });
 
-      t.deepEqual(JSON.parse(json), { title: '_saveJSON_title' });
-    });
+  const json = fs.readFileSync(jsonFile).toString();
+  fs.unlinkSync(jsonFile);
+
+  t.deepEqual(JSON.parse(json), { title: '_saveJSON_title' });
 });
 
 
@@ -103,7 +99,7 @@ test('processes globalModulePaths option', (t) => {
 });
 
 
-test('different instances have different generateScopedName functions', (t) => {
+test('different instances have different generateScopedName functions', async (t) => {
   const one = plugin({
     generateScopedName: () => 'one',
     getJSON:            () => {},
@@ -117,15 +113,10 @@ test('different instances have different generateScopedName functions', (t) => {
   const css     = '.foo {}';
   const params  = { from: 'test.css' };
 
-  return postcss([one])
-    .process(css, params)
-    .then((resultOne) => {
-      postcss([two])
-        .process(css, params)
-        .then((resultTwo) => {
-          t.is(resultOne.css, '.one {}');
-          t.is(resultTwo.css, '.two {}');
-          t.not(resultOne.css, resultTwo.css);
-        });
-    });
+  const resultOne = await postcss([one]).process(css, params);
+  const resultTwo = await postcss([two]).process(css, params);
+
+  t.is(resultOne.css, '.one {}');
+  t.is(resultTwo.css, '.two {}');
+  t.not(resultOne.css, resultTwo.css);
 });
