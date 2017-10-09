@@ -64,7 +64,7 @@ function isResultPlugin(plugin) {
 module.exports = postcss.plugin(PLUGIN_NAME, (opts = {}) => {
   const getJSON = opts.getJSON || saveJSON;
 
-  return (css, result) => {
+  return async (css, result) => {
     const inputFile     = css.source.input.file;
     const resultPlugins = result.processor.plugins.filter(isResultPlugin);
     const pluginList    = getDefaultPluginsList(opts, inputFile);
@@ -72,14 +72,12 @@ module.exports = postcss.plugin(PLUGIN_NAME, (opts = {}) => {
     const loader        = getLoader(opts, plugins);
     const parser        = new Parser(loader.fetch.bind(loader));
 
-    return postcss([...plugins, parser.plugin])
-      .process(css, { from: inputFile })
-      .then(() => {
-        const out = loader.finalSource;
-        if (out) css.prepend(out);
+    await postcss([...plugins, parser.plugin]).process(css, { from: inputFile });
 
-        // getJSON may return a thenable
-        return getJSON(css.source.input.file, parser.exportTokens);
-      });
+    const out = loader.finalSource;
+    if (out) css.prepend(out);
+
+    // getJSON may return a promise
+    return getJSON(css.source.input.file, parser.exportTokens);
   };
 });

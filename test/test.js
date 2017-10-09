@@ -80,7 +80,7 @@ test('saves JSON next to CSS by default', async (t) => {
 });
 
 
-test('processes globalModulePaths option', (t) => {
+test('processes globalModulePaths option', async (t) => {
   const sourceFile  = path.join(fixturesPath, 'in', 'globalModulePaths.css');
   const source      = fs.readFileSync(sourceFile).toString();
 
@@ -93,9 +93,9 @@ test('processes globalModulePaths option', (t) => {
     getJSON:            () => {},
   });
 
-  return postcss([thePlugin])
-    .process(source, { from: sourceFile })
-    .then(result => t.is(result.css, out));
+  const result = await postcss([thePlugin]).process(source, { from: sourceFile });
+
+  t.is(result.css, out);
 });
 
 
