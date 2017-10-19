@@ -78,6 +78,6 @@ module.exports = postcss.plugin(PLUGIN_NAME, (opts = {}) => {
     if (out) css.prepend(out);
 
     // getJSON may return a promise
-    return getJSON(css.source.input.file, parser.exportTokens);
+    return getJSON(css.source.input.file, parser.exportTokens, result.opts.to);
   };
 });
