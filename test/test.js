@@ -120,3 +120,27 @@ test('different instances have different generateScopedName functions', async (t
   t.is(resultTwo.css, '.two {}');
   t.not(resultOne.css, resultTwo.css);
 });
+
+test('getJSON with outputFileName', async (t) => {
+  const sourceFile   = path.join(fixturesPath, 'in', 'test', 'getJSON.css');
+  const expectedFile = path.join(fixturesPath, 'out', 'test', 'getJSON');
+  const source       = fs.readFileSync(sourceFile).toString();
+  const expectedJSON = fs.readFileSync(`${ expectedFile }.json`).toString();
+  let jsonFileName;
+  let resultJson;
+
+  const plugins = [
+    plugin({
+      generateScopedName,
+      getJSON: (cssFile, json, outputFileName) => {
+        jsonFileName = outputFileName.replace('.css', '.json');
+        resultJson = json;
+      },
+    }),
+  ];
+
+  await postcss(plugins).process(source, { from: sourceFile, to: `${ expectedFile }.css` });
+
+  t.deepEqual(jsonFileName, `${ expectedFile }.json`);
+  t.deepEqual(resultJson, JSON.parse(expectedJSON));
+});
