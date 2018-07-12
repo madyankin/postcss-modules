@@ -38,6 +38,7 @@
   "scripts": {
     "pretest": "$(npm bin)/eslint src test",
     "test": "$(npm bin)/babel-node $(npm bin)/ava",
+    "debug": "$(npm bin)/babel-node --inspect-brk node_modules/ava/profile.js ./test/test.js",
     "transpile": "$(npm bin)/babel src -d build",
     "prepublish": "npm run transpile",
     "postpublish": "rm -rf build && git push --follow-tags"

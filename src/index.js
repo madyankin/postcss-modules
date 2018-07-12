@@ -44,6 +44,7 @@ function isGlobalModule(globalModules, inputFile) {
 
 
 function getDefaultPluginsList(opts, inputFile) {
+  debugger; // eslint-disable-line
   const globalModulesList = opts.globalModulePaths || null;
   const defaultBehaviour  = getDefaultScopeBehaviour(opts);
   const generateName      = getScopedNameGenerator(opts);
@@ -63,7 +64,6 @@ function isResultPlugin(plugin) {
 
 module.exports = postcss.plugin(PLUGIN_NAME, (opts = {}) => {
   const getJSON = opts.getJSON || saveJSON;
-
   return async (css, result) => {
     const inputFile     = css.source.input.file;
     const resultPlugins = result.processor.plugins.filter(isResultPlugin);

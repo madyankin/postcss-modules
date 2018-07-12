@@ -5,6 +5,7 @@ import fs             from 'fs';
 import path           from 'path';
 import plugin         from '../src';
 import { behaviours } from '../src/behaviours';
+import testPlugin from '../src/plugin';
 
 const fixturesPath = path.resolve(__dirname, './fixtures');
 
@@ -24,6 +25,7 @@ function generateScopedName(name, filename) {
   return `_${ file }_${ name }`;
 }
 
+console.log('--------------debug-------------'); // eslint-disable-line
 
 Object.keys(cases).forEach((name) => {
   const description = cases[name];
@@ -62,21 +64,37 @@ Object.keys(cases).forEach((name) => {
   });
 });
 
+test('create json', async () => {
+  const filePath = path.join(fixturesPath, '../1.css');
+  const source = fs.readFileSync(filePath);
+  const jsonFile   = path.join(fixturesPath, '../1.css.json');
 
-test('saves JSON next to CSS by default', async (t) => {
+  const css = await postcss([
+    // plugin({ generateScopedName }),
+    testPlugin(),
+  ])
+    .process(source, { from: filePath });
+  console.log('css is ', css.css); // eslint-disable-line
+  const json = await fs.readFile(jsonFile);
+  debugger; // eslint-disable-line
+  console.log('json', json); // eslint-disable-line
+});
+
+test.only('saves JSON next to CSS by default', async (t) => {
   const sourceFile = path.join(fixturesPath, 'in', 'saveJSON.css');
   const source     = fs.readFileSync(sourceFile).toString();
   const jsonFile   = path.join(fixturesPath, 'in', 'saveJSON.css.json');
 
   if (fs.existsSync(jsonFile)) fs.unlinkSync(jsonFile);
 
-  await postcss([plugin({ generateScopedName })])
+  const result = await postcss([plugin({ generateScopedName })])
     .process(source, { from: sourceFile });
 
   const json = fs.readFileSync(jsonFile).toString();
   fs.unlinkSync(jsonFile);
 
   t.deepEqual(JSON.parse(json), { title: '_saveJSON_title' });
+  console.log(result); // eslint-disable-line
 });
 
 
