@@ -170,6 +170,25 @@ postcss([
 ]);
 ```
 
+### Camel cased classes
+
+If you need, you can pass the options `{ camelCase: true }` to transform classes:
+
+CSS:
+```css
+.post-title {
+  color: red;
+}
+```
+
+JSON:
+```json
+{
+  "post-title": "._post-title_116zl_1",
+  "postTitle": "._post-title_116zl_1"
+}
+```
+
 
 ## Integration with templates
 The plugin only transforms CSS classes to CSS modules.
