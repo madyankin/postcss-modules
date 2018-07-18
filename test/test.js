@@ -98,6 +98,25 @@ test('processes globalModulePaths option', async (t) => {
   t.is(result.css, out);
 });
 
+test('processes camelCase option', async (t) => {
+  const sourceFile = path.join(fixturesPath, 'in', 'camelCase.css');
+  const source     = fs.readFileSync(sourceFile).toString();
+  const jsonFile   = path.join(fixturesPath, 'in', 'camelCase.css.json');
+
+  if (fs.existsSync(jsonFile)) fs.unlinkSync(jsonFile);
+
+  await postcss([plugin({ generateScopedName, camelCase: true })])
+    .process(source, { from: sourceFile });
+
+  const json = fs.readFileSync(jsonFile).toString();
+  fs.unlinkSync(jsonFile);
+
+  t.deepEqual(JSON.parse(json), {
+    camelCase: '_camelCase_camel-case',
+    'camel-case': '_camelCase_camel-case',
+  });
+});
+
 
 test('different instances have different generateScopedName functions', async (t) => {
   const one = plugin({

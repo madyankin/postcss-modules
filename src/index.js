@@ -1,4 +1,5 @@
 import postcss            from 'postcss';
+import camelCase          from 'lodash.camelcase';
 import Parser             from 'css-modules-loader-core/lib/parser';
 import FileSystemLoader   from 'css-modules-loader-core/lib/file-system-loader';
 import genericNames       from 'generic-names';
@@ -76,6 +77,15 @@ module.exports = postcss.plugin(PLUGIN_NAME, (opts = {}) => {
 
     const out = loader.finalSource;
     if (out) css.prepend(out);
+
+    if (opts.camelCase === true) {
+      for (let token in parser.exportTokens) {
+        const camelCaseToken = camelCase(token);
+
+        parser.exportTokens[camelCaseToken] = parser.exportTokens[token];
+      }
+    }
+
 
     // getJSON may return a promise
     return getJSON(css.source.input.file, parser.exportTokens, result.opts.to);
