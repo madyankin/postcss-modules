@@ -79,7 +79,7 @@ module.exports = postcss.plugin(PLUGIN_NAME, (opts = {}) => {
     if (out) css.prepend(out);
 
     if (opts.camelCase === true) {
-      Object.keys(parser.exportTokens).forEach(token => {
+      Object.keys(parser.exportTokens).forEach((token) => {
         const camelCaseToken = camelCase(token);
 
         parser.exportTokens[camelCaseToken] = parser.exportTokens[token];
