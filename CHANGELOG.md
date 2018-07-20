@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.0
+
+- Added option to transform classes to camelCase by Igor Ribeiro (@igor-ribeiro) <https://github.com/css-modules/postcss-modules/pull/82>
+
 ## 1.1.0
 
 - Added ability to transmit outputFileName into getJSON by @lutien <https://github.com/css-modules/postcss-modules/pull/72>
