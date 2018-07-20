@@ -20,6 +20,7 @@
   "dependencies": {
     "css-modules-loader-core": "^1.1.0",
     "generic-names": "^1.0.2",
+    "lodash.camelcase": "^4.3.0",
     "postcss": "^6.0.1",
     "string-hash": "^1.1.1"
   },
