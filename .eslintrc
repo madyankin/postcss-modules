@@ -4,7 +4,7 @@
     "sourceType": "module"
   },
   "env": {
-    "node": true,
+    "node": true
   },
   "parser": "babel-eslint",
   "rules": {

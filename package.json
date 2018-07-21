@@ -19,22 +19,22 @@
   },
   "dependencies": {
     "css-modules-loader-core": "^1.1.0",
-    "generic-names": "^1.0.2",
+    "generic-names": "^1.0.3",
     "lodash.camelcase": "^4.3.0",
-    "postcss": "^6.0.1",
+    "postcss": "^7.0.1",
     "string-hash": "^1.1.1"
   },
   "devDependencies": {
-    "autoprefixer": "^6.6.0",
-    "ava": "^0.22.0",
+    "autoprefixer": "6.7.7",
+    "ava": "^0.25.0",
     "babel": "^6.5.2",
-    "babel-cli": "^6.18.0",
-    "babel-core": "^6.21.0",
-    "babel-eslint": "^8.0.1",
-    "babel-preset-env": "^1.6.0",
-    "eslint": "^4.8.0",
-    "eslint-config-airbnb-base": "^12.0.2",
-    "eslint-plugin-import": "^2.2.0"
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^8.2.6",
+    "babel-preset-env": "^1.7.0",
+    "eslint": "^5.1.0",
+    "eslint-config-airbnb-base": "^13.0.0",
+    "eslint-plugin-import": "^2.13.0"
   },
   "scripts": {
     "pretest": "$(npm bin)/eslint src test",
