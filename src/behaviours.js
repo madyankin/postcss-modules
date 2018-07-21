@@ -1,10 +1,9 @@
-import Core from 'css-modules-loader-core';
+import Core from "css-modules-loader-core";
 
 export const behaviours = {
-  LOCAL:  'local',
-  GLOBAL: 'global',
+  LOCAL: "local",
+  GLOBAL: "global"
 };
-
 
 export function getDefaultPlugins(behaviour, generateScopedName) {
   const scope = Core.scope({ generateScopedName });
@@ -14,23 +13,19 @@ export function getDefaultPlugins(behaviour, generateScopedName) {
       Core.values,
       Core.localByDefault,
       Core.extractImports,
-      scope,
+      scope
     ],
 
-    [behaviours.GLOBAL]: [
-      Core.values,
-      Core.extractImports,
-      scope,
-    ],
+    [behaviours.GLOBAL]: [Core.values, Core.extractImports, scope]
   };
 
   return plugins[behaviour];
 }
 
-
 export function isValidBehaviour(behaviour) {
-  return Object
-    .keys(behaviours)
-    .map(key => behaviours[key])
-    .indexOf(behaviour) > -1;
+  return (
+    Object.keys(behaviours)
+      .map(key => behaviours[key])
+      .indexOf(behaviour) > -1
+  );
 }

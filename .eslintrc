@@ -1,18 +1,14 @@
 {
-  "extends": "airbnb-base",
+  "extends": "eslint:recommended",
   "parserOptions": {
     "sourceType": "module"
   },
   "env": {
-    "node": true
+    "node": true,
+    "es6": true
   },
   "parser": "babel-eslint",
   "rules": {
-    "quotes": [2, "single"],
-    "template-curly-spacing": [2, "always"],
-    "max-len": [2, 100, 4],
-    "key-spacing": 0,
-    "no-multi-spaces": 0,
     "import/no-extraneous-dependencies": 0
   }
 }

@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.3.0
+
+- Updated dependecies
+- Added prettier to format code
+
 ## 1.2.0
 
 - Added option to transform classes to camelCase by Igor Ribeiro (@igor-ribeiro) <https://github.com/css-modules/postcss-modules/pull/82>

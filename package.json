@@ -20,8 +20,11 @@
   "dependencies": {
     "css-modules-loader-core": "^1.1.0",
     "generic-names": "^1.0.3",
+    "husky": "^0.14.3",
+    "lint-staged": "^7.2.0",
     "lodash.camelcase": "^4.3.0",
     "postcss": "^7.0.1",
+    "prettier": "^1.13.7",
     "string-hash": "^1.1.1"
   },
   "devDependencies": {
@@ -33,7 +36,6 @@
     "babel-eslint": "^8.2.6",
     "babel-preset-env": "^1.7.0",
     "eslint": "^5.1.0",
-    "eslint-config-airbnb-base": "^13.0.0",
     "eslint-plugin-import": "^2.13.0"
   },
   "scripts": {
@@ -41,7 +43,19 @@
     "test": "$(npm bin)/babel-node $(npm bin)/ava",
     "transpile": "$(npm bin)/babel src -d build",
     "prepublish": "npm run transpile",
-    "postpublish": "rm -rf build && git push --follow-tags"
+    "postpublish": "rm -rf build && git push --follow-tags",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{json,md}": [
+      "prettier --write",
+      "git add"
+    ],
+    "*.js": [
+      "prettier --write",
+      "eslint --fix",
+      "git add"
+    ]
   },
   "require": "babel-core/register"
 }
