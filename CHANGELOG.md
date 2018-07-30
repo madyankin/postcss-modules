@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.1
+
+- Move dev tools to devDependecies by Anton Khlynovskiy (ubzey) <https://github.com/css-modules/postcss-modules/pull/85>
+
 ## 1.3.0
 
 - Updated dependecies
