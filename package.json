@@ -20,11 +20,8 @@
   "dependencies": {
     "css-modules-loader-core": "^1.1.0",
     "generic-names": "^1.0.3",
-    "husky": "^0.14.3",
-    "lint-staged": "^7.2.0",
     "lodash.camelcase": "^4.3.0",
     "postcss": "^7.0.1",
-    "prettier": "^1.13.7",
     "string-hash": "^1.1.1"
   },
   "devDependencies": {
@@ -35,7 +32,10 @@
     "babel-eslint": "^8.2.6",
     "babel-preset-env": "^1.7.0",
     "eslint": "^5.1.0",
-    "eslint-plugin-import": "^2.13.0"
+    "eslint-plugin-import": "^2.13.0",
+    "husky": "0.14.3",
+    "lint-staged": "7.2.0",
+    "prettier": "1.13.7"
   },
   "scripts": {
     "pretest": "$(npm bin)/eslint src test",
