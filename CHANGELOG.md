@@ -1,8 +1,12 @@
 # Changelog
 
+## 1.4.0
+
+- Added export for other plugins by Evilebot Tnawi (@evilebottnawi) <https://github.com/css-modules/postcss-modules/pull/88>, <https://github.com/css-modules/postcss-modules/issues/29>
+
 ## 1.3.1
 
-- Move dev tools to devDependecies by Anton Khlynovskiy (ubzey) <https://github.com/css-modules/postcss-modules/pull/85>
+- Move dev tools to devDependecies by Anton Khlynovskiy (@ubzey) <https://github.com/css-modules/postcss-modules/pull/85>
 
 ## 1.3.0
 
