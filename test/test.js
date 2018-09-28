@@ -166,3 +166,35 @@ test("getJSON with outputFileName", async t => {
   t.deepEqual(jsonFileName, `${expectedFile}.json`);
   t.deepEqual(resultJson, JSON.parse(expectedJSON));
 });
+
+test("expose export tokens for other plugins", async t => {
+  const sourceFile = path.join(fixturesPath, "in", "values.css");
+  const expectedFile = path.join(fixturesPath, "out", "test", "values.css");
+  const source = fs.readFileSync(sourceFile).toString();
+
+  const plugins = [
+    plugin({
+      generateScopedName,
+      getJSON: () => {}
+    })
+  ];
+
+  const result = await postcss(plugins).process(source, {
+    from: sourceFile,
+    to: `${expectedFile}.css`
+  });
+
+  t.deepEqual(result.messages, [
+    {
+      type: "export",
+      plugin: "postcss-modules",
+      exportTokens: {
+        article: "_values_article",
+        colors: '"./values.colors.css"',
+        primary: "green",
+        secondary: "blue",
+        title: "_values_title"
+      }
+    }
+  ]);
+});
