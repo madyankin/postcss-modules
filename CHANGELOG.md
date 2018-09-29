@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.1
+
+- Rebublished the previous release. Sorry :(
+
 ## 1.4.0
 
 - Added export for other plugins by Evilebot Tnawi (@evilebottnawi) <https://github.com/css-modules/postcss-modules/pull/88>, <https://github.com/css-modules/postcss-modules/issues/29>
