@@ -118,6 +118,23 @@ test("processes camelCase option", async t => {
   });
 });
 
+test("processes hashPrefix option", async t => {
+  const generateScopedName = "[hash:base64:5]";
+  const hashPrefix = "prefix";
+  const getJSON = () => {};
+
+  const withoutHashPrefix = plugin({ generateScopedName, getJSON });
+  const withHashPrefix = plugin({ generateScopedName, getJSON, hashPrefix });
+
+  const css = ".foo {}";
+  const params = { from: "test.css" };
+
+  const result1 = await postcss([withoutHashPrefix]).process(css, params);
+  const result2 = await postcss([withHashPrefix]).process(css, params);
+
+  t.not(result1.css, result2.css);
+});
+
 test("different instances have different generateScopedName functions", async t => {
   const one = plugin({
     generateScopedName: () => "one",
