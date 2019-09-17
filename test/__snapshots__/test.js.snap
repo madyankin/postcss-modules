@@ -1,0 +1,186 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`allows to make CSS global: allows to make CSS global - CSS 1`] = `
+".page {
+    padding: 20px;
+}
+
+._global_title {
+    color: green;
+}
+"
+`;
+
+exports[`allows to make CSS global: allows to make CSS global - JSON 1`] = `
+Object {
+  "title": "_global_title",
+}
+`;
+
+exports[`composes rules: composes rules - CSS 1`] = `
+"._composes_a_another-mixin {
+    display: -webkit-flex;
+    display: -moz-box;
+    display: flex;
+    height: 100px;
+    width: 200px;
+}._composes_a_hello {
+    foo: bar;
+}._composes_mixins_title {
+    color: black;
+    font-size: 40px;
+}._composes_mixins_title:hover {
+    color: red;
+}._composes_mixins_figure {
+    text-align: center
+}._composes_mixins_title:focus, ._composes_mixins_figure:focus {
+    outline: none;
+    border: 1px solid red;
+}
+
+.page {
+    padding: 20px;
+}
+
+._composes_title {
+    color: green;
+}
+
+._composes_article {
+    font-size: 16px;
+}
+
+._composes_figure {
+    display: -webkit-flex;
+    display: -moz-box;
+    display: flex;
+}
+"
+`;
+
+exports[`composes rules: composes rules - JSON 1`] = `
+Object {
+  "article": "_composes_article",
+  "figure": "_composes_figure _composes_mixins_figure _composes_a_another-mixin",
+  "title": "_composes_title _composes_mixins_title",
+}
+`;
+
+exports[`exposes export tokens for other plugins: exposes export tokens for other plugins 1`] = `
+Array [
+  Object {
+    "exportTokens": Object {
+      "article": "_values_article",
+      "colors": "\\"./values.colors.css\\"",
+      "primary": "green",
+      "secondary": "blue",
+      "title": "_values_title",
+    },
+    "plugin": "postcss-modules",
+    "type": "export",
+  },
+]
+`;
+
+exports[`generates scoped name with interpolated string: generates scoped name with interpolated string - CSS 1`] = `
+".interpolated__title___2P3iB {
+    color: green;
+}
+
+.interpolated__article___Skl0x {
+    color: black;
+}
+"
+`;
+
+exports[`generates scoped name with interpolated string: generates scoped name with interpolated string - JSON 1`] = `
+Object {
+  "article": "interpolated__article___Skl0x",
+  "title": "interpolated__title___2P3iB",
+}
+`;
+
+exports[`preserves comments: preserves comments - CSS 1`] = `
+"/**
+ * This is a doc comment...
+ */
+p {
+  /* ...and a line comment */
+  padding: 0;
+}
+"
+`;
+
+exports[`preserves comments: preserves comments - JSON 1`] = `Object {}`;
+
+exports[`processes classes: processes classes - CSS 1`] = `
+".page {
+    padding: 20px;
+}
+
+._classes_title {
+    color: green;
+}
+
+._classes_article {
+    color: black;
+}
+"
+`;
+
+exports[`processes classes: processes classes - JSON 1`] = `
+Object {
+  "article": "_classes_article",
+  "title": "_classes_title",
+}
+`;
+
+exports[`processes globalModulePaths option: processes globalModulePaths option 1`] = `
+".page {
+    padding: 20px;
+}
+
+._globalModulePaths_title {
+    color: green;
+}
+"
+`;
+
+exports[`processes values: processes values - CSS 1`] = `
+"
+
+._values_title {
+    color: green;
+}
+
+._values_article {
+    color: blue;
+}
+"
+`;
+
+exports[`processes values: processes values - JSON 1`] = `
+Object {
+  "article": "_values_article",
+  "colors": "\\"./values.colors.css\\"",
+  "primary": "green",
+  "secondary": "blue",
+  "title": "_values_title",
+}
+`;
+
+exports[`saves origin plugins: saves origin plugins - CSS 1`] = `
+"._plugins_title {
+    display: -webkit-flex;
+    display: -moz-box;
+    display: flex;
+    color: green;
+}
+"
+`;
+
+exports[`saves origin plugins: saves origin plugins - JSON 1`] = `
+Object {
+  "title": "_plugins_title",
+}
+`;

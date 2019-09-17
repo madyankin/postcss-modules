@@ -1,5 +1,0 @@
-{
-  "title": "_composes_title _composes_mixins_title",
-  "article": "_composes_article",
-  "figure": "_composes_figure _composes_mixins_figure _composes_a_another-mixin"
-}

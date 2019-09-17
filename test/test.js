@@ -1,4 +1,3 @@
-import test from "ava";
 import postcss from "postcss";
 import autoprefixer from "autoprefixer";
 import fs from "fs";
@@ -34,12 +33,10 @@ Object.keys(cases).forEach(name => {
   const scopeBehaviour =
     name === behaviours.GLOBAL ? behaviours.GLOBAL : behaviours.LOCAL;
 
-  test(description, async t => {
+  it(description, async () => {
     const sourceFile = path.join(fixturesPath, "in", `${name}.css`);
-    const expectedFile = path.join(fixturesPath, "out", name);
     const source = fs.readFileSync(sourceFile).toString();
-    const expectedCSS = fs.readFileSync(`${expectedFile}.css`).toString();
-    const expectedJSON = fs.readFileSync(`${expectedFile}.json`).toString();
+
     let resultJson;
 
     const plugins = [
@@ -55,12 +52,12 @@ Object.keys(cases).forEach(name => {
 
     const result = await postcss(plugins).process(source, { from: sourceFile });
 
-    t.deepEqual(result.css, expectedCSS);
-    t.deepEqual(resultJson, JSON.parse(expectedJSON));
+    expect(result.css).toMatchSnapshot(`${description} - CSS`);
+    expect(resultJson).toMatchSnapshot(`${description} - JSON`);
   });
 });
 
-test("saves JSON next to CSS by default", async t => {
+it("saves JSON next to CSS by default", async () => {
   const sourceFile = path.join(fixturesPath, "in", "saveJSON.css");
   const source = fs.readFileSync(sourceFile).toString();
   const jsonFile = path.join(fixturesPath, "in", "saveJSON.css.json");
@@ -74,15 +71,12 @@ test("saves JSON next to CSS by default", async t => {
   const json = fs.readFileSync(jsonFile).toString();
   fs.unlinkSync(jsonFile);
 
-  t.deepEqual(JSON.parse(json), { title: "_saveJSON_title" });
+  expect(JSON.parse(json)).toMatchObject({ title: "_saveJSON_title" });
 });
 
-test("processes globalModulePaths option", async t => {
+it("processes globalModulePaths option", async () => {
   const sourceFile = path.join(fixturesPath, "in", "globalModulePaths.css");
   const source = fs.readFileSync(sourceFile).toString();
-
-  const outFile = path.join(fixturesPath, "out", "globalModulePaths.css");
-  const out = fs.readFileSync(outFile).toString();
 
   const thePlugin = plugin({
     generateScopedName,
@@ -94,10 +88,10 @@ test("processes globalModulePaths option", async t => {
     from: sourceFile
   });
 
-  t.is(result.css, out);
+  expect(result.css).toMatchSnapshot("processes globalModulePaths option");
 });
 
-test("processes camelCase option", async t => {
+it("processes camelCase option", async () => {
   const sourceFile = path.join(fixturesPath, "in", "camelCase.css");
   const source = fs.readFileSync(sourceFile).toString();
   const jsonFile = path.join(fixturesPath, "in", "camelCase.css.json");
@@ -112,13 +106,13 @@ test("processes camelCase option", async t => {
   const json = fs.readFileSync(jsonFile).toString();
   fs.unlinkSync(jsonFile);
 
-  t.deepEqual(JSON.parse(json), {
+  expect(JSON.parse(json)).toMatchObject({
     camelCase: "_camelCase_camel-case",
     "camel-case": "_camelCase_camel-case"
   });
 });
 
-test("different instances have different generateScopedName functions", async t => {
+it("different instances have different generateScopedName functions", async () => {
   const one = plugin({
     generateScopedName: () => "one",
     getJSON: () => {}
@@ -135,12 +129,11 @@ test("different instances have different generateScopedName functions", async t 
   const resultOne = await postcss([one]).process(css, params);
   const resultTwo = await postcss([two]).process(css, params);
 
-  t.is(resultOne.css, ".one {}");
-  t.is(resultTwo.css, ".two {}");
-  t.not(resultOne.css, resultTwo.css);
+  expect(resultOne.css).toEqual(".one {}");
+  expect(resultTwo.css).toEqual(".two {}");
 });
 
-test("getJSON with outputFileName", async t => {
+it("getJSON with outputFileName", async () => {
   const sourceFile = path.join(fixturesPath, "in", "test", "getJSON.css");
   const expectedFile = path.join(fixturesPath, "out", "test", "getJSON");
   const source = fs.readFileSync(sourceFile).toString();
@@ -163,13 +156,12 @@ test("getJSON with outputFileName", async t => {
     to: `${expectedFile}.css`
   });
 
-  t.deepEqual(jsonFileName, `${expectedFile}.json`);
-  t.deepEqual(resultJson, JSON.parse(expectedJSON));
+  expect(jsonFileName).toEqual(`${expectedFile}.json`);
+  expect(resultJson).toMatchObject(JSON.parse(expectedJSON));
 });
 
-test("expose export tokens for other plugins", async t => {
+it("exposes export tokens for other plugins", async () => {
   const sourceFile = path.join(fixturesPath, "in", "values.css");
-  const expectedFile = path.join(fixturesPath, "out", "test", "values.css");
   const source = fs.readFileSync(sourceFile).toString();
 
   const plugins = [
@@ -180,21 +172,10 @@ test("expose export tokens for other plugins", async t => {
   ];
 
   const result = await postcss(plugins).process(source, {
-    from: sourceFile,
-    to: `${expectedFile}.css`
+    from: sourceFile
   });
 
-  t.deepEqual(result.messages, [
-    {
-      type: "export",
-      plugin: "postcss-modules",
-      exportTokens: {
-        article: "_values_article",
-        colors: '"./values.colors.css"',
-        primary: "green",
-        secondary: "blue",
-        title: "_values_title"
-      }
-    }
-  ]);
+  expect(result.messages).toMatchSnapshot(
+    "exposes export tokens for other plugins"
+  );
 });
