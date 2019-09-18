@@ -21,7 +21,10 @@ function getScopedNameGenerator(opts) {
   const scopedNameGenerator = opts.generateScopedName || generateScopedName;
 
   if (typeof scopedNameGenerator === "function") return scopedNameGenerator;
-  return genericNames(scopedNameGenerator, { context: process.cwd() });
+  return genericNames(scopedNameGenerator, {
+    context: process.cwd(),
+    hashPrefix: opts.hashPrefix
+  });
 }
 
 function getLoader(opts, plugins) {
