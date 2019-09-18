@@ -19,27 +19,28 @@
   },
   "dependencies": {
     "css-modules-loader-core": "^1.1.0",
-    "generic-names": "^1.0.3",
+    "generic-names": "^2.0.1",
     "lodash.camelcase": "^4.3.0",
     "postcss": "^7.0.1",
     "string-hash": "^1.1.1"
   },
   "devDependencies": {
-    "autoprefixer": "6.7.7",
-    "ava": "^0.25.0",
+    "autoprefixer": "^9.6.1",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
-    "babel-eslint": "^8.2.6",
+    "babel-eslint": "^10.0.3",
     "babel-preset-env": "^1.7.0",
-    "eslint": "^5.1.0",
+    "eslint": "^6.4.0",
     "eslint-plugin-import": "^2.13.0",
-    "husky": "0.14.3",
-    "lint-staged": "7.2.0",
-    "prettier": "1.13.7"
+    "eslint-plugin-jest": "^22.17.0",
+    "husky": "^3.0.5",
+    "jest": "^24.9.0",
+    "lint-staged": "^9.2.5",
+    "prettier": "^1.18.2"
   },
   "scripts": {
     "pretest": "$(npm bin)/eslint src test",
-    "test": "$(npm bin)/babel-node $(npm bin)/ava",
+    "test": "$(npm bin)/jest",
     "transpile": "$(npm bin)/babel src -d build",
     "prepublish": "npm run transpile",
     "postpublish": "rm -rf build && git push --follow-tags",
