@@ -146,6 +146,8 @@ exports[`processes globalModulePaths option: processes globalModulePaths option 
 "
 `;
 
+exports[`processes hashPrefix option: processes hashPrefix option 1`] = `"._8xPWf {}"`;
+
 exports[`processes values: processes values - CSS 1`] = `
 "
 
