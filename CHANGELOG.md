@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.5.0
+
+- Added `hashPrefix` option by Jesse Thomson (@jessethomson) <https://github.com/css-modules/postcss-modules/pull/98>
+
 ## 1.4.1
 
 - Rebublished the previous release. Sorry :(
