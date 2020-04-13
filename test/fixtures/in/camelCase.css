@@ -1,3 +1,11 @@
 .camel-case {
     background: red;
 }
+
+.camel-case-extra {
+    background: blue;
+}
+
+.FooBar {
+    background: green;
+}

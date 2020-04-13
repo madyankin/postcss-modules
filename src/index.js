@@ -54,6 +54,12 @@ function isResultPlugin(plugin) {
   return plugin.postcssPlugin !== PLUGIN_NAME;
 }
 
+function dashesCamelCase(string) {
+  return string.replace(/-+(\w)/g, (_, firstLetter) =>
+    firstLetter.toUpperCase()
+  );
+}
+
 module.exports = postcss.plugin(PLUGIN_NAME, (opts = {}) => {
   const getJSON = opts.getJSON || saveJSON;
 
@@ -72,11 +78,34 @@ module.exports = postcss.plugin(PLUGIN_NAME, (opts = {}) => {
     const out = loader.finalSource;
     if (out) css.prepend(out);
 
-    if (opts.camelCase) {
-      Object.keys(parser.exportTokens).forEach(token => {
-        const camelCaseToken = camelCase(token);
-        parser.exportTokens[camelCaseToken] = parser.exportTokens[token];
-      });
+    if (opts.localsConvention) {
+      parser.exportTokens = Object.entries(parser.exportTokens).reduce(
+        (tokens, [className, value]) => {
+          switch (opts.localsConvention) {
+            case "camelCase":
+              tokens[className] = value;
+              tokens[camelCase(className)] = value;
+
+              break;
+            case "camelCaseOnly":
+              tokens[camelCase(className)] = value;
+
+              break;
+            case "dashes":
+              tokens[className] = value;
+              tokens[dashesCamelCase(className)] = value;
+
+              break;
+            case "dashesOnly":
+              tokens[dashesCamelCase(className)] = value;
+
+              break;
+          }
+
+          return tokens;
+        },
+        {}
+      );
     }
 
     result.messages.push({

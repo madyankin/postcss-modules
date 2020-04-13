@@ -181,26 +181,19 @@ postcss([
 ]);
 ```
 
-### Camel cased classes
+### localsConvention
 
-If you need, you can pass the options `{ camelCase: true }` to transform classes:
+Type: `String`
+Default: `null`
 
-CSS:
+Style of exported classnames.
 
-```css
-.post-title {
-  color: red;
-}
-```
-
-JSON:
-
-```json
-{
-  "post-title": "._post-title_116zl_1",
-  "postTitle": "._post-title_116zl_1"
-}
-```
+|         Name          |    Type    | Description                                                                                      |
+| :-------------------: | :--------: | :----------------------------------------------------------------------------------------------- |
+|   **`'camelCase'`**   | `{String}` | Class names will be camelized, the original class name will not to be removed from the locals    |
+| **`'camelCaseOnly'`** | `{String}` | Class names will be camelized, the original class name will be removed from the locals           |
+|    **`'dashes'`**     | `{String}` | Only dashes in class names will be camelized                                                     |
+|  **`'dashesOnly'`**   | `{String}` | Dashes in class names will be camelized, the original class name will be removed from the locals |
 
 ## Integration with templates
 
