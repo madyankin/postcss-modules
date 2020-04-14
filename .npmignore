@@ -7,5 +7,6 @@ src/
 .eslintrc
 .babelrc
 .editorconfig
+.vscode
 
 gulpfile.js
