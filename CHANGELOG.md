@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.0.0
+
+### Added
+
+- [`localsConvention` option](https://github.com/css-modules/postcss-modules#localsconvention) by Hamza Mihai Daniel (@allocenx) <https://github.com/css-modules/postcss-modules/pull/103>, <https://github.com/css-modules/postcss-modules/issues/93>
+
+### Breaking changes
+
+- `camelCase` camelCase removed, use the [`localsConvention` option](https://github.com/css-modules/postcss-modules#localsconvention) instead.
+
 ## 1.5.0
 
 - Added `hashPrefix` option by Jesse Thomson (@jessethomson) <https://github.com/css-modules/postcss-modules/pull/98>
