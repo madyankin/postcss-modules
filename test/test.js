@@ -91,24 +91,92 @@ it("processes globalModulePaths option", async () => {
   expect(result.css).toMatchSnapshot("processes globalModulePaths option");
 });
 
-it("processes camelCase option", async () => {
+it("processes localsConvention with camelCase option", async () => {
   const sourceFile = path.join(fixturesPath, "in", "camelCase.css");
   const source = fs.readFileSync(sourceFile).toString();
   const jsonFile = path.join(fixturesPath, "in", "camelCase.css.json");
 
   if (fs.existsSync(jsonFile)) fs.unlinkSync(jsonFile);
 
-  await postcss([plugin({ generateScopedName, camelCase: true })]).process(
-    source,
-    { from: sourceFile }
-  );
+  await postcss([
+    plugin({ generateScopedName, localsConvention: "camelCase" })
+  ]).process(source, { from: sourceFile });
+
+  const json = fs.readFileSync(jsonFile).toString();
+  fs.unlinkSync(jsonFile);
+
+  expect(JSON.parse(json)).toMatchObject({
+    "camel-case": "_camelCase_camel-case",
+    camelCase: "_camelCase_camel-case",
+    "camel-case-extra": "_camelCase_camel-case-extra",
+    camelCaseExtra: "_camelCase_camel-case-extra",
+    FooBar: "_camelCase_FooBar",
+    fooBar: "_camelCase_FooBar"
+  });
+});
+
+it("processes localsConvention with camelCaseOnly option", async () => {
+  const sourceFile = path.join(fixturesPath, "in", "camelCase.css");
+  const source = fs.readFileSync(sourceFile).toString();
+  const jsonFile = path.join(fixturesPath, "in", "camelCase.css.json");
+
+  if (fs.existsSync(jsonFile)) fs.unlinkSync(jsonFile);
+
+  await postcss([
+    plugin({ generateScopedName, localsConvention: "camelCaseOnly" })
+  ]).process(source, { from: sourceFile });
 
   const json = fs.readFileSync(jsonFile).toString();
   fs.unlinkSync(jsonFile);
 
   expect(JSON.parse(json)).toMatchObject({
     camelCase: "_camelCase_camel-case",
-    "camel-case": "_camelCase_camel-case"
+    camelCaseExtra: "_camelCase_camel-case-extra",
+    fooBar: "_camelCase_FooBar"
+  });
+});
+
+it("processes localsConvention with dashes option", async () => {
+  const sourceFile = path.join(fixturesPath, "in", "camelCase.css");
+  const source = fs.readFileSync(sourceFile).toString();
+  const jsonFile = path.join(fixturesPath, "in", "camelCase.css.json");
+
+  if (fs.existsSync(jsonFile)) fs.unlinkSync(jsonFile);
+
+  await postcss([
+    plugin({ generateScopedName, localsConvention: "dashes" })
+  ]).process(source, { from: sourceFile });
+
+  const json = fs.readFileSync(jsonFile).toString();
+  fs.unlinkSync(jsonFile);
+
+  expect(JSON.parse(json)).toMatchObject({
+    "camel-case": "_camelCase_camel-case",
+    camelCase: "_camelCase_camel-case",
+    "camel-case-extra": "_camelCase_camel-case-extra",
+    camelCaseExtra: "_camelCase_camel-case-extra",
+    FooBar: "_camelCase_FooBar"
+  });
+});
+
+it("processes localsConvention with dashes option", async () => {
+  const sourceFile = path.join(fixturesPath, "in", "camelCase.css");
+  const source = fs.readFileSync(sourceFile).toString();
+  const jsonFile = path.join(fixturesPath, "in", "camelCase.css.json");
+
+  if (fs.existsSync(jsonFile)) fs.unlinkSync(jsonFile);
+
+  await postcss([
+    plugin({ generateScopedName, localsConvention: "dashes" })
+  ]).process(source, { from: sourceFile });
+
+  const json = fs.readFileSync(jsonFile).toString();
+  fs.unlinkSync(jsonFile);
+
+  expect(JSON.parse(json)).toMatchObject({
+    camelCase: "_camelCase_camel-case",
+    camelCaseExtra: "_camelCase_camel-case-extra",
+    FooBar: "_camelCase_FooBar"
   });
 });
 
