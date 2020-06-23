@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.1.0
+
+### Added
+
+- Added `exportGlobals` option
+
 ## 3.0.0
 
 ### Changed
