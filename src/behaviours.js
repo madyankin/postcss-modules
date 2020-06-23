@@ -1,4 +1,4 @@
-import Core from "css-modules-loader-core";
+import Core from "./css-loader-core";
 
 export const behaviours = {
   LOCAL: "local",

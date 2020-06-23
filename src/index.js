@@ -1,8 +1,10 @@
 import postcss from "postcss";
 import camelCase from "lodash.camelcase";
-import Parser from "css-modules-loader-core/lib/parser";
-import FileSystemLoader from "css-modules-loader-core/lib/file-system-loader";
 import genericNames from "generic-names";
+
+import Parser from "./css-loader-core/parser";
+import FileSystemLoader from "./css-loader-core/loader";
+
 import generateScopedName from "./generateScopedName";
 import saveJSON from "./saveJSON";
 import { getDefaultPlugins, isValidBehaviour, behaviours } from "./behaviours";
@@ -114,7 +116,6 @@ module.exports = postcss.plugin(PLUGIN_NAME, (opts = {}) => {
       exportTokens: parser.exportTokens
     });
 
-    // getJSON may return a promise
     return getJSON(css.source.input.file, parser.exportTokens, result.opts.to);
   };
 });
