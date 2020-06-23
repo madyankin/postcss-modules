@@ -159,16 +159,17 @@ postcss([
 ]);
 ```
 
-## Exporting globals
+### Exporting globals
 
 If you need to export global names via the JSON object along with the local ones, add the `exportGlobals` option:
 
-````js
+```js
 postcss([
   require("postcss-modules")({
     exportGlobals: true,
   }),
 ]);
+```
 
 ### Loading source files
 
@@ -180,7 +181,7 @@ postcss([
     Loader: CustomLoader,
   }),
 ]);
-````
+```
 
 You can also pass any needed root path:
 
