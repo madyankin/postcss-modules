@@ -1,4 +1,7 @@
-import Core from "./css-loader-core";
+import localByDefault from "postcss-modules-local-by-default";
+import extractImports from "postcss-modules-extract-imports";
+import modulesScope from "postcss-modules-scope";
+import values from "postcss-modules-values";
 
 export const behaviours = {
   LOCAL: "local",
@@ -6,17 +9,11 @@ export const behaviours = {
 };
 
 export function getDefaultPlugins(behaviour, generateScopedName) {
-  const scope = Core.scope({ generateScopedName });
+  const scope = modulesScope({ generateScopedName });
 
   const plugins = {
-    [behaviours.LOCAL]: [
-      Core.values,
-      Core.localByDefault,
-      Core.extractImports,
-      scope,
-    ],
-
-    [behaviours.GLOBAL]: [Core.values, Core.extractImports, scope],
+    [behaviours.LOCAL]: [values, localByDefault, extractImports, scope],
+    [behaviours.GLOBAL]: [values, extractImports, scope],
   };
 
   return plugins[behaviour];

@@ -1,8 +1,29 @@
 // Copied from https://github.com/css-modules/css-modules-loader-core
 
-import Core from "./index.js";
+import postcss from "postcss";
 import fs from "fs";
 import path from "path";
+
+import Parser from "./parser";
+
+class Core {
+  constructor(plugins) {
+    this.plugins = plugins || Core.defaultPlugins;
+  }
+
+  load(sourceString, sourcePath, trace, pathFetcher) {
+    let parser = new Parser(pathFetcher, trace);
+
+    return postcss(this.plugins.concat([parser.plugin]))
+      .process(sourceString, { from: "/" + sourcePath })
+      .then((result) => {
+        return {
+          injectableSource: result.css,
+          exportTokens: parser.exportTokens,
+        };
+      });
+  }
+}
 
 // Sorts dependencies in the following way:
 // AAA comes before AA and A

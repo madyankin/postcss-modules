@@ -14,7 +14,7 @@ const cases = {
   composes: "composes rules",
   values: "processes values",
   interpolated: "generates scoped name with interpolated string",
-  global: "allows to make CSS global"
+  global: "allows to make CSS global",
 };
 
 function generateScopedName(name, filename) {
@@ -22,7 +22,7 @@ function generateScopedName(name, filename) {
   return `_${file}_${name}`;
 }
 
-Object.keys(cases).forEach(name => {
+Object.keys(cases).forEach((name) => {
   const description = cases[name];
 
   const scopedNameGenerator =
@@ -46,8 +46,8 @@ Object.keys(cases).forEach(name => {
         generateScopedName: scopedNameGenerator,
         getJSON: (cssFile, json) => {
           resultJson = json;
-        }
-      })
+        },
+      }),
     ];
 
     const result = await postcss(plugins).process(source, { from: sourceFile });
@@ -65,7 +65,7 @@ it("saves JSON next to CSS by default", async () => {
   if (fs.existsSync(jsonFile)) fs.unlinkSync(jsonFile);
 
   await postcss([plugin({ generateScopedName })]).process(source, {
-    from: sourceFile
+    from: sourceFile,
   });
 
   const json = fs.readFileSync(jsonFile).toString();
@@ -81,11 +81,11 @@ it("processes globalModulePaths option", async () => {
   const thePlugin = plugin({
     generateScopedName,
     globalModulePaths: [/globalModulePaths/],
-    getJSON: () => {}
+    getJSON: () => {},
   });
 
   const result = await postcss([thePlugin]).process(source, {
-    from: sourceFile
+    from: sourceFile,
   });
 
   expect(result.css).toMatchSnapshot("processes globalModulePaths option");
@@ -99,7 +99,7 @@ it("processes localsConvention with camelCase option", async () => {
   if (fs.existsSync(jsonFile)) fs.unlinkSync(jsonFile);
 
   await postcss([
-    plugin({ generateScopedName, localsConvention: "camelCase" })
+    plugin({ generateScopedName, localsConvention: "camelCase" }),
   ]).process(source, { from: sourceFile });
 
   const json = fs.readFileSync(jsonFile).toString();
@@ -111,7 +111,7 @@ it("processes localsConvention with camelCase option", async () => {
     "camel-case-extra": "_camelCase_camel-case-extra",
     camelCaseExtra: "_camelCase_camel-case-extra",
     FooBar: "_camelCase_FooBar",
-    fooBar: "_camelCase_FooBar"
+    fooBar: "_camelCase_FooBar",
   });
 });
 
@@ -123,7 +123,7 @@ it("processes localsConvention with camelCaseOnly option", async () => {
   if (fs.existsSync(jsonFile)) fs.unlinkSync(jsonFile);
 
   await postcss([
-    plugin({ generateScopedName, localsConvention: "camelCaseOnly" })
+    plugin({ generateScopedName, localsConvention: "camelCaseOnly" }),
   ]).process(source, { from: sourceFile });
 
   const json = fs.readFileSync(jsonFile).toString();
@@ -132,7 +132,7 @@ it("processes localsConvention with camelCaseOnly option", async () => {
   expect(JSON.parse(json)).toMatchObject({
     camelCase: "_camelCase_camel-case",
     camelCaseExtra: "_camelCase_camel-case-extra",
-    fooBar: "_camelCase_FooBar"
+    fooBar: "_camelCase_FooBar",
   });
 });
 
@@ -144,7 +144,7 @@ it("processes localsConvention with dashes option", async () => {
   if (fs.existsSync(jsonFile)) fs.unlinkSync(jsonFile);
 
   await postcss([
-    plugin({ generateScopedName, localsConvention: "dashes" })
+    plugin({ generateScopedName, localsConvention: "dashes" }),
   ]).process(source, { from: sourceFile });
 
   const json = fs.readFileSync(jsonFile).toString();
@@ -155,7 +155,7 @@ it("processes localsConvention with dashes option", async () => {
     camelCase: "_camelCase_camel-case",
     "camel-case-extra": "_camelCase_camel-case-extra",
     camelCaseExtra: "_camelCase_camel-case-extra",
-    FooBar: "_camelCase_FooBar"
+    FooBar: "_camelCase_FooBar",
   });
 });
 
@@ -167,7 +167,7 @@ it("processes localsConvention with dashes option", async () => {
   if (fs.existsSync(jsonFile)) fs.unlinkSync(jsonFile);
 
   await postcss([
-    plugin({ generateScopedName, localsConvention: "dashes" })
+    plugin({ generateScopedName, localsConvention: "dashes" }),
   ]).process(source, { from: sourceFile });
 
   const json = fs.readFileSync(jsonFile).toString();
@@ -176,7 +176,7 @@ it("processes localsConvention with dashes option", async () => {
   expect(JSON.parse(json)).toMatchObject({
     camelCase: "_camelCase_camel-case",
     camelCaseExtra: "_camelCase_camel-case-extra",
-    FooBar: "_camelCase_FooBar"
+    FooBar: "_camelCase_FooBar",
   });
 });
 
@@ -201,12 +201,12 @@ it("processes hashPrefix option", async () => {
 it("different instances have different generateScopedName functions", async () => {
   const one = plugin({
     generateScopedName: () => "one",
-    getJSON: () => {}
+    getJSON: () => {},
   });
 
   const two = plugin({
     generateScopedName: () => "two",
-    getJSON: () => {}
+    getJSON: () => {},
   });
 
   const css = ".foo {}";
@@ -233,13 +233,13 @@ it("getJSON with outputFileName", async () => {
       getJSON: (cssFile, json, outputFileName) => {
         jsonFileName = outputFileName.replace(".css", ".json");
         resultJson = json;
-      }
-    })
+      },
+    }),
   ];
 
   await postcss(plugins).process(source, {
     from: sourceFile,
-    to: `${expectedFile}.css`
+    to: `${expectedFile}.css`,
   });
 
   expect(jsonFileName).toEqual(`${expectedFile}.json`);
@@ -253,12 +253,12 @@ it("exposes export tokens for other plugins", async () => {
   const plugins = [
     plugin({
       generateScopedName,
-      getJSON: () => {}
-    })
+      getJSON: () => {},
+    }),
   ];
 
   const result = await postcss(plugins).process(source, {
-    from: sourceFile
+    from: sourceFile,
   });
 
   expect(result.messages).toMatchSnapshot(
