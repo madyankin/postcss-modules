@@ -21,7 +21,7 @@
     "generic-names": "^2.0.1",
     "icss-replace-symbols": "^1.1.0",
     "lodash.camelcase": "^4.3.0",
-    "postcss": "^7.0.1",
+    "postcss": "^7.0.32",
     "postcss-modules-extract-imports": "^2.0.0",
     "postcss-modules-local-by-default": "^3.0.2",
     "postcss-modules-scope": "^2.2.0",
