@@ -42,14 +42,23 @@ function isGlobalModule(globalModules, inputFile) {
 
 function getDefaultPluginsList(opts, inputFile) {
   const globalModulesList = opts.globalModulePaths || null;
+  const exportGlobals = opts.exportGlobals || false;
   const defaultBehaviour = getDefaultScopeBehaviour(opts);
-  const generateName = getScopedNameGenerator(opts);
+  const generateScopedName = getScopedNameGenerator(opts);
 
   if (globalModulesList && isGlobalModule(globalModulesList, inputFile)) {
-    return getDefaultPlugins(behaviours.GLOBAL, generateName);
+    return getDefaultPlugins({
+      behaviour: behaviours.GLOBAL,
+      generateScopedName,
+      exportGlobals,
+    });
   }
 
-  return getDefaultPlugins(defaultBehaviour, generateName);
+  return getDefaultPlugins({
+    behaviour: defaultBehaviour,
+    generateScopedName,
+    exportGlobals,
+  });
 }
 
 function isResultPlugin(plugin) {

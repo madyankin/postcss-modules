@@ -84,13 +84,13 @@ use the `getJSON` callback. For example, save data about classes into a correspo
 ```js
 postcss([
   require("postcss-modules")({
-    getJSON: function(cssFileName, json, outputFileName) {
+    getJSON: function (cssFileName, json, outputFileName) {
       var path = require("path");
       var cssName = path.basename(cssFileName, ".css");
       var jsonFileName = path.resolve("./build/" + cssName + ".json");
       fs.writeFileSync(jsonFileName, JSON.stringify(json));
-    }
-  })
+    },
+  }),
 ]);
 ```
 
@@ -104,8 +104,8 @@ this behaviour using the `scopeBehaviour` option:
 ```js
 postcss([
   require("postcss-modules")({
-    scopeBehaviour: "global" // can be 'global' or 'local',
-  })
+    scopeBehaviour: "global", // can be 'global' or 'local',
+  }),
 ]);
 ```
 
@@ -125,15 +125,15 @@ To generate custom classes, use the `generateScopedName` callback:
 ```js
 postcss([
   require("postcss-modules")({
-    generateScopedName: function(name, filename, css) {
+    generateScopedName: function (name, filename, css) {
       var path = require("path");
       var i = css.indexOf("." + name);
       var line = css.substr(0, i).split(/[\r\n]/).length;
       var file = path.basename(filename, ".css");
 
       return "_" + file + "_" + line + "_" + name;
-    }
-  })
+    },
+  }),
 ]);
 ```
 
@@ -143,8 +143,8 @@ Or just pass an interpolated string to the `generateScopedName` option
 ```js
 postcss([
   require("postcss-modules")({
-    generateScopedName: "[name]__[local]___[hash:base64:5]"
-  })
+    generateScopedName: "[name]__[local]___[hash:base64:5]",
+  }),
 ]);
 ```
 
@@ -154,10 +154,21 @@ It's possible to add custom hash to generate more unique classes using the `hash
 postcss([
   require("postcss-modules")({
     generateScopedName: "[name]__[local]___[hash:base64:5]",
-    hashPrefix: "prefix"
-  })
+    hashPrefix: "prefix",
+  }),
 ]);
 ```
+
+## Exporting globals
+
+If you need to export global names via the JSON object along with the local ones, add the `exportGlobals` option:
+
+````js
+postcss([
+  require("postcss-modules")({
+    exportGlobals: true,
+  }),
+]);
 
 ### Loading source files
 
@@ -166,10 +177,10 @@ If you need, you can pass a custom loader (see [FileSystemLoader] for example):
 ```js
 postcss([
   require("postcss-modules")({
-    Loader: CustomLoader
-  })
+    Loader: CustomLoader,
+  }),
 ]);
-```
+````
 
 You can also pass any needed root path:
 
@@ -264,7 +275,7 @@ var template = fs.readFileSync("./about.html", "utf8");
 
 posthtml([posthtmlCssModules("./cssModules.json")])
   .process(template)
-  .then(function(result) {
+  .then(function (result) {
     console.log(result.html);
   });
 ```

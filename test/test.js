@@ -265,3 +265,25 @@ it("exposes export tokens for other plugins", async () => {
     "exposes export tokens for other plugins"
   );
 });
+
+it("processes exportGlobals option", async () => {
+  const sourceFile = path.join(fixturesPath, "in", "classes.css");
+  const source = fs.readFileSync(sourceFile).toString();
+  let json;
+
+  await postcss([
+    plugin({
+      generateScopedName,
+      exportGlobals: true,
+      getJSON: (_, result) => {
+        json = result;
+      },
+    }),
+  ]).process(source, { from: sourceFile });
+
+  expect(json).toMatchObject({
+    page: "page",
+    title: "_classes_title",
+    article: "_classes_article",
+  });
+});
