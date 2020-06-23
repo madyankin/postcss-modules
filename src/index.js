@@ -25,7 +25,7 @@ function getScopedNameGenerator(opts) {
   if (typeof scopedNameGenerator === "function") return scopedNameGenerator;
   return genericNames(scopedNameGenerator, {
     context: process.cwd(),
-    hashPrefix: opts.hashPrefix
+    hashPrefix: opts.hashPrefix,
   });
 }
 
@@ -37,7 +37,7 @@ function getLoader(opts, plugins) {
 }
 
 function isGlobalModule(globalModules, inputFile) {
-  return globalModules.some(regex => inputFile.match(regex));
+  return globalModules.some((regex) => inputFile.match(regex));
 }
 
 function getDefaultPluginsList(opts, inputFile) {
@@ -74,7 +74,7 @@ module.exports = postcss.plugin(PLUGIN_NAME, (opts = {}) => {
     const parser = new Parser(loader.fetch.bind(loader));
 
     await postcss([...plugins, parser.plugin]).process(css, {
-      from: inputFile
+      from: inputFile,
     });
 
     const out = loader.finalSource;
@@ -113,7 +113,7 @@ module.exports = postcss.plugin(PLUGIN_NAME, (opts = {}) => {
     result.messages.push({
       type: "export",
       plugin: "postcss-modules",
-      exportTokens: parser.exportTokens
+      exportTokens: parser.exportTokens,
     });
 
     // getJSON may return a promise

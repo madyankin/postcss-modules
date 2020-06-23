@@ -77,7 +77,7 @@ export default class FileSystemLoader {
 
     return Object.keys(traces)
       .sort(traceKeySorter)
-      .map(key => {
+      .map((key) => {
         const filename = traces[key];
         if (written.has(filename)) {
           return null;

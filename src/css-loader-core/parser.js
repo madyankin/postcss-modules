@@ -20,7 +20,7 @@ export default class Parser {
 
   fetchAllImports(css) {
     let imports = [];
-    css.each(node => {
+    css.each((node) => {
       if (node.type == "rule" && node.selector.match(importRegexp)) {
         imports.push(
           this.fetchImport(node, css.source.input.from, imports.length)
@@ -35,16 +35,16 @@ export default class Parser {
   }
 
   extractExports(css) {
-    css.each(node => {
+    css.each((node) => {
       if (node.type == "rule" && node.selector == ":export")
         this.handleExport(node);
     });
   }
 
   handleExport(exportNode) {
-    exportNode.each(decl => {
+    exportNode.each((decl) => {
       if (decl.type == "decl") {
-        Object.keys(this.translations).forEach(translation => {
+        Object.keys(this.translations).forEach((translation) => {
           decl.value = decl.value.replace(
             translation,
             this.translations[translation]
@@ -60,15 +60,15 @@ export default class Parser {
     let file = importNode.selector.match(importRegexp)[1],
       depTrace = this.trace + String.fromCharCode(depNr);
     return this.pathFetcher(file, relativeTo, depTrace).then(
-      exports => {
-        importNode.each(decl => {
+      (exports) => {
+        importNode.each((decl) => {
           if (decl.type == "decl") {
             this.translations[decl.prop] = exports[decl.value];
           }
         });
         importNode.remove();
       },
-      err => console.log(err)
+      (err) => console.log(err)
     );
   }
 }

@@ -37,10 +37,10 @@
     "eslint": "^7.3.1",
     "eslint-plugin-import": "^2.21.2",
     "eslint-plugin-jest": "^23.17.0",
-    "husky": "^3.0.5",
+    "husky": "^4.2.5",
     "jest": "^26.0.1",
-    "lint-staged": "^9.2.5",
-    "prettier": "^1.18.2"
+    "lint-staged": "^10.2.11",
+    "prettier": "^2.0.5"
   },
   "scripts": {
     "pretest": "$(npm bin)/eslint src test",

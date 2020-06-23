@@ -18,10 +18,10 @@ export default class Core {
 
     return postcss(this.plugins.concat([parser.plugin]))
       .process(sourceString, { from: "/" + sourcePath })
-      .then(result => {
+      .then((result) => {
         return {
           injectableSource: result.css,
-          exportTokens: parser.exportTokens
+          exportTokens: parser.exportTokens,
         };
       });
   }
