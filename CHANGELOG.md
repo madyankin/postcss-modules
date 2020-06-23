@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.0.0
+
+### Changed
+
+- Dropped `css-modules-loader-core` dependency
+- [Upgraded all the dependencies](https://github.com/css-modules/postcss-modules/pull/108)
+
+### Breaking changes
+
+- Dropped support for unsupported Node versions. Supported versions are 10, 12 and 14+ https://nodejs.org/en/about/releases/
+
 ## 2.0.0
 
 ### Added
