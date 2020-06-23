@@ -116,6 +116,7 @@ module.exports = postcss.plugin(PLUGIN_NAME, (opts = {}) => {
       exportTokens: parser.exportTokens
     });
 
+    // getJSON may return a promise
     return getJSON(css.source.input.file, parser.exportTokens, result.opts.to);
   };
 });
