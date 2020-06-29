@@ -180,6 +180,30 @@ it("processes localsConvention with dashes option", async () => {
   });
 });
 
+
+it("processes localsConvention with function option", async () => {
+  const sourceFile = path.join(fixturesPath, "in", "camelCase.css");
+  const source = fs.readFileSync(sourceFile).toString();
+  const jsonFile = path.join(fixturesPath, "in", "camelCase.css.json");
+
+  if (fs.existsSync(jsonFile)) fs.unlinkSync(jsonFile);
+
+  await postcss([
+    plugin({ generateScopedName, localsConvention: (className) => {
+      return className.replace('camel-case', 'cc');
+    } }),
+  ]).process(source, { from: sourceFile });
+
+  const json = fs.readFileSync(jsonFile).toString();
+  fs.unlinkSync(jsonFile);
+
+  expect(JSON.parse(json)).toMatchObject({
+    cc: "_camelCase_camel-case",
+    'cc-extra': "_camelCase_camel-case-extra",
+    FooBar: "_camelCase_FooBar",
+  });
+});
+
 it("processes hashPrefix option", async () => {
   const generateScopedName = "[hash:base64:5]";
   const hashPrefix = "prefix";

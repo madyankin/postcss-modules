@@ -195,10 +195,10 @@ postcss([
 
 ### localsConvention
 
-Type: `String`
+Type: `String | (originalClassName: string, generatedClassName: string, inputFile: string) => className: string`
 Default: `null`
 
-Style of exported classnames.
+Style of exported classnames, the keys in your json.
 
 |         Name          |    Type    | Description                                                                                      |
 | :-------------------: | :--------: | :----------------------------------------------------------------------------------------------- |
@@ -206,6 +206,8 @@ Style of exported classnames.
 | **`'camelCaseOnly'`** | `{String}` | Class names will be camelized, the original class name will be removed from the locals           |
 |    **`'dashes'`**     | `{String}` | Only dashes in class names will be camelized                                                     |
 |  **`'dashesOnly'`**   | `{String}` | Dashes in class names will be camelized, the original class name will be removed from the locals |
+
+In lieu of a string, a custom function can generate the exported class names.
 
 ## Integration with templates
 
