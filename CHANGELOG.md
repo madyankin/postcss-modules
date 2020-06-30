@@ -4,7 +4,7 @@
 
 ### Changed
 
-- [`localsConvention` option] now supports a custom function `(originalClassName: string, generatedClassName: string, inputFile: string) => className: string`
+- [`localsConvention` option] now supports a custom function `(originalClassName: string, generatedClassName: string, inputFile: string) => className: string` by Gregory Waxman (@Akkuma) https://github.com/css-modules/postcss-modules/pull/109
 
 ## 3.1.0
 

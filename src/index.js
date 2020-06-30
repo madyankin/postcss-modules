@@ -90,7 +90,8 @@ module.exports = postcss.plugin(PLUGIN_NAME, (opts = {}) => {
     if (out) css.prepend(out);
 
     if (opts.localsConvention) {
-      const isFunc = typeof opts.localsConvention === 'function';
+      const isFunc = typeof opts.localsConvention === "function";
+
       parser.exportTokens = Object.entries(parser.exportTokens).reduce(
         (tokens, [className, value]) => {
           if (isFunc) {
