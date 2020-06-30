@@ -90,8 +90,15 @@ module.exports = postcss.plugin(PLUGIN_NAME, (opts = {}) => {
     if (out) css.prepend(out);
 
     if (opts.localsConvention) {
+      const isFunc = typeof opts.localsConvention === 'function';
       parser.exportTokens = Object.entries(parser.exportTokens).reduce(
         (tokens, [className, value]) => {
+          if (isFunc) {
+            tokens[opts.localsConvention(className, value, inputFile)] = value;
+
+            return tokens;
+          }
+
           switch (opts.localsConvention) {
             case "camelCase":
               tokens[className] = value;

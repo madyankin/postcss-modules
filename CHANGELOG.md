@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.2.0
+
+### Changed
+
+- [`localsConvention` option] now supports a custom function `(originalClassName: string, generatedClassName: string, inputFile: string) => className: string`
+
 ## 3.1.0
 
 ### Added
