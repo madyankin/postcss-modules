@@ -61,8 +61,8 @@ function getDefaultPluginsList(opts, inputFile) {
   });
 }
 
-function isResultPlugin(plugin) {
-  return plugin.postcssPlugin !== PLUGIN_NAME;
+function isOurPlugin(plugin) {
+  return plugin.postcssPlugin === PLUGIN_NAME;
 }
 
 function dashesCamelCase(string) {
@@ -76,13 +76,24 @@ module.exports = postcss.plugin(PLUGIN_NAME, (opts = {}) => {
 
   return async (css, result) => {
     const inputFile = css.source.input.file;
-    const resultPlugins = result.processor.plugins.filter(isResultPlugin);
     const pluginList = getDefaultPluginsList(opts, inputFile);
-    const plugins = [...pluginList, ...resultPlugins];
-    const loader = getLoader(opts, plugins);
+    let resultPluginIndex;
+    result.processor.plugins.some((plugin, i) => {
+      if (isOurPlugin(plugin)) {
+        resultPluginIndex = i;
+        return true;
+      }
+      return false;
+    });
+    if (resultPluginIndex === undefined) {
+      throw new Error('Plugin missing from options.');
+    }
+    const earlierPlugins = result.processor.plugins.slice(0, resultPluginIndex);
+    const loaderPlugins = [...pluginList, ...earlierPlugins];
+    const loader = getLoader(opts, loaderPlugins);
     const parser = new Parser(loader.fetch.bind(loader));
 
-    await postcss([...plugins, parser.plugin]).process(css, {
+    await postcss([...pluginList, parser.plugin]).process(css, {
       from: inputFile,
     });
 
