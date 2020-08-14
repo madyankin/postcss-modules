@@ -41,6 +41,12 @@ Object.keys(cases).forEach((name) => {
 
     const plugins = [
       autoprefixer,
+      postcss.plugin(
+        'test-comment-1',
+        () => (root) => {
+          root.prepend("/* this should also appear once in each file */");
+        }
+      ),
       plugin({
         scopeBehaviour,
         generateScopedName: scopedNameGenerator,
@@ -48,6 +54,12 @@ Object.keys(cases).forEach((name) => {
           resultJson = json;
         },
       }),
+      postcss.plugin(
+        'test-comment-2',
+        () => (root) => {
+          root.prepend("/* this should appear once in each file */");
+        }
+      )
     ];
 
     const result = await postcss(plugins).process(source, { from: sourceFile });
