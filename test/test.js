@@ -39,12 +39,19 @@ Object.keys(cases).forEach((name) => {
 
     let resultJson;
 
+    const rootsSeenBeforePlugin = new Set();
+    const rootsSeenAfterPlugin = new Set();
+
     const plugins = [
       autoprefixer,
       postcss.plugin(
-        'test-comment-1',
+        'validator-1',
         () => (root) => {
-          root.prepend("/* this should also appear once in each file */");
+          if (rootsSeenBeforePlugin.has(root)) {
+            throw new Error('Plugin before ours was called multiple times.')
+          }
+          rootsSeenBeforePlugin.add(root);
+          root.prepend('/* validator-1 */');
         }
       ),
       plugin({
@@ -55,11 +62,15 @@ Object.keys(cases).forEach((name) => {
         },
       }),
       postcss.plugin(
-        'test-comment-2',
+        'validator-2',
         () => (root) => {
-          root.prepend("/* this should appear once in each file */");
+          if (rootsSeenAfterPlugin.has(root)) {
+            throw new Error('Plugin after ours was called multiple times.')
+          }
+          rootsSeenAfterPlugin.add(root);
+          root.prepend('/* validator-2 */');
         }
-      )
+      ),
     ];
 
     const result = await postcss(plugins).process(source, { from: sourceFile });

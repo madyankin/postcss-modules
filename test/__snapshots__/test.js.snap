@@ -1,9 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`allows to make CSS global: allows to make CSS global - CSS 1`] = `
-"/* this should appear once in each file */
+"/* validator-2 */
 
-/* this should also appear once in each file */
+/* validator-1 */
 
 .page {
     padding: 20px;
@@ -22,7 +22,7 @@ Object {
 `;
 
 exports[`composes rules: composes rules - CSS 1`] = `
-"/* this should appear once in each file *//* this should also appear once in each file */._composes_a_another-mixin {
+"/* validator-2 *//* validator-1 */._composes_a_another-mixin {
     display: -webkit-flex;
     display: -moz-box;
     display: flex;
@@ -30,7 +30,7 @@ exports[`composes rules: composes rules - CSS 1`] = `
     width: 200px;
 }._composes_a_hello {
     foo: bar;
-}/* this should also appear once in each file */._composes_mixins_title {
+}/* validator-1 */._composes_mixins_title {
     color: black;
     font-size: 40px;
 }._composes_mixins_title:hover {
@@ -42,7 +42,7 @@ exports[`composes rules: composes rules - CSS 1`] = `
     border: 1px solid red;
 }
 
-/* this should also appear once in each file */
+/* validator-1 */
 
 .page {
     padding: 20px;
@@ -89,9 +89,9 @@ Array [
 `;
 
 exports[`generates scoped name with interpolated string: generates scoped name with interpolated string - CSS 1`] = `
-"/* this should appear once in each file */
+"/* validator-2 */
 
-/* this should also appear once in each file */
+/* validator-1 */
 
 .interpolated__title___2P3iB {
     color: green;
@@ -111,8 +111,8 @@ Object {
 `;
 
 exports[`preserves comments: preserves comments - CSS 1`] = `
-"/* this should appear once in each file */
-/* this should also appear once in each file */
+"/* validator-2 */
+/* validator-1 */
 /**
  * This is a doc comment...
  */
@@ -126,9 +126,9 @@ p {
 exports[`preserves comments: preserves comments - JSON 1`] = `Object {}`;
 
 exports[`processes classes: processes classes - CSS 1`] = `
-"/* this should appear once in each file */
+"/* validator-2 */
 
-/* this should also appear once in each file */
+/* validator-1 */
 
 .page {
     padding: 20px;
@@ -165,11 +165,11 @@ exports[`processes globalModulePaths option: processes globalModulePaths option 
 exports[`processes hashPrefix option: processes hashPrefix option 1`] = `"._8xPWf {}"`;
 
 exports[`processes values: processes values - CSS 1`] = `
-"/* this should appear once in each file */
+"/* validator-2 */
 
-/* this should also appear once in each file */
+/* validator-1 */
 
-/* this should also appear once in each file */
+/* validator-1 */
 
 ._values_title {
     color: green;
@@ -192,7 +192,7 @@ Object {
 `;
 
 exports[`saves origin plugins: saves origin plugins - CSS 1`] = `
-"/* this should appear once in each file *//* this should also appear once in each file */
+"/* validator-2 *//* validator-1 */
 ._plugins_title {
     display: -webkit-flex;
     display: -moz-box;
