@@ -51,7 +51,8 @@ Object.keys(cases).forEach((name) => {
             throw new Error('Plugin before ours was called multiple times.')
           }
           rootsSeenBeforePlugin.add(root);
-          root.prepend(`/* validator-1 (${path.basename(root.source.input.file)}) */`);
+          root.prepend(`/* validator-1-start (${path.basename(root.source.input.file)}) */`);
+          root.append(`/* validator-1-end (${path.basename(root.source.input.file)}) */`);
         }
       ),
       plugin({
@@ -68,7 +69,8 @@ Object.keys(cases).forEach((name) => {
             throw new Error('Plugin after ours was called multiple times.')
           }
           rootsSeenAfterPlugin.add(root);
-          root.prepend(`/* validator-2 (${path.basename(root.source.input.file)}) */`);
+          root.prepend(`/* validator-2-start (${path.basename(root.source.input.file)}) */`);
+          root.append(`/* validator-2-end (${path.basename(root.source.input.file)}) */`);
         }
       ),
     ];

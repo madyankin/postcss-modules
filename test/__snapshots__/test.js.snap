@@ -1,9 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`allows to make CSS global: allows to make CSS global - CSS 1`] = `
-"/* validator-2 (global.css) */
+"/* validator-2-start (global.css) */
 
-/* validator-1 (global.css) */
+/* validator-1-start (global.css) */
 
 .page {
     padding: 20px;
@@ -12,6 +12,10 @@ exports[`allows to make CSS global: allows to make CSS global - CSS 1`] = `
 ._global_title {
     color: green;
 }
+
+/* validator-1-end (global.css) */
+
+/* validator-2-end (global.css) */
 "
 `;
 
@@ -22,7 +26,7 @@ Object {
 `;
 
 exports[`composes rules: composes rules - CSS 1`] = `
-"/* validator-2 (composes.css) *//* validator-1 (composes.a.css) */._composes_a_another-mixin {
+"/* validator-2-start (composes.css) *//* validator-1-start (composes.a.css) */._composes_a_another-mixin {
     display: -webkit-flex;
     display: -moz-box;
     display: flex;
@@ -30,7 +34,7 @@ exports[`composes rules: composes rules - CSS 1`] = `
     width: 200px;
 }._composes_a_hello {
     foo: bar;
-}/* validator-1 (composes.mixins.css) */._composes_mixins_title {
+}/* validator-1-end (composes.a.css) *//* validator-1-start (composes.mixins.css) */._composes_mixins_title {
     color: black;
     font-size: 40px;
 }._composes_mixins_title:hover {
@@ -40,9 +44,9 @@ exports[`composes rules: composes rules - CSS 1`] = `
 }._composes_mixins_title:focus, ._composes_mixins_figure:focus {
     outline: none;
     border: 1px solid red;
-}
+}/* validator-1-end (composes.mixins.css) */
 
-/* validator-1 (composes.css) */
+/* validator-1-start (composes.css) */
 
 .page {
     padding: 20px;
@@ -61,6 +65,10 @@ exports[`composes rules: composes rules - CSS 1`] = `
     display: -moz-box;
     display: flex;
 }
+
+/* validator-1-end (composes.css) */
+
+/* validator-2-end (composes.css) */
 "
 `;
 
@@ -89,9 +97,9 @@ Array [
 `;
 
 exports[`generates scoped name with interpolated string: generates scoped name with interpolated string - CSS 1`] = `
-"/* validator-2 (interpolated.css) */
+"/* validator-2-start (interpolated.css) */
 
-/* validator-1 (interpolated.css) */
+/* validator-1-start (interpolated.css) */
 
 .interpolated__title___2P3iB {
     color: green;
@@ -100,6 +108,10 @@ exports[`generates scoped name with interpolated string: generates scoped name w
 .interpolated__article___Skl0x {
     color: black;
 }
+
+/* validator-1-end (interpolated.css) */
+
+/* validator-2-end (interpolated.css) */
 "
 `;
 
@@ -111,8 +123,8 @@ Object {
 `;
 
 exports[`preserves comments: preserves comments - CSS 1`] = `
-"/* validator-2 (comments.css) */
-/* validator-1 (comments.css) */
+"/* validator-2-start (comments.css) */
+/* validator-1-start (comments.css) */
 /**
  * This is a doc comment...
  */
@@ -120,15 +132,17 @@ p {
   /* ...and a line comment */
   padding: 0;
 }
+/* validator-1-end (comments.css) */
+/* validator-2-end (comments.css) */
 "
 `;
 
 exports[`preserves comments: preserves comments - JSON 1`] = `Object {}`;
 
 exports[`processes classes: processes classes - CSS 1`] = `
-"/* validator-2 (classes.css) */
+"/* validator-2-start (classes.css) */
 
-/* validator-1 (classes.css) */
+/* validator-1-start (classes.css) */
 
 .page {
     padding: 20px;
@@ -141,6 +155,10 @@ exports[`processes classes: processes classes - CSS 1`] = `
 ._classes_article {
     color: black;
 }
+
+/* validator-1-end (classes.css) */
+
+/* validator-2-end (classes.css) */
 "
 `;
 
@@ -165,11 +183,9 @@ exports[`processes globalModulePaths option: processes globalModulePaths option 
 exports[`processes hashPrefix option: processes hashPrefix option 1`] = `"._8xPWf {}"`;
 
 exports[`processes values: processes values - CSS 1`] = `
-"/* validator-2 (values.css) */
+"/* validator-2-start (values.css) *//* validator-1-start (values.colors.css) *//* validator-1-end (values.colors.css) */
 
-/* validator-1 (values.colors.css) */
-
-/* validator-1 (values.css) */
+/* validator-1-start (values.css) */
 
 ._values_title {
     color: green;
@@ -178,6 +194,10 @@ exports[`processes values: processes values - CSS 1`] = `
 ._values_article {
     color: blue;
 }
+
+/* validator-1-end (values.css) */
+
+/* validator-2-end (values.css) */
 "
 `;
 
@@ -192,13 +212,13 @@ Object {
 `;
 
 exports[`saves origin plugins: saves origin plugins - CSS 1`] = `
-"/* validator-2 (plugins.css) *//* validator-1 (plugins.css) */
+"/* validator-2-start (plugins.css) *//* validator-1-start (plugins.css) */
 ._plugins_title {
     display: -webkit-flex;
     display: -moz-box;
     display: flex;
     color: green;
-}
+}/* validator-1-end (plugins.css) *//* validator-2-end (plugins.css) */
 "
 `;
 
