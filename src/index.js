@@ -78,7 +78,7 @@ module.exports = postcss.plugin(PLUGIN_NAME, (opts = {}) => {
     const inputFile = css.source.input.file;
     const pluginList = getDefaultPluginsList(opts, inputFile);
     const resultPluginIndex = result.processor.plugins.findIndex((plugin) => isOurPlugin(plugin));
-    if (resultPluginIndex === undefined) {
+    if (resultPluginIndex === -1) {
       throw new Error('Plugin missing from options.');
     }
     const earlierPlugins = result.processor.plugins.slice(0, resultPluginIndex);
