@@ -39,6 +39,27 @@ Object.keys(cases).forEach((name) => {
 
     let resultJson;
 
+    const plugins = [
+      autoprefixer,
+      plugin({
+        scopeBehaviour,
+        generateScopedName: scopedNameGenerator,
+        getJSON: (cssFile, json) => {
+          resultJson = json;
+        },
+      }),
+    ];
+
+    const result = await postcss(plugins).process(source, { from: sourceFile });
+
+    expect(result.css).toMatchSnapshot(`${description} - CSS`);
+    expect(resultJson).toMatchSnapshot(`${description} - JSON`);
+  });
+
+  it(`only calls plugins once when it ${description}`, async () => {
+    const sourceFile = path.join(fixturesPath, "in", `${name}.css`);
+    const source = fs.readFileSync(sourceFile).toString();
+
     const rootsSeenBeforePlugin = new Set();
     const rootsSeenAfterPlugin = new Set();
 
@@ -58,9 +79,7 @@ Object.keys(cases).forEach((name) => {
       plugin({
         scopeBehaviour,
         generateScopedName: scopedNameGenerator,
-        getJSON: (cssFile, json) => {
-          resultJson = json;
-        },
+        getJSON: () => {},
       }),
       postcss.plugin(
         'validator-2',
@@ -77,8 +96,7 @@ Object.keys(cases).forEach((name) => {
 
     const result = await postcss(plugins).process(source, { from: sourceFile });
 
-    expect(result.css).toMatchSnapshot(`${description} - CSS`);
-    expect(resultJson).toMatchSnapshot(`${description} - JSON`);
+    expect(result.css).toMatchSnapshot(`plugins once - ${description} - CSS`);
   });
 });
 
