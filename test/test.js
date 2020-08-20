@@ -55,6 +55,49 @@ Object.keys(cases).forEach((name) => {
     expect(result.css).toMatchSnapshot(`${description} - CSS`);
     expect(resultJson).toMatchSnapshot(`${description} - JSON`);
   });
+
+  it(`only calls plugins once when it ${description}`, async () => {
+    const sourceFile = path.join(fixturesPath, "in", `${name}.css`);
+    const source = fs.readFileSync(sourceFile).toString();
+
+    const rootsSeenBeforePlugin = new Set();
+    const rootsSeenAfterPlugin = new Set();
+
+    const plugins = [
+      autoprefixer,
+      postcss.plugin(
+        'validator-1',
+        () => (root) => {
+          if (rootsSeenBeforePlugin.has(root)) {
+            throw new Error('Plugin before ours was called multiple times.')
+          }
+          rootsSeenBeforePlugin.add(root);
+          root.prepend(`/* validator-1-start (${path.basename(root.source.input.file)}) */`);
+          root.append(`/* validator-1-end (${path.basename(root.source.input.file)}) */`);
+        }
+      ),
+      plugin({
+        scopeBehaviour,
+        generateScopedName: scopedNameGenerator,
+        getJSON: () => {},
+      }),
+      postcss.plugin(
+        'validator-2',
+        () => (root) => {
+          if (rootsSeenAfterPlugin.has(root)) {
+            throw new Error('Plugin after ours was called multiple times.')
+          }
+          rootsSeenAfterPlugin.add(root);
+          root.prepend(`/* validator-2-start (${path.basename(root.source.input.file)}) */`);
+          root.append(`/* validator-2-end (${path.basename(root.source.input.file)}) */`);
+        }
+      ),
+    ];
+
+    const result = await postcss(plugins).process(source, { from: sourceFile });
+
+    expect(result.css).toMatchSnapshot(`plugins once - ${description} - CSS`);
+  });
 });
 
 it("saves JSON next to CSS by default", async () => {

@@ -100,6 +100,159 @@ Object {
 }
 `;
 
+exports[`only calls plugins once when it allows to make CSS global: plugins once - allows to make CSS global - CSS 1`] = `
+"/* validator-2-start (global.css) */
+
+/* validator-1-start (global.css) */
+
+.page {
+    padding: 20px;
+}
+
+._global_title {
+    color: green;
+}
+
+/* validator-1-end (global.css) */
+
+/* validator-2-end (global.css) */
+"
+`;
+
+exports[`only calls plugins once when it composes rules: plugins once - composes rules - CSS 1`] = `
+"/* validator-2-start (composes.css) *//* validator-1-start (composes.a.css) */._composes_a_another-mixin {
+    display: -webkit-flex;
+    display: -moz-box;
+    display: flex;
+    height: 100px;
+    width: 200px;
+}._composes_a_hello {
+    foo: bar;
+}/* validator-1-end (composes.a.css) *//* validator-1-start (composes.mixins.css) */._composes_mixins_title {
+    color: black;
+    font-size: 40px;
+}._composes_mixins_title:hover {
+    color: red;
+}._composes_mixins_figure {
+    text-align: center
+}._composes_mixins_title:focus, ._composes_mixins_figure:focus {
+    outline: none;
+    border: 1px solid red;
+}/* validator-1-end (composes.mixins.css) */
+
+/* validator-1-start (composes.css) */
+
+.page {
+    padding: 20px;
+}
+
+._composes_title {
+    color: green;
+}
+
+._composes_article {
+    font-size: 16px;
+}
+
+._composes_figure {
+    display: -webkit-flex;
+    display: -moz-box;
+    display: flex;
+}
+
+/* validator-1-end (composes.css) */
+
+/* validator-2-end (composes.css) */
+"
+`;
+
+exports[`only calls plugins once when it generates scoped name with interpolated string: plugins once - generates scoped name with interpolated string - CSS 1`] = `
+"/* validator-2-start (interpolated.css) */
+
+/* validator-1-start (interpolated.css) */
+
+.interpolated__title___2P3iB {
+    color: green;
+}
+
+.interpolated__article___Skl0x {
+    color: black;
+}
+
+/* validator-1-end (interpolated.css) */
+
+/* validator-2-end (interpolated.css) */
+"
+`;
+
+exports[`only calls plugins once when it preserves comments: plugins once - preserves comments - CSS 1`] = `
+"/* validator-2-start (comments.css) */
+/* validator-1-start (comments.css) */
+/**
+ * This is a doc comment...
+ */
+p {
+  /* ...and a line comment */
+  padding: 0;
+}
+/* validator-1-end (comments.css) */
+/* validator-2-end (comments.css) */
+"
+`;
+
+exports[`only calls plugins once when it processes classes: plugins once - processes classes - CSS 1`] = `
+"/* validator-2-start (classes.css) */
+
+/* validator-1-start (classes.css) */
+
+.page {
+    padding: 20px;
+}
+
+._classes_title {
+    color: green;
+}
+
+._classes_article {
+    color: black;
+}
+
+/* validator-1-end (classes.css) */
+
+/* validator-2-end (classes.css) */
+"
+`;
+
+exports[`only calls plugins once when it processes values: plugins once - processes values - CSS 1`] = `
+"/* validator-2-start (values.css) *//* validator-1-start (values.colors.css) *//* validator-1-end (values.colors.css) */
+
+/* validator-1-start (values.css) */
+
+._values_title {
+    color: green;
+}
+
+._values_article {
+    color: blue;
+}
+
+/* validator-1-end (values.css) */
+
+/* validator-2-end (values.css) */
+"
+`;
+
+exports[`only calls plugins once when it saves origin plugins: plugins once - saves origin plugins - CSS 1`] = `
+"/* validator-2-start (plugins.css) *//* validator-1-start (plugins.css) */
+._plugins_title {
+    display: -webkit-flex;
+    display: -moz-box;
+    display: flex;
+    color: green;
+}/* validator-1-end (plugins.css) *//* validator-2-end (plugins.css) */
+"
+`;
+
 exports[`preserves comments: preserves comments - CSS 1`] = `
 "/**
  * This is a doc comment...
