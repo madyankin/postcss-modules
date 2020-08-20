@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.2.1
+
+### Fixed
+
+- Fixed an issue when some plugins were running multiple times by Tom Jenkinson (@tjenkinson) https://github.com/css-modules/postcss-modules/pull/111
+
 ## 3.2.0
 
 ### Changed
