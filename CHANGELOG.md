@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.2.2
+
+### Fixed
+
+- Fixed user plugins order by Tom Jenkinson (@tjenkinson) https://github.com/css-modules/postcss-modules/pull/112
+
 ## 3.2.1
 
 ### Fixed
