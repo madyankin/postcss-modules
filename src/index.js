@@ -82,7 +82,7 @@ module.exports = postcss.plugin(PLUGIN_NAME, (opts = {}) => {
       throw new Error('Plugin missing from options.');
     }
     const earlierPlugins = result.processor.plugins.slice(0, resultPluginIndex);
-    const loaderPlugins = [...pluginList, ...earlierPlugins];
+    const loaderPlugins = [...earlierPlugins, ...pluginList];
     const loader = getLoader(opts, loaderPlugins);
     const parser = new Parser(loader.fetch.bind(loader));
 
