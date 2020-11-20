@@ -65,33 +65,41 @@ Object.keys(cases).forEach((name) => {
 
     const plugins = [
       autoprefixer,
-      postcss.plugin(
-        'validator-1',
-        () => (root) => {
+      {
+        postcssPlugin: "validator-1",
+        Once(root) {
           if (rootsSeenBeforePlugin.has(root)) {
-            throw new Error('Plugin before ours was called multiple times.')
+            throw new Error("Plugin before ours was called multiple times.");
           }
           rootsSeenBeforePlugin.add(root);
-          root.prepend(`/* validator-1-start (${path.basename(root.source.input.file)}) */`);
-          root.append(`/* validator-1-end (${path.basename(root.source.input.file)}) */`);
-        }
-      ),
+          root.prepend(
+            `/* validator-1-start (${path.basename(root.source.input.file)}) */`
+          );
+          root.append(
+            `/* validator-1-end (${path.basename(root.source.input.file)}) */`
+          );
+        },
+      },
       plugin({
         scopeBehaviour,
         generateScopedName: scopedNameGenerator,
         getJSON: () => {},
       }),
-      postcss.plugin(
-        'validator-2',
-        () => (root) => {
+      {
+        postcssPlugin: "validator-2",
+        Once(root) {
           if (rootsSeenAfterPlugin.has(root)) {
-            throw new Error('Plugin after ours was called multiple times.')
+            throw new Error("Plugin after ours was called multiple times.");
           }
           rootsSeenAfterPlugin.add(root);
-          root.prepend(`/* validator-2-start (${path.basename(root.source.input.file)}) */`);
-          root.append(`/* validator-2-end (${path.basename(root.source.input.file)}) */`);
-        }
-      ),
+          root.prepend(
+            `/* validator-2-start (${path.basename(root.source.input.file)}) */`
+          );
+          root.append(
+            `/* validator-2-end (${path.basename(root.source.input.file)}) */`
+          );
+        },
+      },
     ];
 
     const result = await postcss(plugins).process(source, { from: sourceFile });
@@ -223,7 +231,6 @@ it("processes localsConvention with dashes option", async () => {
   });
 });
 
-
 it("processes localsConvention with function option", async () => {
   const sourceFile = path.join(fixturesPath, "in", "camelCase.css");
   const source = fs.readFileSync(sourceFile).toString();
@@ -232,9 +239,12 @@ it("processes localsConvention with function option", async () => {
   if (fs.existsSync(jsonFile)) fs.unlinkSync(jsonFile);
 
   await postcss([
-    plugin({ generateScopedName, localsConvention: (className) => {
-      return className.replace('camel-case', 'cc');
-    } }),
+    plugin({
+      generateScopedName,
+      localsConvention: (className) => {
+        return className.replace("camel-case", "cc");
+      },
+    }),
   ]).process(source, { from: sourceFile });
 
   const json = fs.readFileSync(jsonFile).toString();
@@ -242,7 +252,7 @@ it("processes localsConvention with function option", async () => {
 
   expect(JSON.parse(json)).toMatchObject({
     cc: "_camelCase_camel-case",
-    'cc-extra': "_camelCase_camel-case-extra",
+    "cc-extra": "_camelCase_camel-case-extra",
     FooBar: "_camelCase_FooBar",
   });
 });
