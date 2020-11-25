@@ -109,6 +109,26 @@ Object.keys(cases).forEach((name) => {
   });
 });
 
+it("works with visitor plugins", async () => {
+  const source = `
+p {
+  color: green;
+}
+`;
+
+  const plugins = [
+    {
+      postcssPlugin: "turn-values-blue",
+      Declaration(decl) {
+        decl.value = "blue";
+      },
+    },
+    plugin(),
+  ];
+  const result = await postcss(plugins).process(source, { from: undefined });
+  expect(result.css).toEqual(source.replace("green", "blue"));
+});
+
 it("saves JSON next to CSS by default", async () => {
   const sourceFile = path.join(fixturesPath, "in", "saveJSON.css");
   const source = fs.readFileSync(sourceFile).toString();
