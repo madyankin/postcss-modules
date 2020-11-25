@@ -74,7 +74,7 @@ function dashesCamelCase(string) {
 module.exports = (opts = {}) => {
   return {
     postcssPlugin: PLUGIN_NAME,
-    async Once(css, { result }) {
+    async OnceExit(css, { result }) {
       const getJSON = opts.getJSON || saveJSON;
       const inputFile = css.source.input.file;
       const pluginList = getDefaultPluginsList(opts, inputFile);
