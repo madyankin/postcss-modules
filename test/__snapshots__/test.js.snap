@@ -120,7 +120,7 @@ exports[`only calls plugins once when it allows to make CSS global: plugins once
 `;
 
 exports[`only calls plugins once when it composes rules: plugins once - composes rules - CSS 1`] = `
-"/* validator-2-start (composes.css) *//* validator-1-start (composes.a.css) */._composes_a_another-mixin {
+"/* validator-1-start (composes.a.css) */._composes_a_another-mixin {
     display: -webkit-flex;
     display: -moz-box;
     display: flex;
@@ -139,6 +139,8 @@ exports[`only calls plugins once when it composes rules: plugins once - composes
     outline: none;
     border: 1px solid red;
 }/* validator-1-end (composes.mixins.css) */
+
+/* validator-2-start (composes.css) */
 
 /* validator-1-start (composes.css) */
 
@@ -224,8 +226,8 @@ exports[`only calls plugins once when it processes classes: plugins once - proce
 `;
 
 exports[`only calls plugins once when it processes values: plugins once - processes values - CSS 1`] = `
-"/* validator-2-start (values.css) *//* validator-1-start (values.colors.css) *//* validator-1-end (values.colors.css) */
-
+"/* validator-1-start (values.colors.css) *//* validator-1-end (values.colors.css) */
+/* validator-2-start (values.css) */
 /* validator-1-start (values.css) */
 
 ._values_title {

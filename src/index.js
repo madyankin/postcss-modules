@@ -71,73 +71,77 @@ function dashesCamelCase(string) {
   );
 }
 
-module.exports = postcss.plugin(PLUGIN_NAME, (opts = {}) => {
-  const getJSON = opts.getJSON || saveJSON;
+module.exports = (opts = {}) => {
+  return {
+    postcssPlugin: PLUGIN_NAME,
+    async OnceExit(css, { result }) {
+      const getJSON = opts.getJSON || saveJSON;
+      const inputFile = css.source.input.file;
+      const pluginList = getDefaultPluginsList(opts, inputFile);
+      const resultPluginIndex = result.processor.plugins.findIndex((plugin) => isOurPlugin(plugin));
+      if (resultPluginIndex === -1) {
+        throw new Error('Plugin missing from options.');
+      }
+      const earlierPlugins = result.processor.plugins.slice(0, resultPluginIndex);
+      const loaderPlugins = [...earlierPlugins, ...pluginList];
+      const loader = getLoader(opts, loaderPlugins);
+      const parser = new Parser(loader.fetch.bind(loader));
 
-  return async (css, result) => {
-    const inputFile = css.source.input.file;
-    const pluginList = getDefaultPluginsList(opts, inputFile);
-    const resultPluginIndex = result.processor.plugins.findIndex((plugin) => isOurPlugin(plugin));
-    if (resultPluginIndex === -1) {
-      throw new Error('Plugin missing from options.');
-    }
-    const earlierPlugins = result.processor.plugins.slice(0, resultPluginIndex);
-    const loaderPlugins = [...earlierPlugins, ...pluginList];
-    const loader = getLoader(opts, loaderPlugins);
-    const parser = new Parser(loader.fetch.bind(loader));
+      await postcss([...pluginList, parser.plugin()]).process(css, {
+        from: inputFile,
+      });
 
-    await postcss([...pluginList, parser.plugin]).process(css, {
-      from: inputFile,
-    });
+      const out = loader.finalSource;
+      if (out) css.prepend(out);
 
-    const out = loader.finalSource;
-    if (out) css.prepend(out);
+      if (opts.localsConvention) {
+        const isFunc = typeof opts.localsConvention === "function";
 
-    if (opts.localsConvention) {
-      const isFunc = typeof opts.localsConvention === "function";
+        parser.exportTokens = Object.entries(parser.exportTokens).reduce(
+          (tokens, [className, value]) => {
+            if (isFunc) {
+              tokens[opts.localsConvention(className, value, inputFile)] = value;
 
-      parser.exportTokens = Object.entries(parser.exportTokens).reduce(
-        (tokens, [className, value]) => {
-          if (isFunc) {
-            tokens[opts.localsConvention(className, value, inputFile)] = value;
+              return tokens;
+            }
+
+            switch (opts.localsConvention) {
+              case "camelCase":
+                tokens[className] = value;
+                tokens[camelCase(className)] = value;
+
+                break;
+              case "camelCaseOnly":
+                tokens[camelCase(className)] = value;
+
+                break;
+              case "dashes":
+                tokens[className] = value;
+                tokens[dashesCamelCase(className)] = value;
+
+                break;
+              case "dashesOnly":
+                tokens[dashesCamelCase(className)] = value;
+
+                break;
+            }
 
             return tokens;
-          }
+          },
+          {}
+        );
+      }
 
-          switch (opts.localsConvention) {
-            case "camelCase":
-              tokens[className] = value;
-              tokens[camelCase(className)] = value;
+      result.messages.push({
+        type: "export",
+        plugin: "postcss-modules",
+        exportTokens: parser.exportTokens,
+      });
 
-              break;
-            case "camelCaseOnly":
-              tokens[camelCase(className)] = value;
-
-              break;
-            case "dashes":
-              tokens[className] = value;
-              tokens[dashesCamelCase(className)] = value;
-
-              break;
-            case "dashesOnly":
-              tokens[dashesCamelCase(className)] = value;
-
-              break;
-          }
-
-          return tokens;
-        },
-        {}
-      );
+      // getJSON may return a promise
+      return getJSON(css.source.input.file, parser.exportTokens, result.opts.to);
     }
-
-    result.messages.push({
-      type: "export",
-      plugin: "postcss-modules",
-      exportTokens: parser.exportTokens,
-    });
-
-    // getJSON may return a promise
-    return getJSON(css.source.input.file, parser.exportTokens, result.opts.to);
   };
-});
+};
+
+module.exports.postcss = true;

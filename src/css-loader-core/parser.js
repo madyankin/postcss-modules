@@ -12,10 +12,16 @@ export default class Parser {
     this.trace = trace;
   }
 
-  plugin(css) {
-    return Promise.all(this.fetchAllImports(css))
-      .then(() => this.linkImportedSymbols(css))
-      .then(() => this.extractExports(css));
+  plugin() {
+    const parser = this;
+    return {
+      postcssPlugin: "css-modules-parser",
+      OnceExit(css) {
+        return Promise.all(parser.fetchAllImports(css))
+          .then(() => parser.linkImportedSymbols(css))
+          .then(() => parser.extractExports(css));
+      },
+    };
   }
 
   fetchAllImports(css) {

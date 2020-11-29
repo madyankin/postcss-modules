@@ -7,6 +7,15 @@ import { behaviours } from "../src/behaviours";
 
 const fixturesPath = path.resolve(__dirname, "./fixtures");
 
+function createPlugin(name, processor) {
+  const plugin = () => ({
+    postcssPlugin: name,
+    Once: processor
+  })
+  plugin.postcss = true
+  return plugin
+}
+
 const cases = {
   plugins: "saves origin plugins",
   classes: "processes classes",
@@ -65,9 +74,9 @@ Object.keys(cases).forEach((name) => {
 
     const plugins = [
       autoprefixer,
-      postcss.plugin(
+      createPlugin(
         'validator-1',
-        () => (root) => {
+        (root) => {
           if (rootsSeenBeforePlugin.has(root)) {
             throw new Error('Plugin before ours was called multiple times.')
           }
@@ -81,9 +90,9 @@ Object.keys(cases).forEach((name) => {
         generateScopedName: scopedNameGenerator,
         getJSON: () => {},
       }),
-      postcss.plugin(
+      createPlugin(
         'validator-2',
-        () => (root) => {
+        (root) => {
           if (rootsSeenAfterPlugin.has(root)) {
             throw new Error('Plugin after ours was called multiple times.')
           }

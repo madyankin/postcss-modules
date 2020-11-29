@@ -14,7 +14,7 @@ class Core {
   load(sourceString, sourcePath, trace, pathFetcher) {
     let parser = new Parser(pathFetcher, trace);
 
-    return postcss(this.plugins.concat([parser.plugin]))
+    return postcss(this.plugins.concat([parser.plugin()]))
       .process(sourceString, { from: "/" + sourcePath })
       .then((result) => {
         return {
