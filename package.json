@@ -18,6 +18,7 @@
     "url": "https://github.com/css-modules/postcss-modules.git"
   },
   "dependencies": {
+    "@babel/register": "^7.12.10",
     "generic-names": "^2.0.1",
     "icss-replace-symbols": "^1.1.0",
     "lodash.camelcase": "^4.3.0",
@@ -31,11 +32,11 @@
     "postcss": "^8.0.0"
   },
   "devDependencies": {
+    "@babel/cli": "7.12.10",
+    "@babel/core": "7.12.10",
+    "@babel/preset-env": "7.12.11",
     "autoprefixer": "^10.0.2",
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
     "babel-eslint": "^10.1.0",
-    "babel-preset-env": "^1.7.0",
     "eslint": "^7.3.1",
     "eslint-plugin-import": "^2.21.2",
     "eslint-plugin-jest": "^23.17.0",
@@ -64,5 +65,5 @@
       "git add"
     ]
   },
-  "require": "babel-core/register"
+  "require": "@babel/register"
 }
