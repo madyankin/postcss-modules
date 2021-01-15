@@ -70,54 +70,44 @@ export default class Parser {
     exportNode.remove();
   }
 
-  fetchImport(importNode, relativeTo, depNr) {
-    let file = importNode.selector.match(importRegexp)[1],
-      depTrace = this.trace + String.fromCharCode(depNr);
-    let newPath = file.replace(/^["']|["']$/g, "");
-    let relativeDir = path.dirname(relativeTo),
-      rootRelativePath = path.resolve(relativeDir, newPath),
+  async fetchImport(importNode, relativeTo, depNr) {
+    const file = importNode.selector.match(importRegexp)[1].replace(/^["']|["']$/g, ""),
+      depTrace = this.trace + String.fromCharCode(depNr),
+      relativeDir = path.dirname(relativeTo),
+      rootRelativePath = path.resolve(relativeDir, file),
       fileRelativePath = path.resolve(
         path.join(this.root, relativeDir),
-        newPath
-      );
-    let subParser = new Parser(this.root, this.plugins, this.pathFetcher, depTrace, {
-      sources: this.sources,
-      traces: this.traces,
-      tokensByFile: this.tokensByFile
-    })
-    const tokens = this.tokensByFile[fileRelativePath]
+        file
+      ),
+      subParser = new Parser(this.root, this.plugins, this.pathFetcher, depTrace, {
+        sources: this.sources,
+        traces: this.traces,
+        tokensByFile: this.tokensByFile
+      }),
+      tokens = this.tokensByFile[fileRelativePath];
 
-    const base = tokens
-      ? Promise.resolve(tokens)
-      : this.pathFetcher(newPath, relativeTo, this.root)
-      .then(content => {
-        return postcss(this.plugins.concat([subParser.plugin()]))
-          .process(content, { from: "/" + rootRelativePath })
-          .then((result) => {
-            return {
-              injectableSource: result.css,
-              exportTokens: subParser.exportTokens,
-            };
-          })
-          .then(({ injectableSource, exportTokens }) => {
-            this.sources[fileRelativePath] = injectableSource;
-            this.traces[depTrace] = fileRelativePath;
-            this.tokensByFile[fileRelativePath] = exportTokens;
-            return exportTokens;
-          });
-      })
-    return base
-      .then(
-        (exports) => {
-          importNode.each((decl) => {
-            if (decl.type == "decl") {
-              this.translations[decl.prop] = exports[decl.value];
-            }
-          });
-          importNode.remove();
-        },
-        (err) => console.log(err)
-      );
+    try {
+      let exports = tokens;
+      if (!exports) {
+        const content = await this.pathFetcher(file, relativeTo, this.root);
+        const { css } = await postcss(this.plugins.concat([subParser.plugin()]))
+          .process(content, { from: "/" + rootRelativePath });
+        exports = subParser.exportTokens;
+
+        this.sources[fileRelativePath] = css;
+        this.traces[depTrace] = fileRelativePath;
+        this.tokensByFile[fileRelativePath] = exports;
+      }
+
+      importNode.each((decl) => {
+        if (decl.type == "decl") {
+          this.translations[decl.prop] = exports[decl.value];
+        }
+      });
+      importNode.remove();
+    } catch (e) {
+      console.error(e);
+    }
   }
 
 
