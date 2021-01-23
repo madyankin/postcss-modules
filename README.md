@@ -1,10 +1,8 @@
-# postcss-modules [![Build Status][ci-img]][ci]
+# postcss-modules
 
 A [PostCSS] plugin to use [CSS Modules] everywhere. Not only at the client side.
 
 [postcss]: https://github.com/postcss/postcss
-[ci-img]: https://travis-ci.org/css-modules/postcss-modules.svg
-[ci]: https://travis-ci.org/css-modules/postcss-modules
 [css modules]: https://github.com/css-modules/css-modules
 
 <a href="https://evilmartians.com/?utm_source=postcss-modules">
