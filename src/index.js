@@ -30,9 +30,7 @@ function getScopedNameGenerator(opts) {
 }
 
 function getLoader(opts) {
-  return typeof opts.Loader === "function"
-    ? opts.loader
-    : defaultLoader;
+  return opts.loader || defaultLoader;
 }
 
 function isGlobalModule(globalModules, inputFile) {
