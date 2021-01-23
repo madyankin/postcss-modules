@@ -3,7 +3,7 @@ import camelCase from "lodash.camelcase";
 import genericNames from "generic-names";
 
 import Parser from "./css-loader-core/parser";
-import FileSystemLoader from "./css-loader-core/loader";
+import defaultLoader from "./css-loader-core/loader";
 
 import generateScopedName from "./generateScopedName";
 import saveJSON from "./saveJSON";
@@ -29,11 +29,8 @@ function getScopedNameGenerator(opts) {
   });
 }
 
-function getLoader(opts, plugins) {
-  const root = typeof opts.root === "undefined" ? "/" : opts.root;
-  return typeof opts.Loader === "function"
-    ? new opts.Loader(root, plugins)
-    : new FileSystemLoader(root, plugins);
+function getLoader(opts) {
+  return opts.loader || defaultLoader;
 }
 
 function isGlobalModule(globalModules, inputFile) {
@@ -84,14 +81,15 @@ module.exports = (opts = {}) => {
       }
       const earlierPlugins = result.processor.plugins.slice(0, resultPluginIndex);
       const loaderPlugins = [...earlierPlugins, ...pluginList];
-      const loader = getLoader(opts, loaderPlugins);
-      const parser = new Parser(loader.fetch.bind(loader));
+      const loader = getLoader(opts);
+      const root = typeof opts.root === "undefined" ? "/" : opts.root;
+      const parser = new Parser(root, loaderPlugins, loader);
 
       await postcss([...pluginList, parser.plugin()]).process(css, {
         from: inputFile,
       });
 
-      const out = loader.finalSource;
+      const out = parser.finalSource;
       if (out) css.prepend(out);
 
       if (opts.localsConvention) {
