@@ -5,10 +5,6 @@ A [PostCSS] plugin to use [CSS Modules] everywhere. Not only at the client side.
 [postcss]: https://github.com/postcss/postcss
 [css modules]: https://github.com/css-modules/css-modules
 
-<a href="https://evilmartians.com/?utm_source=postcss-modules">
-<img src="https://evilmartians.com/badges/sponsored-by-evil-martians.svg" alt="Sponsored by Evil Martians" width="236" height="54">
-</a>
-
 What is this? For example, you have the following CSS:
 
 ```css
