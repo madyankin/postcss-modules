@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.1.0
+
+- Added TypeScript typings by Shuman Lim (@origin-master) https://github.com/madyankin/postcss-modules/pull/123
+
 ## 4.0.0
 
 - Upgraded to PostCSS 8 by Evan You (@yyx990803) https://github.com/css-modules/postcss-modules/pull/114
