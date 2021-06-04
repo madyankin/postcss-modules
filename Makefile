@@ -16,7 +16,7 @@ build: clean test
 
 publish: build
 	npm publish ./
-  git push --follow-tags
+	git push --follow-tags
 
 pack: build
 	npm pack
