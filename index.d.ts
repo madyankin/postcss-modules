@@ -55,4 +55,6 @@ declare interface PostcssModulesPlugin {
   postcss: true;
 }
 
+declare const PostcssModulesPlugin: PostcssModulesPlugin;
+
 export = PostcssModulesPlugin;
