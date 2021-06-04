@@ -10,3 +10,7 @@ src/
 .vscode
 
 gulpfile.js
+undefined.json
+Makefile
+.github
+.browserslistrc

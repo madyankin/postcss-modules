@@ -47,11 +47,7 @@
     "prettier": "^2.0.5"
   },
   "scripts": {
-    "pretest": "$(npm bin)/eslint src test",
-    "test": "$(npm bin)/jest",
-    "transpile": "$(npm bin)/babel src -d build",
-    "prepublish": "npm run transpile",
-    "postpublish": "rm -rf build && git push --follow-tags",
+    "test": "make test",
     "precommit": "lint-staged"
   },
   "lint-staged": {

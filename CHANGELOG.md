@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.1.3
+
+- Fixed package contents
+
 ## 4.1.1
 
 - Fixed TypeScript typings by Shuman Lim (@origin-master) https://github.com/madyankin/postcss-modules/pull/124

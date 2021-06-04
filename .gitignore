@@ -2,3 +2,4 @@ node_modules/
 build/
 npm-debug.log
 index.es5.js
+undefined.json
