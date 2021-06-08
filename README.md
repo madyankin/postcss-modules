@@ -5,7 +5,15 @@ A [PostCSS] plugin to use [CSS Modules] everywhere. Not only at the client side.
 [postcss]: https://github.com/postcss/postcss
 [css modules]: https://github.com/css-modules/css-modules
 
-What is this? For example, you have the following CSS:
+## Support the developer
+
+I maintain the plugin in my free time, so I don't receive any payment for this work.
+To have better docs, new features and integrations with frameworks, you can [support me on Patreon](https://www.patreon.com/bePatron?u=25976212).
+
+
+## What is this? 
+
+For example, you have the following CSS:
 
 ```css
 /* styles.css */
