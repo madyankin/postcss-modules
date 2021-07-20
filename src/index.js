@@ -85,7 +85,15 @@ module.exports = (opts = {}) => {
       const earlierPlugins = result.processor.plugins.slice(0, resultPluginIndex);
       const loaderPlugins = [...earlierPlugins, ...pluginList];
       const loader = getLoader(opts, loaderPlugins);
-      const parser = new Parser(loader.fetch.bind(loader));
+      const fetcher = ((file, relativeTo, depTrace) => {
+        const resolvedResult = (typeof opts.resolve === 'function' && opts.resolve(file));
+        const resolvedFile = resolvedResult instanceof Promise ? resolvedResult : Promise.resolve(resolvedResult);
+
+        return resolvedFile.then((f = file) => {
+          return loader.fetch.call(loader, f || file, relativeTo, depTrace);
+        });
+      });
+      const parser = new Parser(fetcher);
 
       await postcss([...pluginList, parser.plugin()]).process(css, {
         from: inputFile,

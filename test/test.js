@@ -10,10 +10,10 @@ const fixturesPath = path.resolve(__dirname, "./fixtures");
 function createPlugin(name, processor) {
   const plugin = () => ({
     postcssPlugin: name,
-    Once: processor
-  })
-  plugin.postcss = true
-  return plugin
+    Once: processor,
+  });
+  plugin.postcss = true;
+  return plugin;
 }
 
 const cases = {
@@ -74,33 +74,35 @@ Object.keys(cases).forEach((name) => {
 
     const plugins = [
       autoprefixer,
-      createPlugin(
-        'validator-1',
-        (root) => {
-          if (rootsSeenBeforePlugin.has(root)) {
-            throw new Error('Plugin before ours was called multiple times.')
-          }
-          rootsSeenBeforePlugin.add(root);
-          root.prepend(`/* validator-1-start (${path.basename(root.source.input.file)}) */`);
-          root.append(`/* validator-1-end (${path.basename(root.source.input.file)}) */`);
+      createPlugin("validator-1", (root) => {
+        if (rootsSeenBeforePlugin.has(root)) {
+          throw new Error("Plugin before ours was called multiple times.");
         }
-      ),
+        rootsSeenBeforePlugin.add(root);
+        root.prepend(
+          `/* validator-1-start (${path.basename(root.source.input.file)}) */`
+        );
+        root.append(
+          `/* validator-1-end (${path.basename(root.source.input.file)}) */`
+        );
+      }),
       plugin({
         scopeBehaviour,
         generateScopedName: scopedNameGenerator,
         getJSON: () => {},
       }),
-      createPlugin(
-        'validator-2',
-        (root) => {
-          if (rootsSeenAfterPlugin.has(root)) {
-            throw new Error('Plugin after ours was called multiple times.')
-          }
-          rootsSeenAfterPlugin.add(root);
-          root.prepend(`/* validator-2-start (${path.basename(root.source.input.file)}) */`);
-          root.append(`/* validator-2-end (${path.basename(root.source.input.file)}) */`);
+      createPlugin("validator-2", (root) => {
+        if (rootsSeenAfterPlugin.has(root)) {
+          throw new Error("Plugin after ours was called multiple times.");
         }
-      ),
+        rootsSeenAfterPlugin.add(root);
+        root.prepend(
+          `/* validator-2-start (${path.basename(root.source.input.file)}) */`
+        );
+        root.append(
+          `/* validator-2-end (${path.basename(root.source.input.file)}) */`
+        );
+      }),
     ];
 
     const result = await postcss(plugins).process(source, { from: sourceFile });
@@ -252,7 +254,6 @@ it("processes localsConvention with dashes option", async () => {
   });
 });
 
-
 it("processes localsConvention with function option", async () => {
   const sourceFile = path.join(fixturesPath, "in", "camelCase.css");
   const source = fs.readFileSync(sourceFile).toString();
@@ -261,9 +262,12 @@ it("processes localsConvention with function option", async () => {
   if (fs.existsSync(jsonFile)) fs.unlinkSync(jsonFile);
 
   await postcss([
-    plugin({ generateScopedName, localsConvention: (className) => {
-      return className.replace('camel-case', 'cc');
-    } }),
+    plugin({
+      generateScopedName,
+      localsConvention: (className) => {
+        return className.replace("camel-case", "cc");
+      },
+    }),
   ]).process(source, { from: sourceFile });
 
   const json = fs.readFileSync(jsonFile).toString();
@@ -271,7 +275,7 @@ it("processes localsConvention with function option", async () => {
 
   expect(JSON.parse(json)).toMatchObject({
     cc: "_camelCase_camel-case",
-    'cc-extra': "_camelCase_camel-case-extra",
+    "cc-extra": "_camelCase_camel-case-extra",
     FooBar: "_camelCase_FooBar",
   });
 });
@@ -382,4 +386,24 @@ it("processes exportGlobals option", async () => {
     title: "_classes_title",
     article: "_classes_article",
   });
+});
+
+it("processes resolve option", async () => {
+  const sourceFile = path.join(fixturesPath, "in", "compose.resolve.css");
+  const source = fs.readFileSync(sourceFile).toString();
+  let json;
+  const result = await postcss([
+    plugin({
+      generateScopedName,
+      resolve: async (file) => {
+        return file.replace(/test-fixture-in/, path.dirname(sourceFile));
+      },
+      getJSON: (_, result) => {
+        json = result;
+      },
+    }),
+  ]).process(source, { from: sourceFile });
+
+  expect(result.css).toMatchSnapshot("processes resolve option");
+  expect(json).toMatchObject({"figure": "_compose_resolve_figure _composes_a_hello"});
 });

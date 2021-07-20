@@ -211,6 +211,24 @@ Style of exported classnames, the keys in your json.
 
 In lieu of a string, a custom function can generate the exported class names.
 
+### Resolve path alias
+
+You can rewrite paths for `composes/from` by using `resolve` options. 
+It's useful when you need to resolve custom path alias.
+
+```js
+postcss([
+  require("postcss-modules")({
+    resolve: function (file) {
+     return file.replace(/^@/, process.cwd());
+    },
+  }),
+]);
+```
+
+`resolve` may also return a `Promise<string>`.
+
+
 ## Integration with templates
 
 The plugin only transforms CSS classes to CSS modules.

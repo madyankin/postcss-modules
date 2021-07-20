@@ -1,0 +1,4 @@
+.figure {
+    composes: hello from "test-fixture-in/composes.a.css";
+    display: flex;
+}

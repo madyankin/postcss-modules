@@ -303,6 +303,19 @@ exports[`processes globalModulePaths option: processes globalModulePaths option 
 
 exports[`processes hashPrefix option: processes hashPrefix option 1`] = `"._8xPWf {}"`;
 
+exports[`processes resolve option: processes resolve option 1`] = `
+"._composes_a_another-mixin {
+    display: flex;
+    height: 100px;
+    width: 200px;
+}._composes_a_hello {
+    foo: bar;
+}._compose_resolve_figure {
+    display: flex;
+}
+"
+`;
+
 exports[`processes values: processes values - CSS 1`] = `
 "
 
