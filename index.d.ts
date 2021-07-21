@@ -48,6 +48,8 @@ declare interface Options {
   root?: string;
 
   Loader?: typeof Loader;
+
+  resolve?: (file: string) => string | Promise<string>;
 }
 
 declare interface PostcssModulesPlugin {
