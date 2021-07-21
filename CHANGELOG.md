@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.2.0
+
+- Added the `resolve` option to configure lookup paths for composes/from by @kamilic https://github.com/madyankin/postcss-modules/pull/126
+
 ## 4.1.3
 
 - Fixed package contents
