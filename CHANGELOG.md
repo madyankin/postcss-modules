@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.2.2
+
+- Fix the build
+
 ## 4.2.1
 
 - Fixed the `resolve` option behaviour by @kamilic https://github.com/madyankin/postcss-modules/pull/127
