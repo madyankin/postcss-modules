@@ -1,6 +1,7 @@
 import postcss from "postcss";
 import camelCase from "lodash.camelcase";
 import genericNames from "generic-names";
+import unquote from './unquote';
 
 import Parser from "./css-loader-core/parser";
 import FileSystemLoader from "./css-loader-core/loader";
@@ -86,11 +87,12 @@ module.exports = (opts = {}) => {
       const loaderPlugins = [...earlierPlugins, ...pluginList];
       const loader = getLoader(opts, loaderPlugins);
       const fetcher = ((file, relativeTo, depTrace) => {
-        const resolvedResult = (typeof opts.resolve === 'function' && opts.resolve(file));
+        const unquoteFile = unquote(file);
+        const resolvedResult = (typeof opts.resolve === 'function' && opts.resolve(unquoteFile));
         const resolvedFile = resolvedResult instanceof Promise ? resolvedResult : Promise.resolve(resolvedResult);
 
-        return resolvedFile.then((f = file) => {
-          return loader.fetch.call(loader, f || file, relativeTo, depTrace);
+        return resolvedFile.then((f) => {
+          return loader.fetch.call(loader, `"${f || unquoteFile}"`, relativeTo, depTrace);
         });
       });
       const parser = new Parser(fetcher);
