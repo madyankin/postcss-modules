@@ -396,7 +396,7 @@ it("processes resolve option", async () => {
     plugin({
       generateScopedName,
       resolve: async (file) => {
-        return file.replace(/test-fixture-in/, path.dirname(sourceFile));
+        return file.replace(/^test-fixture-in/, path.dirname(sourceFile));
       },
       getJSON: (_, result) => {
         json = result;
@@ -405,5 +405,9 @@ it("processes resolve option", async () => {
   ]).process(source, { from: sourceFile });
 
   expect(result.css).toMatchSnapshot("processes resolve option");
-  expect(json).toMatchObject({"figure": "_compose_resolve_figure _composes_a_hello"});
+  expect(json).toStrictEqual({
+    figure: "_compose_resolve_figure _composes_a_hello",
+    "figure-single-quote":
+      "_compose_resolve_figure-single-quote _composes_a_hello",
+  });
 });

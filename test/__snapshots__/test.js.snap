@@ -310,8 +310,14 @@ exports[`processes resolve option: processes resolve option 1`] = `
     width: 200px;
 }._composes_a_hello {
     foo: bar;
-}._compose_resolve_figure {
+}
+
+._compose_resolve_figure {
     display: flex;
+}
+
+._compose_resolve_figure-single-quote {
+    display: block;
 }
 "
 `;
