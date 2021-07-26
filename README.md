@@ -10,8 +10,9 @@ A [PostCSS] plugin to use [CSS Modules] everywhere. Not only at the client side.
 I maintain the plugin in my free time, so I don't receive any payment for this work.
 To have better docs, new features and integrations with frameworks, you can [support me on Patreon](https://www.patreon.com/bePatron?u=25976212).
 
+The sponsors are listed [below in the README](#sponsors)
 
-## What is this? 
+## What is this?
 
 For example, you have the following CSS:
 
@@ -213,7 +214,7 @@ In lieu of a string, a custom function can generate the exported class names.
 
 ### Resolve path alias
 
-You can rewrite paths for `composes/from` by using `resolve` options. 
+You can rewrite paths for `composes/from` by using `resolve` options.
 It's useful when you need to resolve custom path alias.
 
 ```js
@@ -325,3 +326,7 @@ npm install --save-dev postcss postcss-modules
 ```
 
 [filesystemloader]: https://github.com/css-modules/css-modules-loader-core/blob/master/src/file-system-loader.js
+
+
+## Sponsors
+- Dmitry Olyenyov
