@@ -19,7 +19,7 @@
     "url": "https://github.com/css-modules/postcss-modules.git"
   },
   "dependencies": {
-    "generic-names": "^2.0.1",
+    "generic-names": "^4.0.0",
     "icss-replace-symbols": "^1.1.0",
     "lodash.camelcase": "^4.3.0",
     "postcss-modules-extract-imports": "^3.0.0",

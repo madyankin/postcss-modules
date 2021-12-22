@@ -83,11 +83,11 @@ Array [
 `;
 
 exports[`generates scoped name with interpolated string: generates scoped name with interpolated string - CSS 1`] = `
-".interpolated__title___2P3iB {
+".interpolated__title___mAhtv {
     color: green;
 }
 
-.interpolated__article___Skl0x {
+.interpolated__article___MQq7x {
     color: black;
 }
 "
@@ -95,8 +95,8 @@ exports[`generates scoped name with interpolated string: generates scoped name w
 
 exports[`generates scoped name with interpolated string: generates scoped name with interpolated string - JSON 1`] = `
 Object {
-  "article": "interpolated__article___Skl0x",
-  "title": "interpolated__title___2P3iB",
+  "article": "interpolated__article___MQq7x",
+  "title": "interpolated__title___mAhtv",
 }
 `;
 
@@ -173,11 +173,11 @@ exports[`only calls plugins once when it generates scoped name with interpolated
 
 /* validator-1-start (interpolated.css) */
 
-.interpolated__title___2P3iB {
+.interpolated__title___mAhtv {
     color: green;
 }
 
-.interpolated__article___Skl0x {
+.interpolated__article___MQq7x {
     color: black;
 }
 
@@ -301,7 +301,7 @@ exports[`processes globalModulePaths option: processes globalModulePaths option 
 "
 `;
 
-exports[`processes hashPrefix option: processes hashPrefix option 1`] = `"._8xPWf {}"`;
+exports[`processes hashPrefix option: processes hashPrefix option 1`] = `".uG5tz {}"`;
 
 exports[`processes resolve option: processes resolve option 1`] = `
 "._composes_a_another-mixin {
