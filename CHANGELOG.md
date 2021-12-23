@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.3.0
+
+- Updated the `generic-names` dependency to reduce packages size by Bogdan Chadkin (@TrySound) https://github.com/madyankin/postcss-modules/pull/129
+
 ## 4.2.2
 
 - Fix the build
