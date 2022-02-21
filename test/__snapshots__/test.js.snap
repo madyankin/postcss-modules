@@ -202,6 +202,22 @@ p {
 "
 `;
 
+exports[`only calls plugins once when it processes :global shorthand selector: plugins once - processes :global shorthand selector - CSS 1`] = `
+"/* validator-2-start (globalShorthand.css) *//* validator-1-start (globalShorthand.css) */
+.title {
+    color: red;
+}/* validator-1-end (globalShorthand.css) *//* validator-2-end (globalShorthand.css) */
+"
+`;
+
+exports[`only calls plugins once when it processes :local shorthand selector: plugins once - processes :local shorthand selector - CSS 1`] = `
+"/* validator-2-start (localShorthand.css) *//* validator-1-start (localShorthand.css) */
+._localShorthand_title {
+    color: red;
+}/* validator-1-end (localShorthand.css) *//* validator-2-end (localShorthand.css) */
+"
+`;
+
 exports[`only calls plugins once when it processes classes: plugins once - processes classes - CSS 1`] = `
 "/* validator-2-start (classes.css) */
 
@@ -267,6 +283,28 @@ p {
 `;
 
 exports[`preserves comments: preserves comments - JSON 1`] = `Object {}`;
+
+exports[`processes :global shorthand selector: processes :global shorthand selector - CSS 1`] = `
+".title {
+    color: red;
+}
+"
+`;
+
+exports[`processes :global shorthand selector: processes :global shorthand selector - JSON 1`] = `Object {}`;
+
+exports[`processes :local shorthand selector: processes :local shorthand selector - CSS 1`] = `
+"._localShorthand_title {
+    color: red;
+}
+"
+`;
+
+exports[`processes :local shorthand selector: processes :local shorthand selector - JSON 1`] = `
+Object {
+  "title": "_localShorthand_title",
+}
+`;
 
 exports[`processes classes: processes classes - CSS 1`] = `
 ".page {
