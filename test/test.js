@@ -24,6 +24,8 @@ const cases = {
   values: "processes values",
   interpolated: "generates scoped name with interpolated string",
   global: "allows to make CSS global",
+  localShorthand: "processes :local shorthand selector",
+  globalShorthand: "processes :global shorthand selector",
 };
 
 function generateScopedName(name, filename) {
@@ -40,7 +42,9 @@ Object.keys(cases).forEach((name) => {
       : generateScopedName;
 
   const scopeBehaviour =
-    name === behaviours.GLOBAL ? behaviours.GLOBAL : behaviours.LOCAL;
+    name === behaviours.GLOBAL || name === "globalShorthand"
+      ? behaviours.GLOBAL
+      : behaviours.LOCAL;
 
   it(description, async () => {
     const sourceFile = path.join(fixturesPath, "in", `${name}.css`);

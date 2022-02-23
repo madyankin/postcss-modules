@@ -16,8 +16,8 @@ export function getDefaultPlugins({
   const scope = modulesScope({ generateScopedName, exportGlobals });
 
   const plugins = {
-    [behaviours.LOCAL]: [values, localByDefault, extractImports, scope],
-    [behaviours.GLOBAL]: [values, extractImports, scope],
+    [behaviours.LOCAL]: [values, localByDefault({ mode: 'local' }), extractImports, scope],
+    [behaviours.GLOBAL]: [values, localByDefault({ mode: 'global' }), extractImports, scope],
   };
 
   return plugins[behaviour];
