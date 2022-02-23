@@ -1,5 +1,9 @@
 # Changelog
 
+## 4.3.1
+
+- Fixed errors when using shorthand selectors by Felix Bruns (@fxb) https://github.com/madyankin/postcss-modules/pull/130
+
 ## 4.3.0
 
 - Updated the `generic-names` dependency to reduce packages size by Bogdan Chadkin (@TrySound) https://github.com/madyankin/postcss-modules/pull/129
