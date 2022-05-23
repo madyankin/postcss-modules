@@ -8,7 +8,7 @@
     "es6": true,
     "jest/globals": true
   },
-  "parser": "babel-eslint",
+  "parser": "@babel/eslint-parser",
   "plugins": ["jest"],
   "rules": {
     "import/no-extraneous-dependencies": 0
