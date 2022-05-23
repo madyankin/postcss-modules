@@ -15,7 +15,7 @@ class Core {
     let parser = new Parser(pathFetcher, trace);
 
     return postcss(this.plugins.concat([parser.plugin()]))
-      .process(sourceString, { from: "/" + sourcePath })
+      .process(sourceString, { from: sourcePath })
       .then((result) => {
         return {
           injectableSource: result.css,
@@ -44,6 +44,14 @@ const traceKeySorter = (a, b) => {
 
 export default class FileSystemLoader {
   constructor(root, plugins) {
+    if (root === '/' && process.platform === "win32") {
+      const cwdDrive = process.cwd().slice(0, 3)
+      if (!/^[A-Z]:\\$/.test(cwdDrive)) {
+        throw new Error(`Failed to obtain root from "${process.cwd()}".`)
+      }
+      root = cwdDrive
+    }
+
     this.root = root;
     this.sources = {};
     this.traces = {};
@@ -59,12 +67,12 @@ export default class FileSystemLoader {
       let relativeDir = path.dirname(relativeTo),
         rootRelativePath = path.resolve(relativeDir, newPath),
         fileRelativePath = path.resolve(
-          path.join(this.root, relativeDir),
+          path.resolve(this.root, relativeDir),
           newPath
         );
 
       // if the path is not relative or absolute, try to resolve it in node_modules
-      if (newPath[0] !== "." && newPath[0] !== "/") {
+      if (newPath[0] !== "." && !path.isAbsolute(newPath)) {
         try {
           fileRelativePath = require.resolve(newPath);
         } catch (e) {
