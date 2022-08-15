@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.0.0
+
+- Fixed `composes` on Windows by @sapphi-red https://github.com/madyankin/postcss-modules/pull/135
+- Updated Babel to v7 by @sapphi-red. Minimal supported version of Node.js is 10 from now https://github.com/madyankin/postcss-modules/pull/134
+
 ## 4.3.1
 
 - Fixed errors when using shorthand selectors by Felix Bruns (@fxb) https://github.com/madyankin/postcss-modules/pull/130
