@@ -4,29 +4,39 @@ import modulesScope from "postcss-modules-scope";
 import values from "postcss-modules-values";
 
 export const behaviours = {
-  LOCAL: "local",
-  GLOBAL: "global",
+	LOCAL: "local",
+	GLOBAL: "global",
 };
 
 export function getDefaultPlugins({
-  behaviour,
-  generateScopedName,
-  exportGlobals,
+	behaviour,
+	generateScopedName,
+	exportGlobals,
 }) {
-  const scope = modulesScope({ generateScopedName, exportGlobals });
+	const scope = modulesScope({ generateScopedName, exportGlobals });
 
-  const plugins = {
-    [behaviours.LOCAL]: [values, localByDefault({ mode: 'local' }), extractImports, scope],
-    [behaviours.GLOBAL]: [values, localByDefault({ mode: 'global' }), extractImports, scope],
-  };
+	const plugins = {
+		[behaviours.LOCAL]: [
+			values,
+			localByDefault({ mode: "local" }),
+			extractImports,
+			scope,
+		],
+		[behaviours.GLOBAL]: [
+			values,
+			localByDefault({ mode: "global" }),
+			extractImports,
+			scope,
+		],
+	};
 
-  return plugins[behaviour];
+	return plugins[behaviour];
 }
 
 export function isValidBehaviour(behaviour) {
-  return (
-    Object.keys(behaviours)
-      .map((key) => behaviours[key])
-      .indexOf(behaviour) > -1
-  );
+	return (
+		Object.keys(behaviours)
+			.map((key) => behaviours[key])
+			.indexOf(behaviour) > -1
+	);
 }
