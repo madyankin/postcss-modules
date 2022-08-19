@@ -297,7 +297,7 @@ posthtml([posthtmlCssModules("./cssModules.json")])
   });
 ```
 
-(for using other build systems please check [the documentation of PostHTML](https://github.com/posthtml/posthtml/blob/master/README.md))
+(for using other build systems please check [the documentation of PostHTML](https://github.com/posthtml/posthtml/blob/master/readme.md))
 
 And you'll get the following HTML:
 
