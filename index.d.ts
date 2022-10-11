@@ -52,7 +52,7 @@ declare interface Options {
 	resolve?: (file: string) => string | Promise<string>;
 
 	fileResolve?: (
-		filerImport: string,
+		file: string,
 		importer: string
 	) => string | null | Promise<string | null>;
 }
