@@ -1,0 +1,7 @@
+.deepDeepCompose {
+	composes: title from "test-fixture-in/composes.mixins.css";
+}
+
+.dotSlashRelativePath {
+	composes: title from "./composes.mixins.css";
+}
