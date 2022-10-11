@@ -1,0 +1,4 @@
+.deepCompose {
+	composes: deepDeepCompose from "test-fixture-in/deepDeepCompose.css";
+	content: "deepCompose";
+}

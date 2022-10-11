@@ -43,7 +43,7 @@ const traceKeySorter = (a, b) => {
 };
 
 export default class FileSystemLoader {
-	constructor(root, plugins) {
+	constructor(root, plugins, fileResolve) {
 		if (root === "/" && process.platform === "win32") {
 			const cwdDrive = process.cwd().slice(0, 3);
 			if (!/^[A-Z]:\\$/.test(cwdDrive)) {
@@ -55,6 +55,7 @@ export default class FileSystemLoader {
 		}
 
 		this.root = root;
+		this.fileResolve = fileResolve;
 		this.sources = {};
 		this.traces = {};
 		this.importNr = 0;
@@ -65,43 +66,61 @@ export default class FileSystemLoader {
 	fetch(_newPath, relativeTo, _trace) {
 		let newPath = _newPath.replace(/^["']|["']$/g, ""),
 			trace = _trace || String.fromCharCode(this.importNr++);
+		const useFileResolve = typeof this.fileResolve === "function";
 		return new Promise((resolve, reject) => {
-			let relativeDir = path.dirname(relativeTo),
-				rootRelativePath = path.resolve(relativeDir, newPath),
-				fileRelativePath = path.resolve(
-					path.resolve(this.root, relativeDir),
-					newPath
-				);
-
-			// if the path is not relative or absolute, try to resolve it in node_modules
-			if (newPath[0] !== "." && !path.isAbsolute(newPath)) {
-				try {
-					fileRelativePath = require.resolve(newPath);
-				} catch (e) {
-					// noop
+			(useFileResolve
+				? this.fileResolve(newPath, relativeTo)
+				: Promise.resolve()
+			).then((fileResolvedPath) => {
+				if (fileResolvedPath && !path.isAbsolute(fileResolvedPath)) {
+					reject(
+						'The returned path from the "fileResolve" option must be absolute.'
+					);
 				}
-			}
+				let relativeDir = path.dirname(relativeTo),
+					rootRelativePath =
+						fileResolvedPath || path.resolve(relativeDir, newPath),
+					fileRelativePath =
+						fileResolvedPath ||
+						path.resolve(
+							path.resolve(this.root, relativeDir),
+							newPath
+						);
 
-			const tokens = this.tokensByFile[fileRelativePath];
-			if (tokens) {
-				return resolve(tokens);
-			}
+				// if the path is not relative or absolute, try to resolve it in node_modules
+				if (
+					!useFileResolve &&
+					newPath[0] !== "." &&
+					!path.isAbsolute(newPath)
+				) {
+					try {
+						fileRelativePath = require.resolve(newPath);
+					} catch (e) {
+						// noop
+					}
+				}
 
-			fs.readFile(fileRelativePath, "utf-8", (err, source) => {
-				if (err) reject(err);
-				this.core
-					.load(
-						source,
-						rootRelativePath,
-						trace,
-						this.fetch.bind(this)
-					)
-					.then(({ injectableSource, exportTokens }) => {
-						this.sources[fileRelativePath] = injectableSource;
-						this.traces[trace] = fileRelativePath;
-						this.tokensByFile[fileRelativePath] = exportTokens;
-						resolve(exportTokens);
-					}, reject);
+				const tokens = this.tokensByFile[fileRelativePath];
+				if (tokens) {
+					return resolve(tokens);
+				}
+
+				fs.readFile(fileRelativePath, "utf-8", (err, source) => {
+					if (err) reject(err);
+					this.core
+						.load(
+							source,
+							rootRelativePath,
+							trace,
+							this.fetch.bind(this)
+						)
+						.then(({ injectableSource, exportTokens }) => {
+							this.sources[fileRelativePath] = injectableSource;
+							this.traces[trace] = fileRelativePath;
+							this.tokensByFile[fileRelativePath] = exportTokens;
+							resolve(exportTokens);
+						}, reject);
+				});
 			});
 		});
 	}

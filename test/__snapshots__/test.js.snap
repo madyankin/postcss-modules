@@ -328,6 +328,31 @@ Object {
 }
 `;
 
+exports[`processes fileResolve option: processes fileResolve option 1`] = `
+"._composes_a_another-mixin {
+    display: flex;
+    height: 100px;
+    width: 200px;
+}._composes_a_hello {
+    foo: bar;
+}._composes_mixins_title {
+    color: black;
+    font-size: 40px;
+}._composes_mixins_title:hover {
+    color: red;
+}._composes_mixins_figure {
+    text-align: center
+}._composes_mixins_title:focus, ._composes_mixins_figure:focus {
+    outline: none;
+    border: 1px solid red;
+}._deepDeepCompose_deepDeepCompose {
+}._deepDeepCompose_dotSlashRelativePath {
+}._deepCompose_deepCompose {
+	content: \\"deepCompose\\";
+}
+"
+`;
+
 exports[`processes globalModulePaths option: processes globalModulePaths option 1`] = `
 ".page {
     padding: 20px;

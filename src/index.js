@@ -33,8 +33,8 @@ function getScopedNameGenerator(opts) {
 function getLoader(opts, plugins) {
 	const root = typeof opts.root === "undefined" ? "/" : opts.root;
 	return typeof opts.Loader === "function"
-		? new opts.Loader(root, plugins)
-		: new FileSystemLoader(root, plugins);
+		? new opts.Loader(root, plugins, opts.fileResolve)
+		: new FileSystemLoader(root, plugins, opts.fileResolve);
 }
 
 function isGlobalModule(globalModules, inputFile) {
@@ -84,6 +84,15 @@ module.exports = (opts = {}) => {
 			);
 			if (resultPluginIndex === -1) {
 				throw new Error("Plugin missing from options.");
+			}
+			// resolve and fileResolve can't be used together
+			if (
+				typeof opts.resolve === "function" &&
+				typeof opts.fileResolve == "function"
+			) {
+				throw new Error(
+					'Please use either the "resolve" or the "fileResolve" option.'
+				);
 			}
 			const earlierPlugins = result.processor.plugins.slice(
 				0,
