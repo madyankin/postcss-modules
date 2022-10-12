@@ -433,7 +433,7 @@ it("generates correct sourcemaps", async () => {
   expect(map.sources.length).toBe(3); 
   expect(map.sourcesContent.length).toBe(3);
 
-  // make sure sourceContent matches
+  // make sure sourceContent and source is correct
   map.sourcesContent.forEach((sourcemapContent, i) => {
     const fileContent = fs.readFileSync(map.sources[i]);
     expect(sourcemapContent).toBe(fileContent.toString());
