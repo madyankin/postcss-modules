@@ -50,11 +50,6 @@ declare interface Options {
 	Loader?: typeof Loader;
 
 	resolve?: (file: string) => string | Promise<string>;
-
-	fileResolve?: (
-		file: string,
-		importer: string
-	) => string | null | Promise<string | null>;
 }
 
 declare interface PostcssModulesPlugin {
