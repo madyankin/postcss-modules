@@ -132,7 +132,6 @@ it("works with visitor plugins", async () => {
     plugin(),
   ];
   const result = await postcss(plugins).process(source, { from: undefined });
-  console.log(result.css);
   expect(formatCss(result.css)).toEqual(formatCss(source).replace("green", "blue"));
 });
 
