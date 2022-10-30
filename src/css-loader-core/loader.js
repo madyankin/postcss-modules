@@ -46,7 +46,7 @@ export default class FileSystemLoader {
 	constructor(root, plugins) {
 		if (root === "/" && process.platform === "win32") {
 			const cwdDrive = process.cwd().slice(0, 3);
-			if (!/^[A-Z]:\\$/.test(cwdDrive)) {
+			if (!/^[A-Za-z]:\\$/.test(cwdDrive)) {
 				throw new Error(
 					`Failed to obtain root from "${process.cwd()}".`
 				);
