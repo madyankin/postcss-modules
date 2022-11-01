@@ -1,7 +1,7 @@
 // Copied from https://github.com/css-modules/css-modules-loader-core
 
 const importRegexp = /^:import\((.+)\)$/;
-import replaceSymbols from "icss-replace-symbols";
+import { replaceSymbols } from "icss-utils";
 
 export default class Parser {
 	constructor(pathFetcher, trace) {

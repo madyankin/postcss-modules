@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "generic-names": "^4.0.0",
-    "icss-replace-symbols": "^1.1.0",
+    "icss-utils": "^5.1.0",
     "lodash.camelcase": "^4.3.0",
     "postcss-modules-extract-imports": "^3.0.0",
     "postcss-modules-local-by-default": "^4.0.0",
