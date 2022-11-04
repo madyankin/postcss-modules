@@ -211,8 +211,9 @@ You can rewrite paths for `composes/from` by using the `resolve` option.
 It's useful when you need to resolve custom path alias.
 
 Parameters:
-- `file` — a module we want to resolve
-- `importer` — the file that imports the module we want to resolve
+
+-   `file` — a module we want to resolve
+-   `importer` — the file that imports the module we want to resolve
 
 Return value: `string | null | Promise<string | null>`
 
