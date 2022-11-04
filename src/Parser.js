@@ -1,4 +1,4 @@
-// Copied from https://github.com/css-modules/css-modules-loader-core
+// Initially copied from https://github.com/css-modules/css-modules-loader-core
 
 const importRegexp = /^:import\((.+)\)$/;
 import { replaceSymbols } from "icss-utils";
@@ -16,10 +16,10 @@ export default class Parser {
 		const parser = this;
 		return {
 			postcssPlugin: "css-modules-parser",
-			OnceExit(css) {
-				return Promise.all(parser.fetchAllImports(css))
-					.then(() => parser.linkImportedSymbols(css))
-					.then(() => parser.extractExports(css));
+			async OnceExit(css) {
+				await Promise.all(parser.fetchAllImports(css));
+				parser.linkImportedSymbols(css);
+				return parser.extractExports(css);
 			},
 		};
 	}
@@ -56,19 +56,21 @@ export default class Parser {
 		exportNode.remove();
 	}
 
-	fetchImport(importNode, relativeTo, depNr) {
-		let file = importNode.selector.match(importRegexp)[1],
-			depTrace = this.trace + String.fromCharCode(depNr);
-		return this.pathFetcher(file, relativeTo, depTrace).then(
-			(exports) => {
-				importNode.each((decl) => {
-					if (decl.type == "decl") {
-						this.translations[decl.prop] = exports[decl.value];
-					}
-				});
-				importNode.remove();
-			},
-			(err) => console.log(err)
-		);
+	async fetchImport(importNode, relativeTo, depNr) {
+		const file = importNode.selector.match(importRegexp)[1];
+		const depTrace = this.trace + String.fromCharCode(depNr);
+
+		const exports = await this.pathFetcher(file, relativeTo, depTrace);
+
+		try {
+			importNode.each((decl) => {
+				if (decl.type == "decl") {
+					this.translations[decl.prop] = exports[decl.value];
+				}
+			});
+			importNode.remove();
+		} catch (err) {
+			console.log(err);
+		}
 	}
 }

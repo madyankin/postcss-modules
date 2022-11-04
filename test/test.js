@@ -3,7 +3,7 @@ import autoprefixer from "autoprefixer";
 import fs from "fs";
 import path from "path";
 import plugin from "../src";
-import { behaviours } from "../src/behaviours";
+import { behaviours } from "../src/scoping";
 
 const fixturesPath = path.resolve(__dirname, "./fixtures");
 

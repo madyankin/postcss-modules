@@ -1,10 +1,10 @@
 // Initially copied from https://github.com/css-modules/css-modules-loader-core
 
 import postcss from "postcss";
-import fs from "fs";
 import path from "path";
 
 import Parser from "./Parser";
+import { getFileSystem } from "./fs";
 
 class Core {
 	constructor(plugins) {
@@ -62,6 +62,7 @@ export default class FileSystemLoader {
 		this.importNr = 0;
 		this.core = new Core(plugins);
 		this.tokensByFile = {};
+		this.fs = getFileSystem();
 	}
 
 	async fetch(_newPath, relativeTo, _trace) {
@@ -97,7 +98,7 @@ export default class FileSystemLoader {
 		if (tokens) return tokens;
 
 		return new Promise((resolve, reject) => {
-			fs.readFile(fileRelativePath, "utf-8", async (err, source) => {
+			this.fs.readFile(fileRelativePath, "utf-8", async (err, source) => {
 				if (err) reject(err);
 
 				const { injectableSource, exportTokens } = await this.core.load(

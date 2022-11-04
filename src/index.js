@@ -1,34 +1,23 @@
 import postcss from "postcss";
 import camelCase from "lodash.camelcase";
-import genericNames from "generic-names";
 import unquote from "./unquote";
+import { readFile, writeFile } from "fs";
+import { setFileSystem } from "./fs";
 
 import Parser from "./Parser";
 import FileSystemLoader from "./FileSystemLoader";
 
-import generateScopedName from "./generateScopedName";
 import saveJSON from "./saveJSON";
-import { getDefaultPlugins, isValidBehaviour, behaviours } from "./behaviours";
+import {
+	getDefaultPlugins,
+	getDefaultScopeBehaviour,
+	behaviours,
+	getScopedNameGenerator,
+} from "./scoping";
 
 const PLUGIN_NAME = "postcss-modules";
 
-function getDefaultScopeBehaviour(opts) {
-	if (opts.scopeBehaviour && isValidBehaviour(opts.scopeBehaviour)) {
-		return opts.scopeBehaviour;
-	}
-
-	return behaviours.LOCAL;
-}
-
-function getScopedNameGenerator(opts) {
-	const scopedNameGenerator = opts.generateScopedName || generateScopedName;
-
-	if (typeof scopedNameGenerator === "function") return scopedNameGenerator;
-	return genericNames(scopedNameGenerator, {
-		context: process.cwd(),
-		hashPrefix: opts.hashPrefix,
-	});
-}
+setFileSystem({ readFile, writeFile });
 
 function getLoader(opts, plugins) {
 	const root = typeof opts.root === "undefined" ? "/" : opts.root;
@@ -44,8 +33,8 @@ function isGlobalModule(globalModules, inputFile) {
 function getDefaultPluginsList(opts, inputFile) {
 	const globalModulesList = opts.globalModulePaths || null;
 	const exportGlobals = opts.exportGlobals || false;
-	const defaultBehaviour = getDefaultScopeBehaviour(opts);
-	const generateScopedName = getScopedNameGenerator(opts);
+	const defaultBehaviour = getDefaultScopeBehaviour(opts.scopeBehaviour);
+	const generateScopedName = getScopedNameGenerator(opts.generateScopedName, opts.hashPrefix);
 
 	if (globalModulesList && isGlobalModule(globalModulesList, inputFile)) {
 		return getDefaultPlugins({
