@@ -33,8 +33,8 @@ function getScopedNameGenerator(opts) {
 function getLoader(opts, plugins) {
 	const root = typeof opts.root === "undefined" ? "/" : opts.root;
 	return typeof opts.Loader === "function"
-		? new opts.Loader(root, plugins, opts.fileResolve)
-		: new FileSystemLoader(root, plugins, opts.fileResolve);
+		? new opts.Loader(root, plugins, opts.resolve)
+		: new FileSystemLoader(root, plugins, opts.resolve);
 }
 
 function isGlobalModule(globalModules, inputFile) {
@@ -85,39 +85,23 @@ module.exports = (opts = {}) => {
 			if (resultPluginIndex === -1) {
 				throw new Error("Plugin missing from options.");
 			}
-			// resolve and fileResolve can't be used together
-			if (
-				typeof opts.resolve === "function" &&
-				typeof opts.fileResolve == "function"
-			) {
-				throw new Error(
-					'Please use either the "resolve" or the "fileResolve" option.'
-				);
-			}
+
 			const earlierPlugins = result.processor.plugins.slice(
 				0,
 				resultPluginIndex
 			);
 			const loaderPlugins = [...earlierPlugins, ...pluginList];
 			const loader = getLoader(opts, loaderPlugins);
-			const fetcher = (file, relativeTo, depTrace) => {
-				const unquoteFile = unquote(file);
-				const resolvedResult =
-					typeof opts.resolve === "function" &&
-					opts.resolve(unquoteFile);
-				const resolvedFile =
-					resolvedResult instanceof Promise
-						? resolvedResult
-						: Promise.resolve(resolvedResult);
 
-				return resolvedFile.then((f) => {
-					return loader.fetch.call(
-						loader,
-						`"${f || unquoteFile}"`,
-						relativeTo,
-						depTrace
-					);
-				});
+			const fetcher = async (file, relativeTo, depTrace) => {
+				const unquoteFile = unquote(file);
+
+				return loader.fetch.call(
+					loader,
+					unquoteFile,
+					relativeTo,
+					depTrace
+				);
 			};
 			const parser = new Parser(fetcher);
 
@@ -135,9 +119,12 @@ module.exports = (opts = {}) => {
 					parser.exportTokens
 				).reduce((tokens, [className, value]) => {
 					if (isFunc) {
-						tokens[
-							opts.localsConvention(className, value, inputFile)
-						] = value;
+						const convention = opts.localsConvention(
+							className,
+							value,
+							inputFile
+						);
+						tokens[convention] = value;
 
 						return tokens;
 					}
@@ -146,20 +133,19 @@ module.exports = (opts = {}) => {
 						case "camelCase":
 							tokens[className] = value;
 							tokens[camelCase(className)] = value;
-
 							break;
+
 						case "camelCaseOnly":
 							tokens[camelCase(className)] = value;
-
 							break;
+
 						case "dashes":
 							tokens[className] = value;
 							tokens[dashesCamelCase(className)] = value;
-
 							break;
+
 						case "dashesOnly":
 							tokens[dashesCamelCase(className)] = value;
-
 							break;
 					}
 

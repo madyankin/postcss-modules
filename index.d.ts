@@ -49,9 +49,7 @@ declare interface Options {
 
 	Loader?: typeof Loader;
 
-	resolve?: (file: string) => string | Promise<string>;
-
-	fileResolve?: (
+	resolve?: (
 		file: string,
 		importer: string
 	) => string | null | Promise<string | null>;

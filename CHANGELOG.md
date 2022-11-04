@@ -1,5 +1,37 @@
 # Changelog
 
+## 6.0.0
+
+### Breaking
+The `resolve` option has two parameters now and can return `null`. Thanks to Rene Haas (@KingSora)
+https://github.com/madyankin/postcss-modules/commit/86d8135cb5014d0b2848ef395608ee74d82bd179
+
+Parameters:
+- `file` — a module we want to resolve
+- `importer` — the file that imports the module we want to resolve
+
+Return value: `string | null | Promise<string | null>`
+
+```js
+postcss([
+	require("postcss-modules")({
+    	resolve: function (file, importer) {
+			return path.resolve(
+				path.dirname(importer),
+				file.replace(/^@/, process.cwd()
+			);
+    	},
+  	}),
+]);
+```
+
+### Fixed
+- #140 "'Failed to obtain root' error on Windows" fixed by Pierre LeMoine (@DrInfiniteExplorer) https://github.com/madyankin/postcss-modules/pull/144
+
+## Improved
+- `icss-replace-symbols` replaced with with `icss-utils` by Jason Quense (@jquense). The updated replacer works better and will replace values in selectors, which didn't work until now. https://github.com/madyankin/postcss-modules/pull/145
+
+
 ## 5.0.0
 
 - Fixed `composes` on Windows by @sapphi-red https://github.com/madyankin/postcss-modules/pull/135

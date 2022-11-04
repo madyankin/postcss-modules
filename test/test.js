@@ -411,16 +411,16 @@ it("processes exportGlobals option", async () => {
 });
 
 it("processes resolve option", async () => {
-	const sourceFile = path.join(fixturesPath, "in", "compose.resolve.css");
+	const sourceFile = path.join(fixturesPath, "in", "deepCompose.css");
 	const source = fs.readFileSync(sourceFile).toString();
 	let json;
 	const result = await postcss([
 		plugin({
 			generateScopedName,
-			resolve: async (file) => {
-				return file.replace(
-					/^test-fixture-in/,
-					path.dirname(sourceFile)
+			resolve: async (file, importer) => {
+				return path.resolve(
+					path.dirname(importer),
+					file.replace(/^test-fixture-in/, path.dirname(sourceFile))
 				);
 			},
 			getJSON: (_, result) => {
@@ -431,55 +431,7 @@ it("processes resolve option", async () => {
 
 	expect(result.css).toMatchSnapshot("processes resolve option");
 	expect(json).toStrictEqual({
-		figure: "_compose_resolve_figure _composes_a_hello",
-		"figure-single-quote":
-			"_compose_resolve_figure-single-quote _composes_a_hello",
-	});
-});
-
-it("processes fileResolve option", async () => {
-	const sourceFile = path.join(fixturesPath, "in", "deepCompose.css");
-	const source = fs.readFileSync(sourceFile).toString();
-	let json;
-	const result = await postcss([
-		plugin({
-			generateScopedName,
-			fileResolve: async (file, importer) => {
-				return path.resolve(
-					path.dirname(importer),
-					file.replace(/^test-fixture-in/, path.dirname(sourceFile))
-				);
-			},
-			getJSON: (_, result) => {
-				json = result;
-			},
-		}),
-	]).process(source, { from: sourceFile });
-
-	expect(result.css).toMatchSnapshot("processes fileResolve option");
-	expect(json).toStrictEqual({
 		deepCompose:
 			"_deepCompose_deepCompose _deepDeepCompose_deepDeepCompose _composes_mixins_title",
 	});
-});
-
-it("processes fileResolve and resolve option", async () => {
-	const sourceFile = path.join(fixturesPath, "in", "deepCompose.css");
-	const source = fs.readFileSync(sourceFile).toString();
-	const result = await postcss([
-		plugin({
-			generateScopedName,
-			resolve: (file) => file,
-			fileResolve: async (file, importer) => {
-				return path.resolve(
-					path.dirname(importer),
-					file.replace(/^test-fixture-in/, path.dirname(sourceFile))
-				);
-			},
-		}),
-	])
-		.process(source, { from: sourceFile })
-		.catch((error) => error);
-
-	expect(result instanceof Error).toBe(true);
 });
