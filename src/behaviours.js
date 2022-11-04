@@ -8,26 +8,12 @@ export const behaviours = {
 	GLOBAL: "global",
 };
 
-export function getDefaultPlugins({
-	behaviour,
-	generateScopedName,
-	exportGlobals,
-}) {
+export function getDefaultPlugins({ behaviour, generateScopedName, exportGlobals }) {
 	const scope = modulesScope({ generateScopedName, exportGlobals });
 
 	const plugins = {
-		[behaviours.LOCAL]: [
-			values,
-			localByDefault({ mode: "local" }),
-			extractImports,
-			scope,
-		],
-		[behaviours.GLOBAL]: [
-			values,
-			localByDefault({ mode: "global" }),
-			extractImports,
-			scope,
-		],
+		[behaviours.LOCAL]: [values, localByDefault({ mode: "local" }), extractImports, scope],
+		[behaviours.GLOBAL]: [values, localByDefault({ mode: "global" }), extractImports, scope],
 	};
 
 	return plugins[behaviour];
