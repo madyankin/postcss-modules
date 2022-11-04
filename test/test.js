@@ -110,11 +110,11 @@ Object.keys(cases).forEach((name) => {
 });
 
 it("works with visitor plugins", async () => {
-	const source = `
-p {
-  color: green;
-}
-`;
+  const formatCss = (css) =>
+    css
+      .replace(/\s/g, '') // remove whitespaces
+      .replace(/\r?\n|\r/g, '') // remove newlines
+  const source = `p { color: green; }`
 
 	const plugins = [
 		{
@@ -126,7 +126,7 @@ p {
 		plugin(),
 	];
 	const result = await postcss(plugins).process(source, { from: undefined });
-	expect(result.css).toEqual(source.replace("green", "blue"));
+  expect(formatCss(result.css)).toEqual(formatCss(source).replace("green", "blue"));
 });
 
 it("saves JSON next to CSS by default", async () => {
@@ -410,49 +410,28 @@ it("processes resolve option", async () => {
 	});
 });
 
-it("processes fileResolve option", async () => {
-	const sourceFile = path.join(fixturesPath, "in", "deepCompose.css");
-	const source = fs.readFileSync(sourceFile).toString();
-	let json;
-	const result = await postcss([
-		plugin({
-			generateScopedName,
-			fileResolve: async (file, importer) => {
-				return path.resolve(
-					path.dirname(importer),
-					file.replace(/^test-fixture-in/, path.dirname(sourceFile))
-				);
-			},
-			getJSON: (_, result) => {
-				json = result;
-			},
-		}),
-	]).process(source, { from: sourceFile });
+it("generates correct sourcemaps", async () => {
+  const sourceFile = path.join(fixturesPath, "in", "composes.css");
+  const source = fs.readFileSync(sourceFile).toString();
+  const result = await postcss([
+    plugin({
+      generateScopedName,
+      getJSON: () => {},
+    }),
+  ]).process(source, { from: sourceFile, map: { inline: false } });
 
-	expect(result.css).toMatchSnapshot("processes fileResolve option");
-	expect(json).toStrictEqual({
-		deepCompose:
-			"_deepCompose_deepCompose _deepDeepCompose_deepDeepCompose _composes_mixins_title",
-	});
-});
+  const map = result.map.toJSON();
 
-it("processes fileResolve and resolve option", async () => {
-	const sourceFile = path.join(fixturesPath, "in", "deepCompose.css");
-	const source = fs.readFileSync(sourceFile).toString();
-	const result = await postcss([
-		plugin({
-			generateScopedName,
-			resolve: (file) => file,
-			fileResolve: async (file, importer) => {
-				return path.resolve(
-					path.dirname(importer),
-					file.replace(/^test-fixture-in/, path.dirname(sourceFile))
-				);
-			},
-		}),
-	])
-		.process(source, { from: sourceFile })
-		.catch((error) => error);
+  // result consists of 3 files: composes.css, composes.mixins.css, composes.a.css
+  expect(map.sources.length).toBe(3); 
+  expect(map.sourcesContent.length).toBe(3);
 
-	expect(result instanceof Error).toBe(true);
+  // make sure sourceContent and source is correct
+  map.sourcesContent.forEach((sourcemapContent, i) => {
+    const fileContent = fs.readFileSync(map.sources[i]);
+    expect(sourcemapContent).toBe(fileContent.toString());
+  })
+
+  // snapshot for ensuring correct order etc.
+  expect(result.map.toString()).toMatchSnapshot("generates correct sourcemaps");
 });

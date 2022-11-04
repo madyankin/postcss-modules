@@ -1,7 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`allows to make CSS global: allows to make CSS global - CSS 1`] = `
-".page {
+"
+
+.page {
     padding: 20px;
 }
 
@@ -24,19 +26,29 @@ exports[`composes rules: composes rules - CSS 1`] = `
     display: flex;
     height: 100px;
     width: 200px;
-}._composes_a_hello {
+}
+
+._composes_a_hello {
     foo: bar;
-}._composes_mixins_title {
+}
+._composes_mixins_title {
     color: black;
     font-size: 40px;
-}._composes_mixins_title:hover {
+}
+
+._composes_mixins_title:hover {
     color: red;
-}._composes_mixins_figure {
+}
+
+._composes_mixins_figure {
     text-align: center
-}._composes_mixins_title:focus, ._composes_mixins_figure:focus {
+}
+
+._composes_mixins_title:focus, ._composes_mixins_figure:focus {
     outline: none;
     border: 1px solid red;
 }
+
 
 .page {
     padding: 20px;
@@ -82,8 +94,12 @@ Array [
 ]
 `;
 
+exports[`generates correct sourcemaps: generates correct sourcemaps 1`] = `"{\\"version\\":3,\\"sources\\":[\\"test/fixtures/in/composes.a.css\\",\\"test/fixtures/in/composes.mixins.css\\",\\"test/fixtures/in/composes.css\\"],\\"names\\":[],\\"mappings\\":\\"AAAA;IACI,aAAa;IACb,aAAa;IACb,YAAY;AAChB;;AAEA;IACI,QAAQ;AACZ;ACRA;IACI,YAAY;IACZ,eAAe;AACnB;;AAEA;IACI,UAAU;AACd;;AAEA;IAEI;AACJ;;AAEA;IACI,aAAa;IACb,qBAAqB;AACzB;;;ACjBA;IACI,aAAa;AACjB;;AAEA;IAEI,YAAY;AAChB;;AAEA;IACI,eAAe;AACnB;;AAEA;IAEI,aAAa;AACjB\\",\\"file\\":\\"test\\\\\\\\fixtures\\\\\\\\in\\\\\\\\composes.css\\",\\"sourcesContent\\":[\\".another-mixin {\\\\r\\\\n    display: flex;\\\\r\\\\n    height: 100px;\\\\r\\\\n    width: 200px;\\\\r\\\\n}\\\\r\\\\n\\\\r\\\\n.hello {\\\\r\\\\n    foo: bar;\\\\r\\\\n}\\\\r\\\\n\\",\\".title {\\\\r\\\\n    color: black;\\\\r\\\\n    font-size: 40px;\\\\r\\\\n}\\\\r\\\\n\\\\r\\\\n.title:hover {\\\\r\\\\n    color: red;\\\\r\\\\n}\\\\r\\\\n\\\\r\\\\n.figure {\\\\r\\\\n    composes: another-mixin from \\\\\\"composes.a.css\\\\\\";\\\\r\\\\n    text-align: center\\\\r\\\\n}\\\\r\\\\n\\\\r\\\\n.title:focus, .figure:focus {\\\\r\\\\n    outline: none;\\\\r\\\\n    border: 1px solid red;\\\\r\\\\n}\\\\r\\\\n\\",\\":global .page {\\\\r\\\\n    padding: 20px;\\\\r\\\\n}\\\\r\\\\n\\\\r\\\\n.title {\\\\r\\\\n    composes: title from \\\\\\"composes.mixins.css\\\\\\";\\\\r\\\\n    color: green;\\\\r\\\\n}\\\\r\\\\n\\\\r\\\\n.article {\\\\r\\\\n    font-size: 16px;\\\\r\\\\n}\\\\r\\\\n\\\\r\\\\n.figure {\\\\r\\\\n    composes: figure from \\\\\\"composes.mixins.css\\\\\\";\\\\r\\\\n    display: flex;\\\\r\\\\n}\\\\r\\\\n\\"]}"`;
+
 exports[`generates scoped name with interpolated string: generates scoped name with interpolated string - CSS 1`] = `
-".interpolated__title___mAhtv {
+"
+
+.interpolated__title___mAhtv {
     color: green;
 }
 
@@ -101,7 +117,9 @@ Object {
 `;
 
 exports[`only calls plugins once when it allows to make CSS global: plugins once - allows to make CSS global - CSS 1`] = `
-"/* validator-2-start (global.css) */
+"
+
+/* validator-2-start (global.css) */
 
 /* validator-1-start (global.css) */
 
@@ -120,25 +138,45 @@ exports[`only calls plugins once when it allows to make CSS global: plugins once
 `;
 
 exports[`only calls plugins once when it composes rules: plugins once - composes rules - CSS 1`] = `
-"/* validator-1-start (composes.a.css) */._composes_a_another-mixin {
+"/* validator-1-start (composes.a.css) */
+
+._composes_a_another-mixin {
     display: -webkit-flex;
     display: -moz-box;
     display: flex;
     height: 100px;
     width: 200px;
-}._composes_a_hello {
+}
+
+._composes_a_hello {
     foo: bar;
-}/* validator-1-end (composes.a.css) *//* validator-1-start (composes.mixins.css) */._composes_mixins_title {
+}
+
+/* validator-1-end (composes.a.css) */
+
+
+/* validator-1-start (composes.mixins.css) */
+
+._composes_mixins_title {
     color: black;
     font-size: 40px;
-}._composes_mixins_title:hover {
+}
+
+._composes_mixins_title:hover {
     color: red;
-}._composes_mixins_figure {
+}
+
+._composes_mixins_figure {
     text-align: center
-}._composes_mixins_title:focus, ._composes_mixins_figure:focus {
+}
+
+._composes_mixins_title:focus, ._composes_mixins_figure:focus {
     outline: none;
     border: 1px solid red;
-}/* validator-1-end (composes.mixins.css) */
+}
+
+/* validator-1-end (composes.mixins.css) */
+
 
 /* validator-2-start (composes.css) */
 
@@ -169,7 +207,9 @@ exports[`only calls plugins once when it composes rules: plugins once - composes
 `;
 
 exports[`only calls plugins once when it generates scoped name with interpolated string: plugins once - generates scoped name with interpolated string - CSS 1`] = `
-"/* validator-2-start (interpolated.css) */
+"
+
+/* validator-2-start (interpolated.css) */
 
 /* validator-1-start (interpolated.css) */
 
@@ -188,7 +228,8 @@ exports[`only calls plugins once when it generates scoped name with interpolated
 `;
 
 exports[`only calls plugins once when it preserves comments: plugins once - preserves comments - CSS 1`] = `
-"/* validator-2-start (comments.css) */
+"
+/* validator-2-start (comments.css) */
 /* validator-1-start (comments.css) */
 /**
  * This is a doc comment...
@@ -219,7 +260,9 @@ exports[`only calls plugins once when it processes :local shorthand selector: pl
 `;
 
 exports[`only calls plugins once when it processes classes: plugins once - processes classes - CSS 1`] = `
-"/* validator-2-start (classes.css) */
+"
+
+/* validator-2-start (classes.css) */
 
 /* validator-1-start (classes.css) */
 
@@ -242,7 +285,9 @@ exports[`only calls plugins once when it processes classes: plugins once - proce
 `;
 
 exports[`only calls plugins once when it processes values: plugins once - processes values - CSS 1`] = `
-"/* validator-1-start (values.colors.css) *//* validator-1-end (values.colors.css) */
+"/* validator-1-start (values.colors.css) */
+/* validator-1-end (values.colors.css) */
+
 /* validator-2-start (values.css) */
 /* validator-1-start (values.css) */
 
@@ -272,7 +317,8 @@ exports[`only calls plugins once when it saves origin plugins: plugins once - sa
 `;
 
 exports[`preserves comments: preserves comments - CSS 1`] = `
-"/**
+"
+/**
  * This is a doc comment...
  */
 p {
@@ -307,7 +353,9 @@ Object {
 `;
 
 exports[`processes classes: processes classes - CSS 1`] = `
-".page {
+"
+
+.page {
     padding: 20px;
 }
 
@@ -328,33 +376,10 @@ Object {
 }
 `;
 
-exports[`processes fileResolve option: processes fileResolve option 1`] = `
-"._composes_a_another-mixin {
-    display: flex;
-    height: 100px;
-    width: 200px;
-}._composes_a_hello {
-    foo: bar;
-}._composes_mixins_title {
-    color: black;
-    font-size: 40px;
-}._composes_mixins_title:hover {
-    color: red;
-}._composes_mixins_figure {
-    text-align: center
-}._composes_mixins_title:focus, ._composes_mixins_figure:focus {
-    outline: none;
-    border: 1px solid red;
-}._deepDeepCompose_deepDeepCompose {
-}._deepDeepCompose_dotSlashRelativePath {
-}._deepCompose_deepCompose {
-	content: \\"deepCompose\\";
-}
-"
-`;
-
 exports[`processes globalModulePaths option: processes globalModulePaths option 1`] = `
-".page {
+"
+
+.page {
     padding: 20px;
 }
 
@@ -371,21 +396,34 @@ exports[`processes resolve option: processes resolve option 1`] = `
     display: flex;
     height: 100px;
     width: 200px;
-}._composes_a_hello {
+}
+
+._composes_a_hello {
     foo: bar;
-}._composes_mixins_title {
+}
+._composes_mixins_title {
     color: black;
     font-size: 40px;
-}._composes_mixins_title:hover {
+}
+
+._composes_mixins_title:hover {
     color: red;
-}._composes_mixins_figure {
+}
+
+._composes_mixins_figure {
     text-align: center
-}._composes_mixins_title:focus, ._composes_mixins_figure:focus {
+}
+
+._composes_mixins_title:focus, ._composes_mixins_figure:focus {
     outline: none;
     border: 1px solid red;
-}._deepDeepCompose_deepDeepCompose {
-}._deepDeepCompose_dotSlashRelativePath {
-}._deepCompose_deepCompose {
+}
+._deepDeepCompose_deepDeepCompose {
+}
+
+._deepDeepCompose_dotSlashRelativePath {
+}
+._deepCompose_deepCompose {
 	content: \\"deepCompose\\";
 }
 "
@@ -393,6 +431,7 @@ exports[`processes resolve option: processes resolve option 1`] = `
 
 exports[`processes values: processes values - CSS 1`] = `
 "
+
 
 ._values_title {
     color: green;

@@ -20,7 +20,7 @@ class Core {
 		});
 
 		return {
-			injectableSource: result.css,
+			injectableSource: result,
 			exportTokens: parser.exportTokens,
 		};
 	}
@@ -129,8 +129,7 @@ export default class FileSystemLoader {
 				}
 				written.add(filename);
 
-				return sources[filename];
-			})
-			.join("");
+				return sources[filename].root
+			}).filter(Boolean);
 	}
 }
