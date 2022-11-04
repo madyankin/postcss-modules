@@ -12,26 +12,26 @@ For example, you have the following CSS:
 ```css
 /* styles.css */
 :global .page {
-  padding: 20px;
+	padding: 20px;
 }
 
 .title {
-  composes: title from "./mixins.css";
-  color: green;
+	composes: title from "./mixins.css";
+	color: green;
 }
 
 .article {
-  font-size: 16px;
+	font-size: 16px;
 }
 
 /* mixins.css */
 .title {
-  color: black;
-  font-size: 40px;
+	color: black;
+	font-size: 40px;
 }
 
 .title:hover {
-  color: red;
+	color: red;
 }
 ```
 
@@ -39,24 +39,24 @@ After the transformation it will become like this:
 
 ```css
 ._title_116zl_1 {
-  color: black;
-  font-size: 40px;
+	color: black;
+	font-size: 40px;
 }
 
 ._title_116zl_1:hover {
-  color: red;
+	color: red;
 }
 
 .page {
-  padding: 20px;
+	padding: 20px;
 }
 
 ._title_xkpkl_5 {
-  color: green;
+	color: green;
 }
 
 ._article_xkpkl_10 {
-  font-size: 16px;
+	font-size: 16px;
 }
 ```
 
@@ -64,8 +64,8 @@ And the plugin will give you a JSON object for transformed classes:
 
 ```json
 {
-  "title": "_title_xkpkl_5 _title_116zl_1",
-  "article": "_article_xkpkl_10"
+	"title": "_title_xkpkl_5 _title_116zl_1",
+	"article": "_article_xkpkl_10"
 }
 ```
 
@@ -79,14 +79,14 @@ use the `getJSON` callback. For example, save data about classes into a correspo
 
 ```js
 postcss([
-  require("postcss-modules")({
-    getJSON: function (cssFileName, json, outputFileName) {
-      var path = require("path");
-      var cssName = path.basename(cssFileName, ".css");
-      var jsonFileName = path.resolve("./build/" + cssName + ".json");
-      fs.writeFileSync(jsonFileName, JSON.stringify(json));
-    },
-  }),
+	require("postcss-modules")({
+		getJSON: function (cssFileName, json, outputFileName) {
+			var path = require("path");
+			var cssName = path.basename(cssFileName, ".css");
+			var jsonFileName = path.resolve("./build/" + cssName + ".json");
+			fs.writeFileSync(jsonFileName, JSON.stringify(json));
+		},
+	}),
 ]);
 ```
 
@@ -99,9 +99,9 @@ this behaviour using the `scopeBehaviour` option:
 
 ```js
 postcss([
-  require("postcss-modules")({
-    scopeBehaviour: "global", // can be 'global' or 'local',
-  }),
+	require("postcss-modules")({
+		scopeBehaviour: "global", // can be 'global' or 'local',
+	}),
 ]);
 ```
 
@@ -120,16 +120,16 @@ To generate custom classes, use the `generateScopedName` callback:
 
 ```js
 postcss([
-  require("postcss-modules")({
-    generateScopedName: function (name, filename, css) {
-      var path = require("path");
-      var i = css.indexOf("." + name);
-      var line = css.substr(0, i).split(/[\r\n]/).length;
-      var file = path.basename(filename, ".css");
+	require("postcss-modules")({
+		generateScopedName: function (name, filename, css) {
+			var path = require("path");
+			var i = css.indexOf("." + name);
+			var line = css.substr(0, i).split(/[\r\n]/).length;
+			var file = path.basename(filename, ".css");
 
-      return "_" + file + "_" + line + "_" + name;
-    },
-  }),
+			return "_" + file + "_" + line + "_" + name;
+		},
+	}),
 ]);
 ```
 
@@ -138,9 +138,9 @@ Or just pass an interpolated string to the `generateScopedName` option
 
 ```js
 postcss([
-  require("postcss-modules")({
-    generateScopedName: "[name]__[local]___[hash:base64:5]",
-  }),
+	require("postcss-modules")({
+		generateScopedName: "[name]__[local]___[hash:base64:5]",
+	}),
 ]);
 ```
 
@@ -148,10 +148,10 @@ It's possible to add custom hash to generate more unique classes using the `hash
 
 ```js
 postcss([
-  require("postcss-modules")({
-    generateScopedName: "[name]__[local]___[hash:base64:5]",
-    hashPrefix: "prefix",
-  }),
+	require("postcss-modules")({
+		generateScopedName: "[name]__[local]___[hash:base64:5]",
+		hashPrefix: "prefix",
+	}),
 ]);
 ```
 
@@ -161,9 +161,9 @@ If you need to export global names via the JSON object along with the local ones
 
 ```js
 postcss([
-  require("postcss-modules")({
-    exportGlobals: true,
-  }),
+	require("postcss-modules")({
+		exportGlobals: true,
+	}),
 ]);
 ```
 
@@ -173,9 +173,9 @@ If you need, you can pass a custom loader (see [FileSystemLoader] for example):
 
 ```js
 postcss([
-  require("postcss-modules")({
-    Loader: CustomLoader,
-  }),
+	require("postcss-modules")({
+		Loader: CustomLoader,
+	}),
 ]);
 ```
 
@@ -207,21 +207,28 @@ In lieu of a string, a custom function can generate the exported class names.
 
 ### Resolve path alias
 
-You can rewrite paths for `composes/from` by using `resolve` options.
+You can rewrite paths for `composes/from` by using the `resolve` option.
 It's useful when you need to resolve custom path alias.
+
+Parameters:
+
+-   `file` — a module we want to resolve
+-   `importer` — the file that imports the module we want to resolve
+
+Return value: `string | null | Promise<string | null>`
 
 ```js
 postcss([
-  require("postcss-modules")({
-    resolve: function (file) {
-     return file.replace(/^@/, process.cwd());
-    },
-  }),
+	require("postcss-modules")({
+    	resolve: function (file, importer) {
+			return path.resolve(
+				path.dirname(importer),
+				file.replace(/^@/, process.cwd()
+			);
+    	},
+  	}),
 ]);
 ```
-
-`resolve` may also return a `Promise<string>`.
-
 
 ## Integration with templates
 
@@ -233,8 +240,8 @@ Assume you've saved project's CSS modules in `cssModules.json`:
 
 ```json
 {
-  "title": "_title_xkpkl_5 _title_116zl_1",
-  "article": "_article_xkpkl_10"
+	"title": "_title_xkpkl_5 _title_116zl_1",
+	"article": "_article_xkpkl_10"
 }
 ```
 
@@ -261,7 +268,7 @@ And you'll get the following HTML:
 ```html
 <h1 class="_title_xkpkl_5 _title_116zl_1">postcss-modules</h1>
 <article class="_article_xkpkl_10">
-  A PostCSS plugin to use CSS Modules everywhere
+	A PostCSS plugin to use CSS Modules everywhere
 </article>
 ```
 
@@ -278,7 +285,7 @@ Here is our template `about.html`:
 ```html
 <h1 css-module="title">postcss-modules</h1>
 <article css-module="article">
-  A PostCSS plugin to use CSS Modules everywhere
+	A PostCSS plugin to use CSS Modules everywhere
 </article>
 ```
 
@@ -291,10 +298,10 @@ var posthtmlCssModules = require("posthtml-css-modules");
 var template = fs.readFileSync("./about.html", "utf8");
 
 posthtml([posthtmlCssModules("./cssModules.json")])
-  .process(template)
-  .then(function (result) {
-    console.log(result.html);
-  });
+	.process(template)
+	.then(function (result) {
+		console.log(result.html);
+	});
 ```
 
 (for using other build systems please check [the documentation of PostHTML](https://github.com/posthtml/posthtml/blob/master/readme.md))
@@ -304,7 +311,7 @@ And you'll get the following HTML:
 ```html
 <h1 class="_title_xkpkl_5 _title_116zl_1">postcss-modules</h1>
 <article class="_article_xkpkl_10">
-  A PostCSS plugin to use CSS Modules everywhere
+	A PostCSS plugin to use CSS Modules everywhere
 </article>
 ```
 
@@ -320,6 +327,6 @@ npm install --save-dev postcss postcss-modules
 
 [filesystemloader]: https://github.com/css-modules/css-modules-loader-core/blob/master/src/file-system-loader.js
 
-
 ## Sponsors
-- Dmitry Olyenyov
+
+-   Dmitry Olyenyov

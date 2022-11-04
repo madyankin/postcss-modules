@@ -373,14 +373,20 @@ exports[`processes resolve option: processes resolve option 1`] = `
     width: 200px;
 }._composes_a_hello {
     foo: bar;
-}
-
-._compose_resolve_figure {
-    display: flex;
-}
-
-._compose_resolve_figure-single-quote {
-    display: block;
+}._composes_mixins_title {
+    color: black;
+    font-size: 40px;
+}._composes_mixins_title:hover {
+    color: red;
+}._composes_mixins_figure {
+    text-align: center
+}._composes_mixins_title:focus, ._composes_mixins_figure:focus {
+    outline: none;
+    border: 1px solid red;
+}._deepDeepCompose_deepDeepCompose {
+}._deepDeepCompose_dotSlashRelativePath {
+}._deepCompose_deepCompose {
+	content: \\"deepCompose\\";
 }
 "
 `;

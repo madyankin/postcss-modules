@@ -1,10 +1,6 @@
 import type { Plugin } from "postcss";
 
-declare type GenerateScopedNameFunction = (
-	name: string,
-	filename: string,
-	css: string
-) => string;
+declare type GenerateScopedNameFunction = (name: string, filename: string, css: string) => string;
 
 declare type LocalsConventionFunction = (
 	originalClassName: string,
@@ -15,21 +11,13 @@ declare type LocalsConventionFunction = (
 declare class Loader {
 	constructor(root: string, plugins: Plugin[]);
 
-	fetch(
-		file: string,
-		relativeTo: string,
-		depTrace: string
-	): Promise<{ [key: string]: string }>;
+	fetch(file: string, relativeTo: string, depTrace: string): Promise<{ [key: string]: string }>;
 
 	finalSource?: string | undefined;
 }
 
 declare interface Options {
-	getJSON?(
-		cssFilename: string,
-		json: { [name: string]: string },
-		outputFilename?: string
-	): void;
+	getJSON?(cssFilename: string, json: { [name: string]: string }, outputFilename?: string): void;
 
 	localsConvention?:
 		| "camelCase"
@@ -49,12 +37,16 @@ declare interface Options {
 
 	Loader?: typeof Loader;
 
+<<<<<<< HEAD
 	resolve?: (file: string) => string | Promise<string>;
 
 	fileResolve?: (
 		file: string,
 		importer: string
 	) => string | null | Promise<string | null>;
+=======
+	resolve?: (file: string, importer: string) => string | null | Promise<string | null>;
+>>>>>>> 7393c055accba46f9d122e9bee491c1ad1fafccb
 }
 
 declare interface PostcssModulesPlugin {

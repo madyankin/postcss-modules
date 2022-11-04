@@ -33,8 +33,13 @@ function getScopedNameGenerator(opts) {
 function getLoader(opts, plugins) {
 	const root = typeof opts.root === "undefined" ? "/" : opts.root;
 	return typeof opts.Loader === "function"
+<<<<<<< HEAD
 		? new opts.Loader(root, plugins, opts.fileResolve)
 		: new FileSystemLoader(root, plugins, opts.fileResolve);
+=======
+		? new opts.Loader(root, plugins, opts.resolve)
+		: new FileSystemLoader(root, plugins, opts.resolve);
+>>>>>>> 7393c055accba46f9d122e9bee491c1ad1fafccb
 }
 
 function isGlobalModule(globalModules, inputFile) {
@@ -67,9 +72,7 @@ function isOurPlugin(plugin) {
 }
 
 function dashesCamelCase(string) {
-	return string.replace(/-+(\w)/g, (_, firstLetter) =>
-		firstLetter.toUpperCase()
-	);
+	return string.replace(/-+(\w)/g, (_, firstLetter) => firstLetter.toUpperCase());
 }
 
 module.exports = (opts = {}) => {
@@ -79,12 +82,13 @@ module.exports = (opts = {}) => {
 			const getJSON = opts.getJSON || saveJSON;
 			const inputFile = css.source.input.file;
 			const pluginList = getDefaultPluginsList(opts, inputFile);
-			const resultPluginIndex = result.processor.plugins.findIndex(
-				(plugin) => isOurPlugin(plugin)
+			const resultPluginIndex = result.processor.plugins.findIndex((plugin) =>
+				isOurPlugin(plugin)
 			);
 			if (resultPluginIndex === -1) {
 				throw new Error("Plugin missing from options.");
 			}
+<<<<<<< HEAD
 			// resolve and fileResolve can't be used together
 			if (
 				typeof opts.resolve === "function" &&
@@ -98,26 +102,17 @@ module.exports = (opts = {}) => {
 				0,
 				resultPluginIndex
 			);
+=======
+
+			const earlierPlugins = result.processor.plugins.slice(0, resultPluginIndex);
+>>>>>>> 7393c055accba46f9d122e9bee491c1ad1fafccb
 			const loaderPlugins = [...earlierPlugins, ...pluginList];
 			const loader = getLoader(opts, loaderPlugins);
-			const fetcher = (file, relativeTo, depTrace) => {
-				const unquoteFile = unquote(file);
-				const resolvedResult =
-					typeof opts.resolve === "function" &&
-					opts.resolve(unquoteFile);
-				const resolvedFile =
-					resolvedResult instanceof Promise
-						? resolvedResult
-						: Promise.resolve(resolvedResult);
 
-				return resolvedFile.then((f) => {
-					return loader.fetch.call(
-						loader,
-						`"${f || unquoteFile}"`,
-						relativeTo,
-						depTrace
-					);
-				});
+			const fetcher = async (file, relativeTo, depTrace) => {
+				const unquoteFile = unquote(file);
+
+				return loader.fetch.call(loader, unquoteFile, relativeTo, depTrace);
 			};
 			const parser = new Parser(fetcher);
 
@@ -131,40 +126,39 @@ module.exports = (opts = {}) => {
 			if (opts.localsConvention) {
 				const isFunc = typeof opts.localsConvention === "function";
 
-				parser.exportTokens = Object.entries(
-					parser.exportTokens
-				).reduce((tokens, [className, value]) => {
-					if (isFunc) {
-						tokens[
-							opts.localsConvention(className, value, inputFile)
-						] = value;
+				parser.exportTokens = Object.entries(parser.exportTokens).reduce(
+					(tokens, [className, value]) => {
+						if (isFunc) {
+							const convention = opts.localsConvention(className, value, inputFile);
+							tokens[convention] = value;
+
+							return tokens;
+						}
+
+						switch (opts.localsConvention) {
+							case "camelCase":
+								tokens[className] = value;
+								tokens[camelCase(className)] = value;
+								break;
+
+							case "camelCaseOnly":
+								tokens[camelCase(className)] = value;
+								break;
+
+							case "dashes":
+								tokens[className] = value;
+								tokens[dashesCamelCase(className)] = value;
+								break;
+
+							case "dashesOnly":
+								tokens[dashesCamelCase(className)] = value;
+								break;
+						}
 
 						return tokens;
-					}
-
-					switch (opts.localsConvention) {
-						case "camelCase":
-							tokens[className] = value;
-							tokens[camelCase(className)] = value;
-
-							break;
-						case "camelCaseOnly":
-							tokens[camelCase(className)] = value;
-
-							break;
-						case "dashes":
-							tokens[className] = value;
-							tokens[dashesCamelCase(className)] = value;
-
-							break;
-						case "dashesOnly":
-							tokens[dashesCamelCase(className)] = value;
-
-							break;
-					}
-
-					return tokens;
-				}, {});
+					},
+					{}
+				);
 			}
 
 			result.messages.push({
@@ -174,11 +168,7 @@ module.exports = (opts = {}) => {
 			});
 
 			// getJSON may return a promise
-			return getJSON(
-				css.source.input.file,
-				parser.exportTokens,
-				result.opts.to
-			);
+			return getJSON(css.source.input.file, parser.exportTokens, result.opts.to);
 		},
 	};
 };
