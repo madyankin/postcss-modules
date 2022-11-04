@@ -28,13 +28,7 @@ export default class Parser {
 		let imports = [];
 		css.each((node) => {
 			if (node.type == "rule" && node.selector.match(importRegexp)) {
-				imports.push(
-					this.fetchImport(
-						node,
-						css.source.input.from,
-						imports.length
-					)
-				);
+				imports.push(this.fetchImport(node, css.source.input.from, imports.length));
 			}
 		});
 		return imports;
@@ -46,8 +40,7 @@ export default class Parser {
 
 	extractExports(css) {
 		css.each((node) => {
-			if (node.type == "rule" && node.selector == ":export")
-				this.handleExport(node);
+			if (node.type == "rule" && node.selector == ":export") this.handleExport(node);
 		});
 	}
 
@@ -55,10 +48,7 @@ export default class Parser {
 		exportNode.each((decl) => {
 			if (decl.type == "decl") {
 				Object.keys(this.translations).forEach((translation) => {
-					decl.value = decl.value.replace(
-						translation,
-						this.translations[translation]
-					);
+					decl.value = decl.value.replace(translation, this.translations[translation]);
 				});
 				this.exportTokens[decl.prop] = decl.value;
 			}

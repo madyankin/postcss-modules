@@ -67,9 +67,7 @@ function isOurPlugin(plugin) {
 }
 
 function dashesCamelCase(string) {
-	return string.replace(/-+(\w)/g, (_, firstLetter) =>
-		firstLetter.toUpperCase()
-	);
+	return string.replace(/-+(\w)/g, (_, firstLetter) => firstLetter.toUpperCase());
 }
 
 module.exports = (opts = {}) => {
@@ -79,29 +77,21 @@ module.exports = (opts = {}) => {
 			const getJSON = opts.getJSON || saveJSON;
 			const inputFile = css.source.input.file;
 			const pluginList = getDefaultPluginsList(opts, inputFile);
-			const resultPluginIndex = result.processor.plugins.findIndex(
-				(plugin) => isOurPlugin(plugin)
+			const resultPluginIndex = result.processor.plugins.findIndex((plugin) =>
+				isOurPlugin(plugin)
 			);
 			if (resultPluginIndex === -1) {
 				throw new Error("Plugin missing from options.");
 			}
 
-			const earlierPlugins = result.processor.plugins.slice(
-				0,
-				resultPluginIndex
-			);
+			const earlierPlugins = result.processor.plugins.slice(0, resultPluginIndex);
 			const loaderPlugins = [...earlierPlugins, ...pluginList];
 			const loader = getLoader(opts, loaderPlugins);
 
 			const fetcher = async (file, relativeTo, depTrace) => {
 				const unquoteFile = unquote(file);
 
-				return loader.fetch.call(
-					loader,
-					unquoteFile,
-					relativeTo,
-					depTrace
-				);
+				return loader.fetch.call(loader, unquoteFile, relativeTo, depTrace);
 			};
 			const parser = new Parser(fetcher);
 
@@ -115,42 +105,39 @@ module.exports = (opts = {}) => {
 			if (opts.localsConvention) {
 				const isFunc = typeof opts.localsConvention === "function";
 
-				parser.exportTokens = Object.entries(
-					parser.exportTokens
-				).reduce((tokens, [className, value]) => {
-					if (isFunc) {
-						const convention = opts.localsConvention(
-							className,
-							value,
-							inputFile
-						);
-						tokens[convention] = value;
+				parser.exportTokens = Object.entries(parser.exportTokens).reduce(
+					(tokens, [className, value]) => {
+						if (isFunc) {
+							const convention = opts.localsConvention(className, value, inputFile);
+							tokens[convention] = value;
+
+							return tokens;
+						}
+
+						switch (opts.localsConvention) {
+							case "camelCase":
+								tokens[className] = value;
+								tokens[camelCase(className)] = value;
+								break;
+
+							case "camelCaseOnly":
+								tokens[camelCase(className)] = value;
+								break;
+
+							case "dashes":
+								tokens[className] = value;
+								tokens[dashesCamelCase(className)] = value;
+								break;
+
+							case "dashesOnly":
+								tokens[dashesCamelCase(className)] = value;
+								break;
+						}
 
 						return tokens;
-					}
-
-					switch (opts.localsConvention) {
-						case "camelCase":
-							tokens[className] = value;
-							tokens[camelCase(className)] = value;
-							break;
-
-						case "camelCaseOnly":
-							tokens[camelCase(className)] = value;
-							break;
-
-						case "dashes":
-							tokens[className] = value;
-							tokens[dashesCamelCase(className)] = value;
-							break;
-
-						case "dashesOnly":
-							tokens[dashesCamelCase(className)] = value;
-							break;
-					}
-
-					return tokens;
-				}, {});
+					},
+					{}
+				);
 			}
 
 			result.messages.push({
@@ -160,11 +147,7 @@ module.exports = (opts = {}) => {
 			});
 
 			// getJSON may return a promise
-			return getJSON(
-				css.source.input.file,
-				parser.exportTokens,
-				result.opts.to
-			);
+			return getJSON(css.source.input.file, parser.exportTokens, result.opts.to);
 		},
 	};
 };

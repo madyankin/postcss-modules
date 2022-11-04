@@ -36,11 +36,13 @@ class Core {
 const traceKeySorter = (a, b) => {
 	if (a.length < b.length) {
 		return a < b.substring(0, a.length) ? -1 : 1;
-	} else if (a.length > b.length) {
-		return a.substring(0, b.length) <= b ? -1 : 1;
-	} else {
-		return a < b ? -1 : 1;
 	}
+
+	if (a.length > b.length) {
+		return a.substring(0, b.length) <= b ? -1 : 1;
+	}
+
+	return a < b ? -1 : 1;
 };
 
 export default class FileSystemLoader {
@@ -48,9 +50,7 @@ export default class FileSystemLoader {
 		if (root === "/" && process.platform === "win32") {
 			const cwdDrive = process.cwd().slice(0, 3);
 			if (!/^[A-Za-z]:\\$/.test(cwdDrive)) {
-				throw new Error(
-					`Failed to obtain root from "${process.cwd()}".`
-				);
+				throw new Error(`Failed to obtain root from "${process.cwd()}".`);
 			}
 			root = cwdDrive;
 		}
@@ -74,26 +74,18 @@ export default class FileSystemLoader {
 			: await Promise.resolve();
 
 		if (fileResolvedPath && !path.isAbsolute(fileResolvedPath)) {
-			throw new Error(
-				'The returned path from the "fileResolve" option must be absolute.'
-			);
+			throw new Error('The returned path from the "fileResolve" option must be absolute.');
 		}
 
 		const relativeDir = path.dirname(relativeTo);
 
-		const rootRelativePath =
-			fileResolvedPath || path.resolve(relativeDir, newPath);
+		const rootRelativePath = fileResolvedPath || path.resolve(relativeDir, newPath);
 
 		let fileRelativePath =
-			fileResolvedPath ||
-			path.resolve(path.resolve(this.root, relativeDir), newPath);
+			fileResolvedPath || path.resolve(path.resolve(this.root, relativeDir), newPath);
 
 		// if the path is not relative or absolute, try to resolve it in node_modules
-		if (
-			!useFileResolve &&
-			newPath[0] !== "." &&
-			!path.isAbsolute(newPath)
-		) {
+		if (!useFileResolve && newPath[0] !== "." && !path.isAbsolute(newPath)) {
 			try {
 				fileRelativePath = require.resolve(newPath);
 			} catch (e) {

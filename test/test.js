@@ -37,9 +37,7 @@ Object.keys(cases).forEach((name) => {
 	const description = cases[name];
 
 	const scopedNameGenerator =
-		name === "interpolated"
-			? "[name]__[local]___[hash:base64:5]"
-			: generateScopedName;
+		name === "interpolated" ? "[name]__[local]___[hash:base64:5]" : generateScopedName;
 
 	const scopeBehaviour =
 		name === behaviours.GLOBAL || name === "globalShorthand"
@@ -82,21 +80,11 @@ Object.keys(cases).forEach((name) => {
 			autoprefixer,
 			createPlugin("validator-1", (root) => {
 				if (rootsSeenBeforePlugin.has(root)) {
-					throw new Error(
-						"Plugin before ours was called multiple times."
-					);
+					throw new Error("Plugin before ours was called multiple times.");
 				}
 				rootsSeenBeforePlugin.add(root);
-				root.prepend(
-					`/* validator-1-start (${path.basename(
-						root.source.input.file
-					)}) */`
-				);
-				root.append(
-					`/* validator-1-end (${path.basename(
-						root.source.input.file
-					)}) */`
-				);
+				root.prepend(`/* validator-1-start (${path.basename(root.source.input.file)}) */`);
+				root.append(`/* validator-1-end (${path.basename(root.source.input.file)}) */`);
 			}),
 			plugin({
 				scopeBehaviour,
@@ -105,21 +93,11 @@ Object.keys(cases).forEach((name) => {
 			}),
 			createPlugin("validator-2", (root) => {
 				if (rootsSeenAfterPlugin.has(root)) {
-					throw new Error(
-						"Plugin after ours was called multiple times."
-					);
+					throw new Error("Plugin after ours was called multiple times.");
 				}
 				rootsSeenAfterPlugin.add(root);
-				root.prepend(
-					`/* validator-2-start (${path.basename(
-						root.source.input.file
-					)}) */`
-				);
-				root.append(
-					`/* validator-2-end (${path.basename(
-						root.source.input.file
-					)}) */`
-				);
+				root.prepend(`/* validator-2-start (${path.basename(root.source.input.file)}) */`);
+				root.append(`/* validator-2-end (${path.basename(root.source.input.file)}) */`);
 			}),
 		];
 
@@ -127,9 +105,7 @@ Object.keys(cases).forEach((name) => {
 			from: sourceFile,
 		});
 
-		expect(result.css).toMatchSnapshot(
-			`plugins once - ${description} - CSS`
-		);
+		expect(result.css).toMatchSnapshot(`plugins once - ${description} - CSS`);
 	});
 });
 
@@ -194,9 +170,9 @@ it("processes localsConvention with camelCase option", async () => {
 
 	if (fs.existsSync(jsonFile)) fs.unlinkSync(jsonFile);
 
-	await postcss([
-		plugin({ generateScopedName, localsConvention: "camelCase" }),
-	]).process(source, { from: sourceFile });
+	await postcss([plugin({ generateScopedName, localsConvention: "camelCase" })]).process(source, {
+		from: sourceFile,
+	});
 
 	const json = fs.readFileSync(jsonFile).toString();
 	fs.unlinkSync(jsonFile);
@@ -239,9 +215,9 @@ it("processes localsConvention with dashes option", async () => {
 
 	if (fs.existsSync(jsonFile)) fs.unlinkSync(jsonFile);
 
-	await postcss([
-		plugin({ generateScopedName, localsConvention: "dashes" }),
-	]).process(source, { from: sourceFile });
+	await postcss([plugin({ generateScopedName, localsConvention: "dashes" })]).process(source, {
+		from: sourceFile,
+	});
 
 	const json = fs.readFileSync(jsonFile).toString();
 	fs.unlinkSync(jsonFile);
@@ -262,9 +238,9 @@ it("processes localsConvention with dashes option", async () => {
 
 	if (fs.existsSync(jsonFile)) fs.unlinkSync(jsonFile);
 
-	await postcss([
-		plugin({ generateScopedName, localsConvention: "dashes" }),
-	]).process(source, { from: sourceFile });
+	await postcss([plugin({ generateScopedName, localsConvention: "dashes" })]).process(source, {
+		from: sourceFile,
+	});
 
 	const json = fs.readFileSync(jsonFile).toString();
 	fs.unlinkSync(jsonFile);
@@ -383,9 +359,7 @@ it("exposes export tokens for other plugins", async () => {
 		from: sourceFile,
 	});
 
-	expect(result.messages).toMatchSnapshot(
-		"exposes export tokens for other plugins"
-	);
+	expect(result.messages).toMatchSnapshot("exposes export tokens for other plugins");
 });
 
 it("processes exportGlobals option", async () => {
