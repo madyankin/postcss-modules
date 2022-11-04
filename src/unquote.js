@@ -1,6 +1,6 @@
 // copied from https://github.com/lakenen/node-unquote
 
-var reg = /['"]/;
+const reg = /['"]/;
 
 export default function unquote(str) {
 	if (!str) {

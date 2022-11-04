@@ -4,7 +4,7 @@ import postcss from "postcss";
 import fs from "fs";
 import path from "path";
 
-import Parser from "./parser";
+import Parser from "./Parser";
 
 class Core {
 	constructor(plugins) {

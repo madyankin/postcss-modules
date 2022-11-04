@@ -3,8 +3,8 @@ import camelCase from "lodash.camelcase";
 import genericNames from "generic-names";
 import unquote from "./unquote";
 
-import Parser from "./css-loader-core/parser";
-import FileSystemLoader from "./css-loader-core/loader";
+import Parser from "./Parser";
+import FileSystemLoader from "./FileSystemLoader";
 
 import generateScopedName from "./generateScopedName";
 import saveJSON from "./saveJSON";
