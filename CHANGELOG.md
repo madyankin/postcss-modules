@@ -31,7 +31,7 @@ postcss([
 
 -   #140 "'Failed to obtain root' error on Windows" fixed by Pierre LeMoine (@DrInfiniteExplorer) https://github.com/madyankin/postcss-modules/pull/144
 
-## Improved
+### Improved
 
 -   `icss-replace-symbols` replaced with with `icss-utils` by Jason Quense (@jquense). The updated replacer works better and will replace values in selectors, which didn't work until now. https://github.com/madyankin/postcss-modules/pull/145
 
