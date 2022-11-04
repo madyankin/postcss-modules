@@ -33,13 +33,8 @@ function getScopedNameGenerator(opts) {
 function getLoader(opts, plugins) {
 	const root = typeof opts.root === "undefined" ? "/" : opts.root;
 	return typeof opts.Loader === "function"
-<<<<<<< HEAD
-		? new opts.Loader(root, plugins, opts.fileResolve)
-		: new FileSystemLoader(root, plugins, opts.fileResolve);
-=======
 		? new opts.Loader(root, plugins, opts.resolve)
 		: new FileSystemLoader(root, plugins, opts.resolve);
->>>>>>> 7393c055accba46f9d122e9bee491c1ad1fafccb
 }
 
 function isGlobalModule(globalModules, inputFile) {
@@ -88,24 +83,8 @@ module.exports = (opts = {}) => {
 			if (resultPluginIndex === -1) {
 				throw new Error("Plugin missing from options.");
 			}
-<<<<<<< HEAD
-			// resolve and fileResolve can't be used together
-			if (
-				typeof opts.resolve === "function" &&
-				typeof opts.fileResolve == "function"
-			) {
-				throw new Error(
-					'Please use either the "resolve" or the "fileResolve" option.'
-				);
-			}
-			const earlierPlugins = result.processor.plugins.slice(
-				0,
-				resultPluginIndex
-			);
-=======
 
 			const earlierPlugins = result.processor.plugins.slice(0, resultPluginIndex);
->>>>>>> 7393c055accba46f9d122e9bee491c1ad1fafccb
 			const loaderPlugins = [...earlierPlugins, ...pluginList];
 			const loader = getLoader(opts, loaderPlugins);
 

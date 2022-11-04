@@ -64,66 +64,6 @@ export default class FileSystemLoader {
 		this.tokensByFile = {};
 	}
 
-<<<<<<< HEAD
-	fetch(_newPath, relativeTo, _trace) {
-		let newPath = _newPath.replace(/^["']|["']$/g, ""),
-			trace = _trace || String.fromCharCode(this.importNr++);
-		const useFileResolve = typeof this.fileResolve === "function";
-		return new Promise((resolve, reject) => {
-			(useFileResolve
-				? this.fileResolve(newPath, relativeTo)
-				: Promise.resolve()
-			).then((fileResolvedPath) => {
-				if (fileResolvedPath && !path.isAbsolute(fileResolvedPath)) {
-					reject(
-						'The returned path from the "fileResolve" option must be absolute.'
-					);
-				}
-				let relativeDir = path.dirname(relativeTo),
-					rootRelativePath =
-						fileResolvedPath || path.resolve(relativeDir, newPath),
-					fileRelativePath =
-						fileResolvedPath ||
-						path.resolve(
-							path.resolve(this.root, relativeDir),
-							newPath
-						);
-
-				// if the path is not relative or absolute, try to resolve it in node_modules
-				if (
-					!useFileResolve &&
-					newPath[0] !== "." &&
-					!path.isAbsolute(newPath)
-				) {
-					try {
-						fileRelativePath = require.resolve(newPath);
-					} catch (e) {
-						// noop
-					}
-				}
-
-				const tokens = this.tokensByFile[fileRelativePath];
-				if (tokens) {
-					return resolve(tokens);
-				}
-
-				fs.readFile(fileRelativePath, "utf-8", (err, source) => {
-					if (err) reject(err);
-					this.core
-						.load(
-							source,
-							rootRelativePath,
-							trace,
-							this.fetch.bind(this)
-						)
-						.then(({ injectableSource, exportTokens }) => {
-							this.sources[fileRelativePath] = injectableSource;
-							this.traces[trace] = fileRelativePath;
-							this.tokensByFile[fileRelativePath] = exportTokens;
-							resolve(exportTokens);
-						}, reject);
-				});
-=======
 	async fetch(_newPath, relativeTo, _trace) {
 		const newPath = _newPath.replace(/^["']|["']$/g, "");
 		const trace = _trace || String.fromCharCode(this.importNr++);
@@ -171,7 +111,6 @@ export default class FileSystemLoader {
 				this.traces[trace] = fileRelativePath;
 				this.tokensByFile[fileRelativePath] = exportTokens;
 				resolve(exportTokens);
->>>>>>> 7393c055accba46f9d122e9bee491c1ad1fafccb
 			});
 		});
 	}

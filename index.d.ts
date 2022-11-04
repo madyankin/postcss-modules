@@ -37,16 +37,7 @@ declare interface Options {
 
 	Loader?: typeof Loader;
 
-<<<<<<< HEAD
-	resolve?: (file: string) => string | Promise<string>;
-
-	fileResolve?: (
-		file: string,
-		importer: string
-	) => string | null | Promise<string | null>;
-=======
 	resolve?: (file: string, importer: string) => string | null | Promise<string | null>;
->>>>>>> 7393c055accba46f9d122e9bee491c1ad1fafccb
 }
 
 declare interface PostcssModulesPlugin {
