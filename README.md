@@ -191,7 +191,7 @@ postcss([
 
 ### localsConvention
 
-Type: `String | (originalClassName: string, generatedClassName: string, inputFile: string) => className: string`
+Type: `String | (originalClassName: string, generatedClassName: string, inputFile: string) => className: (string|string[])`
 Default: `null`
 
 Style of exported classnames, the keys in your json.
@@ -202,7 +202,7 @@ Style of exported classnames, the keys in your json.
 | **`'camelCaseOnly'`** | `{String}` | Class names will be camelized, the original class name will be removed from the locals           |
 |    **`'dashes'`**     | `{String}` | Only dashes in class names will be camelized                                                     |
 |  **`'dashesOnly'`**   | `{String}` | Dashes in class names will be camelized, the original class name will be removed from the locals |
-|      **`'all'`**      | `{String}` | Apply camelCase dashes and the orignional naming convention                                      |
+|      **`'all'`**      | `{String}` | Apply camelCase, dashes, and the orignional naming convention                                    |
 |     **`'none'`**      | `{String}` | Only use the orignional naming convention with out locals                                        |
 
 In lieu of a string, a custom function can generate the exported class names.
