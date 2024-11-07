@@ -22,11 +22,11 @@
     "generic-names": "^4.0.0",
     "icss-utils": "^5.1.0",
     "lodash.camelcase": "^4.3.0",
-    "postcss-modules-extract-imports": "^3.0.0",
-    "postcss-modules-local-by-default": "^4.0.0",
-    "postcss-modules-scope": "^3.0.0",
+    "postcss-modules-extract-imports": "^3.1.0",
+    "postcss-modules-local-by-default": "^4.0.5",
+    "postcss-modules-scope": "^3.2.0",
     "postcss-modules-values": "^4.0.0",
-    "string-hash": "^1.1.1"
+    "string-hash": "^1.1.3"
   },
   "peerDependencies": {
     "postcss": "^8.0.0"
