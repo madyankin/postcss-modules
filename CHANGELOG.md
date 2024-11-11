@@ -1,5 +1,9 @@
 # Changelog
 
+## 6.0.1
+
+-   Updated dependencies by Bill Collins (@mrginglymus)
+
 ## 6.0.0
 
 ### Breaking
