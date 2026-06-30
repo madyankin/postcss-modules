@@ -32,11 +32,11 @@
 		"postcss": "^8.0.0"
 	},
 	"devDependencies": {
-		"@babel/cli": "^8.0.1",
-		"@babel/core": "^8.0.1",
-		"@babel/eslint-parser": "^8.0.1",
-		"@babel/preset-env": "^8.0.2",
-		"@babel/register": "^8.0.1",
+		"@babel/cli": "^7.29.0",
+		"@babel/core": "^7.29.0",
+		"@babel/eslint-parser": "^7.29.0",
+		"@babel/preset-env": "^7.29.0",
+		"@babel/register": "^7.29.0",
 		"@eslint/js": "^9.39.4",
 		"autoprefixer": "^10.5.2",
 		"eslint": "^9.39.0",
