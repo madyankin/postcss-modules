@@ -1,18 +1,22 @@
 BUILD_DIR	= ./build
+EXEC		= npm exec --no-install --
 
 .PHONY: clean lint test build publish pack release-patch release-minor release-major
+
+node_modules:
+	npm ci
 
 clean:
 	rm -rf $(BUILD_DIR) *.tgz
 
-lint:
-	npx eslint src test
+lint: node_modules
+	$(EXEC) eslint src test
 
 test: lint
-	npx jest
+	$(EXEC) jest
 
 build: clean test
-	npx swc src -d $(BUILD_DIR) --strip-leading-paths
+	$(EXEC) swc src -d $(BUILD_DIR) --strip-leading-paths
 
 publish: build
 	npm publish ./
