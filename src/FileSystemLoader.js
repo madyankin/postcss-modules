@@ -89,7 +89,7 @@ export default class FileSystemLoader {
 		if (!useFileResolve && newPath[0] !== "." && !path.isAbsolute(newPath)) {
 			try {
 				fileRelativePath = require.resolve(newPath);
-			} catch (e) {
+			} catch {
 				// noop
 			}
 		}
@@ -105,7 +105,7 @@ export default class FileSystemLoader {
 					source,
 					rootRelativePath,
 					trace,
-					this.fetch.bind(this)
+					this.fetch.bind(this),
 				);
 
 				this.sources[fileRelativePath] = injectableSource;
