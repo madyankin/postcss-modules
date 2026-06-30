@@ -105,7 +105,7 @@ postcss([
 
 ### Without a bundler (SSR, Node scripts, Jest/Vitest in node mode)
 
-For Node directly, install the loader hook:
+`postcss-modules` ships a Node [module-customization hook](https://nodejs.org/api/module.html#customization-hooks) at the `postcss-modules/loader` subpath. Register it with `--import` and any `import` of a `.css` file is intercepted, run through the plugin, and exposed as a default-exported token map.
 
 ```sh
 node --import postcss-modules/loader app.mjs
@@ -114,12 +114,78 @@ node --import postcss-modules/loader app.mjs
 ```js
 // app.mjs
 import styles from "./button.css";
-console.log(styles.primary); // "_button__primary_xkpkl_5"
+
+const el = document.createElement("div");
+el.className = styles.primary; // "_button__primary_xkpkl_5"
 ```
 
-Options live in `postcss-modules.config.{js,cjs,mjs}` in your cwd, or set `POSTCSS_MODULES_CONFIG=/path/to/cfg.cjs`. The config object accepts the same options as the PostCSS plugin (`generateScopedName`, `localsConvention`, `scopeBehaviour`, `globalModulePaths`, `Loader`, `resolve`, …).
+Composing across files (`composes: foo from "./other.css"`) works without extra configuration — the same `FileSystemLoader` the PostCSS plugin uses resolves siblings.
 
-Requires Node ≥ 20.6 (the version that stabilized `module.register`). The loader returns only the token map; the transformed CSS is not emitted. For HMR, watch mode, or CSS extraction, use a bundler instead.
+#### Configuring the loader
+
+The hook accepts the same options object as the PostCSS plugin
+(`generateScopedName`, `localsConvention`, `scopeBehaviour`, `globalModulePaths`, `exportGlobals`, `hashPrefix`, `Loader`, `resolve`, `root`). Options are discovered, in priority order:
+
+1. `process.env.POSTCSS_MODULES_CONFIG` — absolute or cwd-relative path to a config file.
+2. `postcss-modules.config.{js,cjs,mjs}` in `process.cwd()`.
+3. A `"postcss-modules"` key in the nearest `package.json`.
+4. Empty defaults.
+
+Example config file:
+
+```js
+// postcss-modules.config.cjs
+module.exports = {
+	generateScopedName: "[name]__[local]___[hash:base64:5]",
+	localsConvention: "camelCaseOnly",
+};
+```
+
+Or inline in `package.json`:
+
+```json
+{
+	"postcss-modules": {
+		"generateScopedName": "[name]__[local]___[hash:base64:5]"
+	}
+}
+```
+
+Or via an environment variable, useful for per-environment overrides:
+
+```sh
+POSTCSS_MODULES_CONFIG=./config/css-modules.cjs node --import postcss-modules/loader app.mjs
+```
+
+#### Jest / Vitest
+
+Both runners accept the same `--import` flag through their Node options.
+
+```sh
+NODE_OPTIONS="--import postcss-modules/loader" jest
+NODE_OPTIONS="--import postcss-modules/loader" vitest
+```
+
+Or wire it into a setup file. The loader runs once per worker, so spawned worker pools (Jest's default) pick it up automatically.
+
+#### TypeScript
+
+Add an ambient declaration so the compiler accepts default-importing a `.css` file:
+
+```ts
+// css-modules.d.ts
+declare module "*.css" {
+	const tokens: { readonly [key: string]: string };
+	export default tokens;
+}
+```
+
+#### Limitations
+
+- **ESM only.** `require("./x.css")` is not supported; the underlying transform is async and cannot be expressed through `require.extensions`. Use a `.mjs` entrypoint, or `"type": "module"` in `package.json`.
+- **Tokens only, no CSS output.** The loader returns the class-name map but does not emit the transformed CSS. SSR setups that need the stylesheet should use a bundler or call `postcss([require("postcss-modules")(...)]).process(...)` directly to capture both.
+- **No HMR, no watch mode** — by design. Use a bundler for those.
+- **Node ≥ 20.6.** `module.register` stabilized there.
 
 ### Generating scoped names
 

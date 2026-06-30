@@ -17,7 +17,7 @@ lint: node_modules/.installed
 
 compile: node_modules/.installed
 	$(EXEC) swc src -d $(BUILD_DIR) --strip-leading-paths --ignore 'src/*.mjs'
-	$(DOCKER) sh -c 'cp src/*.mjs $(BUILD_DIR)/'
+	cp src/*.mjs $(BUILD_DIR)/
 
 test: lint compile
 	$(EXEC) jest
