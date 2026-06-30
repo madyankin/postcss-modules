@@ -1,6 +1,6 @@
 BUILD_DIR	= ./build
 
-.PHONY: clean lint test build publish pack
+.PHONY: clean lint test build publish pack release-patch release-minor release-major
 
 clean:
 	rm -rf $(BUILD_DIR) *.tgz
@@ -20,3 +20,15 @@ publish: build
 
 pack: build
 	npm pack
+
+release-patch:
+	npm version patch
+	$(MAKE) publish
+
+release-minor:
+	npm version minor
+	$(MAKE) publish
+
+release-major:
+	npm version major
+	$(MAKE) publish
