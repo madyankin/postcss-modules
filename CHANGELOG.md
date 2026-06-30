@@ -1,27 +1,36 @@
 # Changelog
 
-## 7.0.0
+## 8.0.0
 
 ### Breaking
 
-- Dropped support for Node.js 10, 12, 14, 15, 16, and 18. The minimum supported Node.js version is now 20.
+- Dropped support for Node.js 18. The minimum supported Node.js version is now 20.
 
 ### Updated
 
 - All `devDependencies` bumped to latest: `@babel/*` 7 → 8, `eslint` 7 → 9 (now uses flat `eslint.config.mjs`), `eslint-plugin-jest` 23 → 29, `prettier` 2 → 3, `husky` 4 → 9, `lint-staged` 10 → 17, `autoprefixer` to 10.5, `postcss` to 8.5
 - Bumped `postcss-modules-local-by-default` to 4.2 and `postcss-modules-scope` to 3.2.1
-
-### Security
-
-- Patched 14 Dependabot security alerts in transitive dependencies (`form-data`, `lodash`, `@babel/core`, `@babel/plugin-transform-modules-systemjs`, `uuid`, `picomatch`, `flatted`, `minimatch`, `qs`, `js-yaml`, `nanoid`)
-- Bumped `jest` from 26 to 30 to drop vulnerable `node-notifier`, `sane`, and `jsdom` chains
 - Pinned transitive `glob` to v12 via `overrides`
 
 ### Internal
 
 - Reformatted source with Prettier 3 (whitespace only)
 - Bumped Babel compile target from Node 10 to Node 18
-- Regenerated Jest snapshots for the new `pretty-format` serializer (cosmetic only; emitted CSS and JSON are unchanged)
+
+## 7.0.0
+
+### Breaking
+
+-   Dropped support for Node.js 10, 12, 14, and 15. The minimum supported Node.js version is now 18.
+
+### Security
+
+-   Patched 14 Dependabot security alerts in transitive dependencies (`form-data`, `lodash`, `@babel/core`, `@babel/plugin-transform-modules-systemjs`, `uuid`, `picomatch`, `flatted`, `minimatch`, `qs`, `js-yaml`, `nanoid`)
+-   Bumped `jest` from 26 to 30 to drop vulnerable `node-notifier`, `sane`, and `jsdom` chains
+
+### Internal
+
+-   Regenerated Jest snapshots for the new `pretty-format` serializer (cosmetic only; emitted CSS and JSON are unchanged)
 
 ## 6.0.1
 
