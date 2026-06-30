@@ -8,6 +8,8 @@ src/
 .babelrc
 .editorconfig
 .vscode
+.idea
+.claude
 
 gulpfile.js
 undefined.json
