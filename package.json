@@ -42,7 +42,7 @@
     "eslint-plugin-import": "^2.21.2",
     "eslint-plugin-jest": "^23.17.0",
     "husky": "^4.2.5",
-    "jest": "^26.0.1",
+    "jest": "^30.4.2",
     "lint-staged": "^10.2.11",
     "postcss": "^8.1.9",
     "prettier": "^2.0.5"
