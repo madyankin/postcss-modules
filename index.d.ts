@@ -6,7 +6,7 @@ declare type LocalsConventionFunction = (
 	originalClassName: string,
 	generatedClassName: string,
 	inputFile: string
-) => string;
+) => string | string[];
 
 declare class Loader {
 	constructor(root: string, plugins: Plugin[]);
@@ -24,6 +24,8 @@ declare interface Options {
 		| "camelCaseOnly"
 		| "dashes"
 		| "dashesOnly"
+		| "all"
+		| "none"
 		| LocalsConventionFunction;
 
 	scopeBehaviour?: "global" | "local";
