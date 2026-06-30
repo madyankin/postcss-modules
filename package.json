@@ -32,12 +32,10 @@
 		"postcss": "^8.0.0"
 	},
 	"devDependencies": {
-		"@babel/cli": "^8.0.1",
-		"@babel/core": "^8.0.1",
-		"@babel/eslint-parser": "^8.0.1",
-		"@babel/preset-env": "^8.0.2",
-		"@babel/register": "^8.0.1",
 		"@eslint/js": "^9.39.4",
+		"@swc/cli": "^0.7.8",
+		"@swc/core": "^1.13.20",
+		"@swc/jest": "^0.2.39",
 		"autoprefixer": "^10.5.2",
 		"eslint": "^9.39.0",
 		"eslint-plugin-import": "^2.32.0",
@@ -67,6 +65,5 @@
 			"prettier --write",
 			"eslint --fix"
 		]
-	},
-	"require": "@babel/register"
+	}
 }
