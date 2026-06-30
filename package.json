@@ -4,6 +4,14 @@
 	"description": "PostCSS plugin to use CSS Modules everywhere",
 	"main": "build/index.js",
 	"types": "index.d.ts",
+	"exports": {
+		".": {
+			"types": "./index.d.ts",
+			"default": "./build/index.js"
+		},
+		"./loader": "./build/loader.mjs",
+		"./package.json": "./package.json"
+	},
 	"keywords": [
 		"postcss",
 		"css",
@@ -48,7 +56,7 @@
 		"prettier": "^3.9.4"
 	},
 	"engines": {
-		"node": ">=20"
+		"node": ">=20.6"
 	},
 	"scripts": {
 		"test": "make test",

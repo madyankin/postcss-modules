@@ -50,3 +50,5 @@ declare interface PostcssModulesPlugin {
 declare const PostcssModulesPlugin: PostcssModulesPlugin;
 
 export = PostcssModulesPlugin;
+
+declare module "postcss-modules/loader" {}
