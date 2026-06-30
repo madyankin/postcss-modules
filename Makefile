@@ -12,7 +12,7 @@ test: lint
 	npx jest
 
 build: clean test
-	npx babel src -d $(BUILD_DIR)
+	npx swc src -d $(BUILD_DIR) --strip-leading-paths
 
 publish: build
 	npm publish ./
