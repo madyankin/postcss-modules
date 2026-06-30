@@ -1,11 +1,13 @@
 BUILD_DIR	= ./build
-EXEC		= npm exec --
+NODE_IMAGE	= node:22
+DOCKER		= docker run --rm -v "$(CURDIR)":/app -w /app $(NODE_IMAGE)
+EXEC		= $(DOCKER) npm exec --
 
 .PHONY: clean lint compile test build publish pack release-patch release-minor release-major
 
 # Reinstall whenever package-lock.json is newer than the marker.
 node_modules/.installed: package-lock.json package.json
-	npm ci
+	$(DOCKER) npm ci
 	@mkdir -p node_modules
 	@touch node_modules/.installed
 
@@ -29,7 +31,7 @@ publish: build
 	git push --follow-tags
 
 pack: build
-	npm pack
+	$(DOCKER) npm pack
 
 release-patch:
 	npm version patch
