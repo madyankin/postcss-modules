@@ -1,5 +1,15 @@
 # Changelog
 
+## 8.2.0
+
+### Added
+
+- New `localsConvention` value `'all'` — emit the original class name plus the camelCase and dashes-camelCase variants in one pass.
+- New `localsConvention` value `'none'` — emit only the original class name, with no additional aliases.
+- The function form of `localsConvention` may now return an array of strings. Every entry in the array is added to the locals map and resolves to the same value, which makes it easy to expose a single CSS class under multiple JS-friendly aliases.
+
+Adapted from the unmerged work in [#154](https://github.com/madyankin/postcss-modules/pull/154) by @CarbonORM.
+
 ## 8.1.0
 
 ### Internal
