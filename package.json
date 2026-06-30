@@ -51,6 +51,9 @@
     "test": "make test",
     "precommit": "lint-staged"
   },
+  "overrides": {
+    "glob": "^12.0.0"
+  },
   "lint-staged": {
     "*.{json,md}": [
       "prettier --write",
