@@ -1,5 +1,12 @@
 # Changelog
 
+## 8.1.0
+
+### Internal
+
+- Replaced Babel with swc across the entire toolchain: `@swc/cli` compiles `src/` to `build/`, `@swc/jest` transforms test files, and ESLint now uses its default `espree` parser. Removed five `@babel/*` devDependencies and the unused `@babel/register` runtime hook. The published `build/*.js` keeps the same `module.exports = (opts) => ...; module.exports.postcss = true` shape, so existing CommonJS consumers are unaffected.
+- Pinned transitive `file-type` to v22 via `overrides` to silence `@swc/cli`'s vulnerable dependency chain.
+
 ## 8.0.0
 
 ### Breaking
@@ -21,16 +28,16 @@
 
 ### Breaking
 
--   Dropped support for Node.js 10, 12, 14, and 15. The minimum supported Node.js version is now 18.
+- Dropped support for Node.js 10, 12, 14, and 15. The minimum supported Node.js version is now 18.
 
 ### Security
 
--   Patched 14 Dependabot security alerts in transitive dependencies (`form-data`, `lodash`, `@babel/core`, `@babel/plugin-transform-modules-systemjs`, `uuid`, `picomatch`, `flatted`, `minimatch`, `qs`, `js-yaml`, `nanoid`)
--   Bumped `jest` from 26 to 30 to drop vulnerable `node-notifier`, `sane`, and `jsdom` chains
+- Patched 14 Dependabot security alerts in transitive dependencies (`form-data`, `lodash`, `@babel/core`, `@babel/plugin-transform-modules-systemjs`, `uuid`, `picomatch`, `flatted`, `minimatch`, `qs`, `js-yaml`, `nanoid`)
+- Bumped `jest` from 26 to 30 to drop vulnerable `node-notifier`, `sane`, and `jsdom` chains
 
 ### Internal
 
--   Regenerated Jest snapshots for the new `pretty-format` serializer (cosmetic only; emitted CSS and JSON are unchanged)
+- Regenerated Jest snapshots for the new `pretty-format` serializer (cosmetic only; emitted CSS and JSON are unchanged)
 
 ## 6.0.1
 
