@@ -9,8 +9,8 @@ let fileSystem = {
 };
 
 export function setFileSystem(fs) {
-	fileSystem.readFile = fs.readFile
-	fileSystem.writeFile = fs.writeFile
+	fileSystem.readFile = fs.readFile;
+	fileSystem.writeFile = fs.writeFile;
 }
 
 export function getFileSystem() {

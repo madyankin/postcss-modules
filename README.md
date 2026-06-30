@@ -212,8 +212,8 @@ It's useful when you need to resolve custom path alias.
 
 Parameters:
 
--   `file` — a module we want to resolve
--   `importer` — the file that imports the module we want to resolve
+- `file` — a module we want to resolve
+- `importer` — the file that imports the module we want to resolve
 
 Return value: `string | null | Promise<string | null>`
 
@@ -267,9 +267,7 @@ And you'll get the following HTML:
 
 ```html
 <h1 class="_title_xkpkl_5 _title_116zl_1">postcss-modules</h1>
-<article class="_article_xkpkl_10">
-	A PostCSS plugin to use CSS Modules everywhere
-</article>
+<article class="_article_xkpkl_10">A PostCSS plugin to use CSS Modules everywhere</article>
 ```
 
 ### HTML
@@ -284,9 +282,7 @@ Here is our template `about.html`:
 
 ```html
 <h1 css-module="title">postcss-modules</h1>
-<article css-module="article">
-	A PostCSS plugin to use CSS Modules everywhere
-</article>
+<article css-module="article">A PostCSS plugin to use CSS Modules everywhere</article>
 ```
 
 Transform it:
@@ -310,9 +306,7 @@ And you'll get the following HTML:
 
 ```html
 <h1 class="_title_xkpkl_5 _title_116zl_1">postcss-modules</h1>
-<article class="_article_xkpkl_10">
-	A PostCSS plugin to use CSS Modules everywhere
-</article>
+<article class="_article_xkpkl_10">A PostCSS plugin to use CSS Modules everywhere</article>
 ```
 
 ## May I see the plugin in action?
@@ -329,4 +323,4 @@ npm install --save-dev postcss postcss-modules
 
 ## Sponsors
 
--   Dmitry Olyenyov
+- Dmitry Olyenyov

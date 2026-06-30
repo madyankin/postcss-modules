@@ -1,69 +1,72 @@
 {
-  "name": "postcss-modules",
-  "version": "7.0.0",
-  "description": "PostCSS plugin to use CSS Modules everywhere",
-  "main": "build/index.js",
-  "types": "index.d.ts",
-  "keywords": [
-    "postcss",
-    "css",
-    "postcss-plugin",
-    "modules",
-    "css modules",
-    "components"
-  ],
-  "author": "Alexander Madyankin <alexander@madyankin.name>",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/css-modules/postcss-modules.git"
-  },
-  "dependencies": {
-    "generic-names": "^4.0.0",
-    "icss-utils": "^5.1.0",
-    "lodash.camelcase": "^4.3.0",
-    "postcss-modules-extract-imports": "^3.1.0",
-    "postcss-modules-local-by-default": "^4.0.5",
-    "postcss-modules-scope": "^3.2.0",
-    "postcss-modules-values": "^4.0.0",
-    "string-hash": "^1.1.3"
-  },
-  "peerDependencies": {
-    "postcss": "^8.0.0"
-  },
-  "devDependencies": {
-    "@babel/cli": "^7.17.10",
-    "@babel/core": "^7.18.0",
-    "@babel/eslint-parser": "^7.17.0",
-    "@babel/preset-env": "^7.18.0",
-    "@babel/register": "^7.17.7",
-    "autoprefixer": "^10.0.2",
-    "eslint": "^7.3.1",
-    "eslint-plugin-import": "^2.21.2",
-    "eslint-plugin-jest": "^23.17.0",
-    "husky": "^4.2.5",
-    "jest": "^30.4.2",
-    "lint-staged": "^10.2.11",
-    "postcss": "^8.1.9",
-    "prettier": "^2.0.5"
-  },
-  "scripts": {
-    "test": "make test",
-    "precommit": "lint-staged"
-  },
-  "overrides": {
-    "glob": "^12.0.0"
-  },
-  "lint-staged": {
-    "*.{json,md}": [
-      "prettier --write",
-      "git add"
-    ],
-    "*.js": [
-      "prettier --write",
-      "eslint --fix",
-      "git add"
-    ]
-  },
-  "require": "@babel/register"
+	"name": "postcss-modules",
+	"version": "7.0.0",
+	"description": "PostCSS plugin to use CSS Modules everywhere",
+	"main": "build/index.js",
+	"types": "index.d.ts",
+	"keywords": [
+		"postcss",
+		"css",
+		"postcss-plugin",
+		"modules",
+		"css modules",
+		"components"
+	],
+	"author": "Alexander Madyankin <alexander@madyankin.name>",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/css-modules/postcss-modules.git"
+	},
+	"dependencies": {
+		"generic-names": "^4.0.0",
+		"icss-utils": "^5.1.0",
+		"lodash.camelcase": "^4.3.0",
+		"postcss-modules-extract-imports": "^3.1.0",
+		"postcss-modules-local-by-default": "^4.2.0",
+		"postcss-modules-scope": "^3.2.1",
+		"postcss-modules-values": "^4.0.0",
+		"string-hash": "^1.1.3"
+	},
+	"peerDependencies": {
+		"postcss": "^8.0.0"
+	},
+	"devDependencies": {
+		"@babel/cli": "^8.0.1",
+		"@babel/core": "^8.0.1",
+		"@babel/eslint-parser": "^8.0.1",
+		"@babel/preset-env": "^8.0.2",
+		"@babel/register": "^8.0.1",
+		"@eslint/js": "^9.39.4",
+		"autoprefixer": "^10.5.2",
+		"eslint": "^9.39.0",
+		"eslint-plugin-import": "^2.32.0",
+		"eslint-plugin-jest": "^29.15.4",
+		"globals": "^17.7.0",
+		"husky": "^9.1.7",
+		"jest": "^30.4.2",
+		"lint-staged": "^17.0.8",
+		"postcss": "^8.5.16",
+		"prettier": "^3.9.4"
+	},
+	"engines": {
+		"node": ">=20"
+	},
+	"scripts": {
+		"test": "make test",
+		"prepare": "husky || true"
+	},
+	"overrides": {
+		"glob": "^12.0.0"
+	},
+	"lint-staged": {
+		"*.{json,md}": [
+			"prettier --write"
+		],
+		"*.js": [
+			"prettier --write",
+			"eslint --fix"
+		]
+	},
+	"require": "@babel/register"
 }
