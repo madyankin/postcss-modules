@@ -78,6 +78,12 @@ export function makePlugin(opts) {
 				from: inputFile,
 			});
 
+			// Remove rules whose selector was reduced to whitespace after
+			// `:global { ... }` unwrapping — see #136.
+			css.walkRules((rule) => {
+				if (rule.selector.trim() === "") rule.remove();
+			});
+
 			const out = loader.finalSource;
 			if (out) css.prepend(out);
 
