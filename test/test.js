@@ -194,9 +194,10 @@ it("processes localsConvention with camelCaseOnly option", async () => {
 
 	if (fs.existsSync(jsonFile)) fs.unlinkSync(jsonFile);
 
-	await postcss([
-		plugin({ generateScopedName, localsConvention: "camelCaseOnly" }),
-	]).process(source, { from: sourceFile });
+	await postcss([plugin({ generateScopedName, localsConvention: "camelCaseOnly" })]).process(
+		source,
+		{ from: sourceFile },
+	);
 
 	const json = fs.readFileSync(jsonFile).toString();
 	fs.unlinkSync(jsonFile);
@@ -394,7 +395,7 @@ it("processes resolve option", async () => {
 			resolve: async (file, importer) => {
 				return path.resolve(
 					path.dirname(importer),
-					file.replace(/^test-fixture-in/, path.dirname(sourceFile))
+					file.replace(/^test-fixture-in/, path.dirname(sourceFile)),
 				);
 			},
 			getJSON: (_, result) => {

@@ -58,7 +58,7 @@ export function makePlugin(opts) {
 			const inputFile = css.source.input.file;
 			const pluginList = getDefaultPluginsList(opts, inputFile);
 			const resultPluginIndex = result.processor.plugins.findIndex((plugin) =>
-				isOurPlugin(plugin)
+				isOurPlugin(plugin),
 			);
 			if (resultPluginIndex === -1) {
 				throw new Error("Plugin missing from options.");
