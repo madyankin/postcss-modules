@@ -1,15 +1,18 @@
 BUILD_DIR	= ./build
-EXEC		= npm exec --no-install --
+EXEC		= npm exec --
 
 .PHONY: clean lint test build publish pack release-patch release-minor release-major
 
-node_modules:
+# Reinstall whenever package-lock.json is newer than the marker.
+node_modules/.installed: package-lock.json package.json
 	npm ci
+	@mkdir -p node_modules
+	@touch node_modules/.installed
 
 clean:
 	rm -rf $(BUILD_DIR) *.tgz
 
-lint: node_modules
+lint: node_modules/.installed
 	$(EXEC) eslint src test
 
 test: lint
