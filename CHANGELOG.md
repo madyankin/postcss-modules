@@ -1,5 +1,20 @@
 # Changelog
 
+## 7.0.0
+
+### Breaking
+
+-   Dropped support for Node.js 10, 12, 14, and 15. The minimum supported Node.js version is now 18.
+
+### Security
+
+-   Patched 14 Dependabot security alerts in transitive dependencies (`form-data`, `lodash`, `@babel/core`, `@babel/plugin-transform-modules-systemjs`, `uuid`, `picomatch`, `flatted`, `minimatch`, `qs`, `js-yaml`, `nanoid`)
+-   Bumped `jest` from 26 to 30 to drop vulnerable `node-notifier`, `sane`, and `jsdom` chains
+
+### Internal
+
+-   Regenerated Jest snapshots for the new `pretty-format` serializer (cosmetic only; emitted CSS and JSON are unchanged)
+
 ## 6.0.1
 
 -   Updated dependencies by Bill Collins (@mrginglymus)
