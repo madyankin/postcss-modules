@@ -92,6 +92,35 @@ postcss([
 
 `getJSON` may also return a `Promise`.
 
+## Using with JavaScript imports
+
+### With a bundler
+
+`import styles from "./x.css"` is already supported by every major bundler — they invoke postcss-modules (or its building blocks) under the hood:
+
+- **webpack** — [`css-loader`](https://github.com/webpack-contrib/css-loader) with `{ modules: true }`
+- **Vite** — built-in, files named `*.module.css`
+- **esbuild** — [`esbuild-css-modules-plugin`](https://github.com/indooorsman/esbuild-css-modules-plugin)
+- **Rollup** — [`rollup-plugin-postcss`](https://github.com/egoist/rollup-plugin-postcss) with `modules: true`
+
+### Without a bundler (SSR, Node scripts, Jest/Vitest in node mode)
+
+For Node directly, install the loader hook:
+
+```sh
+node --import postcss-modules/loader app.mjs
+```
+
+```js
+// app.mjs
+import styles from "./button.css";
+console.log(styles.primary); // "_button__primary_xkpkl_5"
+```
+
+Options live in `postcss-modules.config.{js,cjs,mjs}` in your cwd, or set `POSTCSS_MODULES_CONFIG=/path/to/cfg.cjs`. The config object accepts the same options as the PostCSS plugin (`generateScopedName`, `localsConvention`, `scopeBehaviour`, `globalModulePaths`, `Loader`, `resolve`, …).
+
+Requires Node ≥ 20.6 (the version that stabilized `module.register`). The loader returns only the token map; the transformed CSS is not emitted. For HMR, watch mode, or CSS extraction, use a bundler instead.
+
 ### Generating scoped names
 
 By default, the plugin assumes that all the classes are local. You can change

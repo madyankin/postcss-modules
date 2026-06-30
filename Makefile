@@ -1,7 +1,7 @@
 BUILD_DIR	= ./build
 EXEC		= npm exec --
 
-.PHONY: clean lint test build publish pack release-patch release-minor release-major
+.PHONY: clean lint compile test build publish pack release-patch release-minor release-major
 
 # Reinstall whenever package-lock.json is newer than the marker.
 node_modules/.installed: package-lock.json package.json
@@ -15,11 +15,14 @@ clean:
 lint: node_modules/.installed
 	$(EXEC) eslint src test
 
-test: lint
+compile: node_modules/.installed
+	$(EXEC) swc src -d $(BUILD_DIR) --strip-leading-paths --ignore 'src/*.mjs'
+	$(DOCKER) sh -c 'cp src/*.mjs $(BUILD_DIR)/'
+
+test: lint compile
 	$(EXEC) jest
 
 build: clean test
-	$(EXEC) swc src -d $(BUILD_DIR) --strip-leading-paths
 
 publish: build
 	npm publish ./
