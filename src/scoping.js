@@ -33,16 +33,20 @@ export function getDefaultScopeBehaviour(scopeBehaviour) {
 	return scopeBehaviour && isValidBehaviour(scopeBehaviour) ? scopeBehaviour : behaviours.LOCAL;
 }
 
-function generateScopedNameDefault(name, filename, css) {
-	const i = css.indexOf(`.${name}`);
-	const lineNumber = css.substr(0, i).split(/[\r\n]/).length;
-	const hash = stringHash(css).toString(36).substr(0, 5);
+function makeDefaultScopedNameGenerator(hashPrefix) {
+	return function generateScopedNameDefault(name, filename, css) {
+		const i = css.indexOf(`.${name}`);
+		const lineNumber = css.substr(0, i).split(/[\r\n]/).length;
+		const hash = stringHash(`${hashPrefix || ""}${css}`)
+			.toString(36)
+			.substr(0, 5);
 
-	return `_${name}_${hash}_${lineNumber}`;
+		return `_${name}_${hash}_${lineNumber}`;
+	};
 }
 
 export function getScopedNameGenerator(generateScopedName, hashPrefix) {
-	const scopedNameGenerator = generateScopedName || generateScopedNameDefault;
+	const scopedNameGenerator = generateScopedName || makeDefaultScopedNameGenerator(hashPrefix);
 
 	if (typeof scopedNameGenerator === "function") {
 		return scopedNameGenerator;

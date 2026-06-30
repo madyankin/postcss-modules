@@ -374,6 +374,31 @@ it("processes hashPrefix option", async () => {
 	expect(result1.css).not.toEqual(result2.css);
 });
 
+it("drops empty :global rules left behind by Sass-style nesting (#136)", async () => {
+	const source = `:global {\n  /* leading comment */\n}\n:global summary {\n  display: list-item;\n}\n`;
+
+	const result = await postcss([
+		plugin({ generateScopedName: (n) => n, getJSON: () => {} }),
+	]).process(source, { from: "test.css" });
+
+	expect(result.css).not.toMatch(/^\s*\{/m);
+	expect(result.css).toContain("summary {");
+});
+
+it("processes hashPrefix option with the default scope name generator (#160)", async () => {
+	const getJSON = () => {};
+	const withoutHashPrefix = plugin({ getJSON });
+	const withHashPrefix = plugin({ getJSON, hashPrefix: "prefix" });
+
+	const css = ".foo {}";
+	const params = { from: "test.css" };
+
+	const result1 = await postcss([withoutHashPrefix]).process(css, params);
+	const result2 = await postcss([withHashPrefix]).process(css, params);
+
+	expect(result1.css).not.toEqual(result2.css);
+});
+
 it("different instances have different generateScopedName functions", async () => {
 	const one = plugin({
 		generateScopedName: () => "one",

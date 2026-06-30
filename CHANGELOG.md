@@ -1,5 +1,12 @@
 # Changelog
 
+## 8.3.1
+
+### Fixed
+
+- `hashPrefix` is now applied when no custom `generateScopedName` is set. Previously the option was only honoured by `generic-names`, so the built-in default generator silently ignored it. [#160](https://github.com/madyankin/postcss-modules/issues/160)
+- Empty rules left behind after `:global { ... }` unwrapping (e.g. a Sass block containing only a multi-line comment) are now removed instead of emitted as orphaned `{ ... }` blocks. [#136](https://github.com/madyankin/postcss-modules/issues/136)
+
 ## 8.3.0
 
 ### Added
