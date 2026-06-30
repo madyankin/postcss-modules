@@ -191,7 +191,7 @@ postcss([
 
 ### localsConvention
 
-Type: `String | (originalClassName: string, generatedClassName: string, inputFile: string) => className: (string | string[])`
+Type: `String | (originalClassName: string, generatedClassName: string, inputFile: string) => string | string[]`
 Default: `null`
 
 Style of exported classnames, the keys in your json.
@@ -202,10 +202,30 @@ Style of exported classnames, the keys in your json.
 | **`'camelCaseOnly'`** | `{String}` | Class names will be camelized, the original class name will be removed from the locals           |
 |    **`'dashes'`**     | `{String}` | Only dashes in class names will be camelized                                                     |
 |  **`'dashesOnly'`**   | `{String}` | Dashes in class names will be camelized, the original class name will be removed from the locals |
-|      **`'all'`**      | `{String}` | Apply camelCase, dashes, and the original naming convention                                      |
-|     **`'none'`**      | `{String}` | Use only the original class names, with no additional locals                                     |
+|      **`'all'`**      | `{String}` | Emit the original class name plus the camelCase and dashes-camelCase variants                    |
+|     **`'none'`**      | `{String}` | Emit only the original class name (equivalent to leaving `localsConvention` unset)               |
 
-In lieu of a string, a custom function can generate the exported class names. The function may return either a single string or an array of strings; when an array is returned every entry is added to the locals map and resolves to the same value.
+For an input class `foo-bar` resolving to scoped name `_a`:
+
+| Mode            | Emitted locals                                                                              |
+| --------------- | ------------------------------------------------------------------------------------------- |
+| `camelCase`     | `{ "foo-bar": "_a", "fooBar": "_a" }`                                                       |
+| `camelCaseOnly` | `{ "fooBar": "_a" }`                                                                        |
+| `dashes`        | `{ "foo-bar": "_a", "fooBar": "_a" }`                                                       |
+| `dashesOnly`    | `{ "fooBar": "_a" }`                                                                        |
+| `all`           | `{ "foo-bar": "_a", "fooBar": "_a" }` (camelCase + dashesCamelCase collapse for this input) |
+| `none`          | `{ "foo-bar": "_a" }`                                                                       |
+
+In lieu of a string, a custom function can generate the exported class names. The function may return either a single string or an array of strings; when an array is returned every entry is added to the locals map and resolves to the same value:
+
+```js
+postcss([
+	require("postcss-modules")({
+		localsConvention: (original, generated) => [original, generated, original.toUpperCase()],
+	}),
+]);
+// .foo-bar { ... }  →  { "foo-bar": "_a", "_a": "_a", "FOO-BAR": "_a" }
+```
 
 ### Resolve path alias
 
