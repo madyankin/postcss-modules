@@ -13,8 +13,9 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        node-version: [20.x, 22.x, 24.x]
+        node-version: [22.x, 24.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        # Node 20 dropped: EOL April 2026, and 9.0.0 requires `module.register` (Node 20.6+).
 
     runs-on: ${{ matrix.os }}
 

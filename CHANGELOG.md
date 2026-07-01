@@ -1,5 +1,15 @@
 # Changelog
 
+## 9.0.0
+
+### Breaking
+
+- Minimum Node.js bumped from 20 to 20.6, the release that stabilized `module.register`.
+
+### Added
+
+- New `postcss-modules/loader` subpath — an opt-in Node module-customization hook. Run with `node --import postcss-modules/loader app.mjs` and JavaScript files can do `import styles from "./button.css"` to receive the class-name token map as the default export, mirroring `css-loader`'s `modules` workflow. Options live in `postcss-modules.config.{js,cjs,mjs}` in cwd, the `POSTCSS_MODULES_CONFIG` env var, or a `"postcss-modules"` key in `package.json`, and accept the same shape as the PostCSS plugin. Aimed at non-bundler use cases (SSR, Node scripts, Jest/Vitest in node mode); bundler users keep using their existing integrations. [#80](https://github.com/madyankin/postcss-modules/issues/80)
+
 ## 8.3.1
 
 ### Fixed
