@@ -2,6 +2,7 @@ name: Test
 
 env:
   FORCE_COLOR: "1"
+  USE_DOCKER: "0"
 
 on:
   push:
