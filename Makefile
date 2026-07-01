@@ -1,6 +1,13 @@
 BUILD_DIR	= ./build
 NODE_IMAGE	= node:22
-DOCKER		= docker run --rm -v "$(CURDIR)":/app -w /app $(NODE_IMAGE)
+USE_DOCKER	?= 1
+
+ifeq ($(USE_DOCKER),1)
+DOCKER		= docker run --rm -t -e FORCE_COLOR=1 -v "$(CURDIR)":/app -w /app $(NODE_IMAGE)
+else
+DOCKER		=
+endif
+
 EXEC		= $(DOCKER) npm exec --
 
 .PHONY: clean lint compile test build publish pack release-patch release-minor release-major
