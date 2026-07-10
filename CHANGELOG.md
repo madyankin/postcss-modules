@@ -1,5 +1,11 @@
 # Changelog
 
+## 9.0.1
+
+### Fixed
+
+- Added a type declaration for `postcss-modules/loader` so TypeScript users can extend it with `declare module` without hitting a type error. [#172](https://github.com/madyankin/postcss-modules/pull/172) by [@sapphi-red](https://github.com/sapphi-red)
+
 ## 9.0.0
 
 ### Breaking
