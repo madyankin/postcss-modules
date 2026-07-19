@@ -116,10 +116,10 @@ export default class FileSystemLoader {
 		});
 	}
 
-	get finalSource() {
+	get finalSources() {
 		const traces = this.traces;
 		const sources = this.sources;
-		let written = new Set();
+		const written = new Set();
 
 		return Object.keys(traces)
 			.sort(traceKeySorter)
@@ -130,8 +130,12 @@ export default class FileSystemLoader {
 				}
 				written.add(filename);
 
-				return sources[filename];
+				return { file: filename, source: sources[filename] };
 			})
-			.join("");
+			.filter(Boolean);
+	}
+
+	get finalSource() {
+		return this.finalSources.map((entry) => entry.source).join("");
 	}
 }
