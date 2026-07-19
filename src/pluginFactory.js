@@ -84,8 +84,55 @@ export function makePlugin(opts) {
 				if (rule.selector.trim() === "") rule.remove();
 			});
 
-			const out = loader.finalSource;
-			if (out) css.prepend(out);
+			// Prepend the traced dependencies exactly as before, then re-parse
+			// each dependency with its own `from` and graft those sources onto
+			// the prepended nodes, pairing them by position. The pairing holds
+			// because each dependency is complete CSS, so parsing the
+			// concatenation yields the same node sequence as parsing each part.
+			// If malformed CSS merges nodes across a file boundary the counts
+			// differ and the graft is skipped, leaving the nodes unattributed
+			// as before. Plugins that run after this one (e.g. url rewriters)
+			// need `source.input.file` to resolve relative paths against the
+			// file the CSS actually came from — see #149.
+			const sources = Array.isArray(loader.finalSources) ? loader.finalSources : null;
+			if (sources) {
+				const joined = sources.map((entry) => entry.source).join("");
+				if (joined) {
+					const countBefore = css.nodes.length;
+					css.prepend(joined);
+					const prepended = css.nodes.slice(0, css.nodes.length - countBefore);
+					const sourceSeq = [];
+					for (const { file, source } of sources) {
+						postcss.parse(source, { from: file }).walk((node) => {
+							sourceSeq.push(node.source);
+						});
+					}
+					let count = 0;
+					for (const node of prepended) {
+						count += 1;
+						if (typeof node.walk === "function") {
+							node.walk(() => {
+								count += 1;
+							});
+						}
+					}
+					if (count === sourceSeq.length) {
+						let i = 0;
+						for (const node of prepended) {
+							node.source = sourceSeq[i++];
+							if (typeof node.walk === "function") {
+								node.walk((child) => {
+									child.source = sourceSeq[i++];
+								});
+							}
+						}
+					}
+				}
+			} else {
+				// Custom loaders may not implement `finalSources`.
+				const out = loader.finalSource;
+				if (out) css.prepend(out);
+			}
 
 			if (opts.localsConvention) {
 				const reducer = makeLocalsConventionReducer(opts.localsConvention, inputFile);

@@ -129,6 +129,24 @@ p {
 	expect(result.css).toEqual(source.replace("green", "blue"));
 });
 
+it("keeps the source file on CSS prepended from composed dependencies", async () => {
+	const sourceFile = path.join(fixturesPath, "in", "composes.css");
+	const source = fs.readFileSync(sourceFile).toString();
+	const mixinsFile = path.join(fixturesPath, "in", "composes.mixins.css");
+
+	const result = await postcss([plugin({ generateScopedName, getJSON: () => {} })]).process(
+		source,
+		{ from: sourceFile },
+	);
+
+	const fileByDecl = {};
+	result.root.walkDecls((decl) => {
+		fileByDecl[`${decl.prop}: ${decl.value}`] = decl.source.input.file;
+	});
+	expect(fileByDecl["font-size: 40px"]).toEqual(mixinsFile);
+	expect(fileByDecl["color: green"]).toEqual(sourceFile);
+});
+
 it("saves JSON next to CSS by default", async () => {
 	const sourceFile = path.join(fixturesPath, "in", "saveJSON.css");
 	const source = fs.readFileSync(sourceFile).toString();
