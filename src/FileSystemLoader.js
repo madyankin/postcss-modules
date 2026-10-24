@@ -116,6 +116,15 @@ export default class FileSystemLoader {
 		});
 	}
 
+	// Files read through `composes` and `@value` imports, including nested ones,
+	// in the order their CSS is prepended.
+	get dependencies() {
+		const files = Object.keys(this.traces)
+			.sort(traceKeySorter)
+			.map((key) => this.traces[key]);
+		return [...new Set(files)];
+	}
+
 	get finalSource() {
 		const traces = this.traces;
 		const sources = this.sources;

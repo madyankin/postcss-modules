@@ -462,7 +462,61 @@ it("exposes export tokens for other plugins", async () => {
 		from: sourceFile,
 	});
 
-	expect(result.messages).toMatchSnapshot("exposes export tokens for other plugins");
+	const exportMessages = result.messages.filter((message) => message.type === "export");
+	expect(exportMessages).toMatchSnapshot("exposes export tokens for other plugins");
+});
+
+it("reports files read through composes and @value as dependencies", async () => {
+	const dependenciesOf = async (name) => {
+		const sourceFile = path.join(fixturesPath, "in", `${name}.css`);
+		const source = fs.readFileSync(sourceFile).toString();
+		const result = await postcss([plugin({ generateScopedName, getJSON: () => {} })]).process(
+			source,
+			{ from: sourceFile },
+		);
+		return result.messages
+			.filter((message) => message.type === "dependency")
+			.map(({ plugin, file, parent }) => ({
+				plugin,
+				file: path.relative(fixturesPath, file),
+				parent: path.relative(fixturesPath, parent),
+			}))
+			.sort((a, b) => a.file.localeCompare(b.file));
+	};
+
+	expect(await dependenciesOf("composes")).toEqual([
+		{
+			plugin: "postcss-modules",
+			file: path.join("in", "composes.a.css"),
+			parent: path.join("in", "composes.css"),
+		},
+		{
+			plugin: "postcss-modules",
+			file: path.join("in", "composes.mixins.css"),
+			parent: path.join("in", "composes.css"),
+		},
+	]);
+	expect(await dependenciesOf("values")).toEqual([
+		{
+			plugin: "postcss-modules",
+			file: path.join("in", "values.colors.css"),
+			parent: path.join("in", "values.css"),
+		},
+	]);
+	expect(await dependenciesOf("classes")).toEqual([]);
+});
+
+it("reports the processed file as the parent of its dependencies", async () => {
+	const sourceFile = path.join(fixturesPath, "in", "composes.css");
+	const processedFile = path.join(fixturesPath, "in", "entry.css");
+	const root = postcss.parse(fs.readFileSync(sourceFile).toString(), { from: sourceFile });
+	const processor = postcss([plugin({ generateScopedName, getJSON: () => {} })]);
+	const result = await processor.process(root, { from: processedFile });
+
+	const parents = result.messages
+		.filter((message) => message.type === "dependency")
+		.map((message) => message.parent);
+	expect(parents).toEqual([processedFile, processedFile]);
 });
 
 it("processes exportGlobals option", async () => {
