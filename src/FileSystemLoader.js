@@ -135,6 +135,12 @@ export default class FileSystemLoader {
 			.filter(Boolean);
 	}
 
+	// Files read through `composes` and `@value` imports, including nested ones,
+	// in the order their CSS is prepended.
+	get dependencies() {
+		return this.finalSources.map((entry) => entry.file);
+	}
+
 	get finalSource() {
 		return this.finalSources.map((entry) => entry.source).join("");
 	}

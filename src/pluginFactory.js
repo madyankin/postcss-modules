@@ -134,6 +134,17 @@ export function makePlugin(opts) {
 				if (out) css.prepend(out);
 			}
 
+			// Report the files read through `composes` and `@value` imports, so
+			// runners can rebuild this file when one of them changes.
+			for (const file of loader.dependencies || []) {
+				result.messages.push({
+					type: "dependency",
+					plugin: PLUGIN_NAME,
+					file,
+					parent: result.opts.from || inputFile,
+				});
+			}
+
 			if (opts.localsConvention) {
 				const reducer = makeLocalsConventionReducer(opts.localsConvention, inputFile);
 				parser.exportTokens = Object.entries(parser.exportTokens).reduce(reducer, {});
