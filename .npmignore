@@ -10,9 +10,14 @@ src/
 .vscode
 .idea
 .claude
+.husky
+_scratchpad/
 
 gulpfile.js
 undefined.json
 Makefile
 .github
 .browserslistrc
+.swcrc
+eslint.config.mjs
+jest.config.js

@@ -1,5 +1,16 @@
 # Changelog
 
+## 9.1.0
+
+### Added
+
+- Added `scopeBehaviour: "pure"`, matching css-loader's pure CSS Modules mode: every selector branch must contain a local class or ID. Includes TypeScript support, escape comments, dependency validation, and documentation. [#106](https://github.com/madyankin/postcss-modules/issues/106)
+
+### Fixed
+
+- Preserved source filenames on CSS prepended from `composes` dependencies, so downstream plugins can resolve relative paths such as `url()` against the correct file. [#173](https://github.com/madyankin/postcss-modules/pull/173) by [@soreavis](https://github.com/soreavis)
+- Reported files read through `composes` and `@value` as PostCSS dependency messages, allowing watch-mode runners to rebuild when imported CSS changes. [#174](https://github.com/madyankin/postcss-modules/pull/174) by [@mkantautas](https://github.com/mkantautas)
+
 ## 9.0.1
 
 ### Fixed
