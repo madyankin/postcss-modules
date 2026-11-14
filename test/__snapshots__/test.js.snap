@@ -1,5 +1,22 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
+exports[`allows pure CSS Modules selectors: allows pure CSS Modules selectors - CSS 1`] = `
+"._pure_button {
+	color: blue;
+}
+
+._pure_button .icon {
+	color: currentColor;
+}
+"
+`;
+
+exports[`allows pure CSS Modules selectors: allows pure CSS Modules selectors - JSON 1`] = `
+{
+  "button": "_pure_button",
+}
+`;
+
 exports[`allows to make CSS global: allows to make CSS global - CSS 1`] = `
 ".page {
     padding: 20px;
@@ -98,6 +115,25 @@ exports[`generates scoped name with interpolated string: generates scoped name w
   "article": "interpolated__article___MQq7x",
   "title": "interpolated__title___mAhtv",
 }
+`;
+
+exports[`only calls plugins once when it allows pure CSS Modules selectors: plugins once - allows pure CSS Modules selectors - CSS 1`] = `
+"/* validator-2-start (pure.css) */
+
+/* validator-1-start (pure.css) */
+
+._pure_button {
+	color: blue;
+}
+
+._pure_button .icon {
+	color: currentColor;
+}
+
+/* validator-1-end (pure.css) */
+
+/* validator-2-end (pure.css) */
+"
 `;
 
 exports[`only calls plugins once when it allows to make CSS global: plugins once - allows to make CSS global - CSS 1`] = `
@@ -387,6 +423,17 @@ exports[`processes values: processes values - JSON 1`] = `
   "secondary": "blue",
   "title": "_values_title",
 }
+`;
+
+exports[`pure scopeBehaviour lets globalModulePaths override pure mode: pure mode with globalModulePaths 1`] = `
+".page {
+    padding: 20px;
+}
+
+._globalModulePaths_title {
+    color: green;
+}
+"
 `;
 
 exports[`saves origin plugins: saves origin plugins - CSS 1`] = `

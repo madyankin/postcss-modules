@@ -195,13 +195,22 @@ this behaviour using the `scopeBehaviour` option:
 ```js
 postcss([
 	require("postcss-modules")({
-		scopeBehaviour: "global", // can be 'global' or 'local',
+		scopeBehaviour: "global", // can be 'global', 'local' or 'pure',
 	}),
 ]);
 ```
 
+Like `local` mode, `pure` mode localizes class and ID names, but it also requires
+every comma-separated selector branch to contain at least one local class or ID.
+For example, `.button :global(.icon)` is allowed, while `:global(.page)` is
+rejected. Add `/* cssmodules-pure-ignore */` immediately before a selector or
+at-rule to skip this check once, or put
+`/* cssmodules-pure-no-check */` at the top of a file to disable the check for
+the whole file.
+
 To define paths for global modules, use the `globalModulePaths` option.
-It is an array with regular expressions defining the paths:
+It is an array with regular expressions defining the paths. Matching files are
+treated as global even when `scopeBehaviour` is `"pure"`:
 
 ```js
 postcss([

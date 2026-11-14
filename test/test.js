@@ -24,6 +24,7 @@ const cases = {
 	values: "processes values",
 	interpolated: "generates scoped name with interpolated string",
 	global: "allows to make CSS global",
+	pure: "allows pure CSS Modules selectors",
 	localShorthand: "processes :local shorthand selector",
 	globalShorthand: "processes :global shorthand selector",
 };
@@ -39,10 +40,12 @@ Object.keys(cases).forEach((name) => {
 	const scopedNameGenerator =
 		name === "interpolated" ? "[name]__[local]___[hash:base64:5]" : generateScopedName;
 
-	const scopeBehaviour =
-		name === behaviours.GLOBAL || name === "globalShorthand"
-			? behaviours.GLOBAL
-			: behaviours.LOCAL;
+	let scopeBehaviour = behaviours.LOCAL;
+	if (name === behaviours.GLOBAL || name === "globalShorthand") {
+		scopeBehaviour = behaviours.GLOBAL;
+	} else if (name === behaviours.PURE) {
+		scopeBehaviour = behaviours.PURE;
+	}
 
 	it(description, async () => {
 		const sourceFile = path.join(fixturesPath, "in", `${name}.css`);
@@ -179,6 +182,75 @@ it("processes globalModulePaths option", async () => {
 	});
 
 	expect(result.css).toMatchSnapshot("processes globalModulePaths option");
+});
+
+describe("pure scopeBehaviour", () => {
+	const processPure = (source, from = "pure.css", options = {}) =>
+		postcss([
+			plugin({
+				scopeBehaviour: behaviours.PURE,
+				generateScopedName,
+				getJSON: () => {},
+				...options,
+			}),
+		]).process(source, { from });
+	const getPureError = async (...args) => {
+		try {
+			await processPure(...args);
+		} catch (error) {
+			return error;
+		}
+		throw new Error("Expected pure mode to reject the CSS");
+	};
+
+	it.each([
+		[":global(.page) { color: blue; }", ":global(.page)"],
+		[".local, :global(.global) { color: blue; }", ":global(.global)"],
+	])("rejects a selector branch without a local class or ID", async (source, selector) => {
+		const error = await getPureError(source);
+
+		expect(error.message).toMatch(/is not pure/);
+		expect(error.message).toContain(selector);
+	});
+
+	it("rejects global keyframes", async () => {
+		const source = "@keyframes :global(fade) { from { opacity: 0; } to { opacity: 1; } }";
+
+		await expect(processPure(source)).rejects.toThrow(/not allowed in pure mode/);
+	});
+
+	it("lets globalModulePaths override pure mode", async () => {
+		const sourceFile = path.join(fixturesPath, "in", "globalModulePaths.css");
+		const source = fs.readFileSync(sourceFile).toString();
+
+		const result = await processPure(source, sourceFile, {
+			globalModulePaths: [/globalModulePaths/],
+		});
+
+		expect(result.css).toMatchSnapshot("pure mode with globalModulePaths");
+	});
+
+	it("reports an invalid composed dependency as the error source", async () => {
+		const sourceFile = path.join(fixturesPath, "in", "pureComposes.css");
+		const source = fs.readFileSync(sourceFile).toString();
+		const dependencyFile = path.join(fixturesPath, "in", "pureComposes.invalid.css");
+		const error = await getPureError(source, sourceFile);
+
+		expect(error).toMatchObject({ file: dependencyFile });
+		expect(error.message).toMatch(/is not pure/);
+	});
+
+	it("keeps the runtime fallback for an unknown behaviour", async () => {
+		const result = await postcss([
+			plugin({
+				scopeBehaviour: "unknown",
+				generateScopedName,
+				getJSON: () => {},
+			}),
+		]).process(".button {}", { from: "fallback.css" });
+
+		expect(result.css).toEqual("._fallback_button {}");
+	});
 });
 
 it("processes localsConvention with camelCase option", async () => {

@@ -1,0 +1,3 @@
+.button {
+	composes: invalid from "./pureComposes.invalid.css";
+}

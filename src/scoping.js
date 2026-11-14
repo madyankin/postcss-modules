@@ -8,6 +8,7 @@ import values from "postcss-modules-values";
 export const behaviours = {
 	LOCAL: "local",
 	GLOBAL: "global",
+	PURE: "pure",
 };
 
 export function getDefaultPlugins({ behaviour, generateScopedName, exportGlobals }) {
@@ -16,6 +17,7 @@ export function getDefaultPlugins({ behaviour, generateScopedName, exportGlobals
 	const plugins = {
 		[behaviours.LOCAL]: [values, localByDefault({ mode: "local" }), extractImports, scope],
 		[behaviours.GLOBAL]: [values, localByDefault({ mode: "global" }), extractImports, scope],
+		[behaviours.PURE]: [values, localByDefault({ mode: "pure" }), extractImports, scope],
 	};
 
 	return plugins[behaviour];

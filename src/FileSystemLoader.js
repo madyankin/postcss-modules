@@ -99,19 +99,26 @@ export default class FileSystemLoader {
 
 		return new Promise((resolve, reject) => {
 			this.fs.readFile(fileRelativePath, "utf-8", async (err, source) => {
-				if (err) reject(err);
+				if (err) {
+					reject(err);
+					return;
+				}
 
-				const { injectableSource, exportTokens } = await this.core.load(
-					source,
-					rootRelativePath,
-					trace,
-					this.fetch.bind(this),
-				);
+				try {
+					const { injectableSource, exportTokens } = await this.core.load(
+						source,
+						rootRelativePath,
+						trace,
+						this.fetch.bind(this),
+					);
 
-				this.sources[fileRelativePath] = injectableSource;
-				this.traces[trace] = fileRelativePath;
-				this.tokensByFile[fileRelativePath] = exportTokens;
-				resolve(exportTokens);
+					this.sources[fileRelativePath] = injectableSource;
+					this.traces[trace] = fileRelativePath;
+					this.tokensByFile[fileRelativePath] = exportTokens;
+					resolve(exportTokens);
+				} catch (error) {
+					reject(error);
+				}
 			});
 		});
 	}

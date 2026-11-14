@@ -28,7 +28,7 @@ declare interface Options {
 		| "none"
 		| LocalsConventionFunction;
 
-	scopeBehaviour?: "global" | "local";
+	scopeBehaviour?: "global" | "local" | "pure";
 	globalModulePaths?: RegExp[];
 
 	generateScopedName?: string | GenerateScopedNameFunction;

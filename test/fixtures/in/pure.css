@@ -1,0 +1,7 @@
+.button {
+	color: blue;
+}
+
+.button :global(.icon) {
+	color: currentColor;
+}
