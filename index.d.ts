@@ -2,6 +2,11 @@ import type { Plugin } from "postcss";
 
 declare type GenerateScopedNameFunction = (name: string, filename: string, css: string) => string;
 
+declare type ResolveFunction = (
+	file: string,
+	importer: string,
+) => string | null | Promise<string | null>;
+
 declare type LocalsConventionFunction = (
 	originalClassName: string,
 	generatedClassName: string,
@@ -9,7 +14,7 @@ declare type LocalsConventionFunction = (
 ) => string | string[];
 
 declare class Loader {
-	constructor(root: string, plugins: Plugin[]);
+	constructor(root: string, plugins: Plugin[], resolve?: ResolveFunction);
 
 	fetch(
 		file: string,
@@ -18,6 +23,8 @@ declare class Loader {
 	): Promise<{ [key: string]: string }>;
 
 	finalSource?: string | undefined;
+	finalSources?: { file: string; source: string }[] | undefined;
+	dependencies?: string[] | undefined;
 }
 
 declare interface Options {
@@ -43,7 +50,7 @@ declare interface Options {
 
 	Loader?: typeof Loader;
 
-	resolve?: (file: string, importer: string) => string | null | Promise<string | null>;
+	resolve?: ResolveFunction;
 }
 
 declare interface PostcssModulesPlugin {
