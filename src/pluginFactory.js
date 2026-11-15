@@ -3,53 +3,21 @@ import unquote from "./unquote";
 import Parser from "./Parser";
 import createJSONWriter from "./saveJSON";
 import { makeLocalsConventionReducer } from "./localsConvention";
-import FileSystemLoader from "./FileSystemLoader";
+import { createLoader } from "./createLoader";
 import { prependDependencySources } from "./prependDependencySources";
 import { addDependencyMessages, addExportMessage } from "./resultMessages";
-import {
-	getDefaultPlugins,
-	getDefaultScopeBehaviour,
-	behaviours,
-	getScopedNameGenerator,
-} from "./scoping";
+import { getDefaultPluginsList } from "./scoping";
 
 const PLUGIN_NAME = "postcss-modules";
 
-function isGlobalModule(globalModules, inputFile) {
-	return globalModules.some((regex) => inputFile.match(regex));
-}
-
-function getDefaultPluginsList(opts, inputFile) {
-	const globalModulesList = opts.globalModulePaths || null;
-	const exportGlobals = opts.exportGlobals || false;
-	const defaultBehaviour = getDefaultScopeBehaviour(opts.scopeBehaviour);
-	const generateScopedName = getScopedNameGenerator(opts.generateScopedName, opts.hashPrefix);
-
-	if (globalModulesList && isGlobalModule(globalModulesList, inputFile)) {
-		return getDefaultPlugins({
-			behaviour: behaviours.GLOBAL,
-			generateScopedName,
-			exportGlobals,
-		});
-	}
-
-	return getDefaultPlugins({
-		behaviour: defaultBehaviour,
-		generateScopedName,
-		exportGlobals,
-	});
-}
-
-function getLoader(opts, plugins, fileSystem) {
-	const root = typeof opts.root === "undefined" ? "/" : opts.root;
-
-	return typeof opts.Loader === "function"
-		? new opts.Loader(root, plugins, opts.resolve)
-		: new FileSystemLoader(root, plugins, opts.resolve, fileSystem);
-}
-
 function isOurPlugin(plugin) {
 	return plugin.postcssPlugin === PLUGIN_NAME;
+}
+
+function removeEmptySelectors(css) {
+	css.walkRules((rule) => {
+		if (rule.selector.trim() === "") rule.remove();
+	});
 }
 
 export function makePlugin(opts, { fileSystem } = {}) {
@@ -68,7 +36,7 @@ export function makePlugin(opts, { fileSystem } = {}) {
 
 			const earlierPlugins = result.processor.plugins.slice(0, resultPluginIndex);
 			const loaderPlugins = [...earlierPlugins, ...pluginList];
-			const loader = getLoader(opts, loaderPlugins, fileSystem);
+			const loader = createLoader(opts, loaderPlugins, fileSystem);
 
 			const fetcher = async (file, relativeTo, dependencyPath) => {
 				const unquoteFile = unquote(file);
@@ -82,9 +50,7 @@ export function makePlugin(opts, { fileSystem } = {}) {
 
 			// Remove rules whose selector was reduced to whitespace after
 			// `:global { ... }` unwrapping — see #136.
-			css.walkRules((rule) => {
-				if (rule.selector.trim() === "") rule.remove();
-			});
+			removeEmptySelectors(css);
 
 			prependDependencySources(css, loader);
 			addDependencyMessages(result, loader, inputFile);

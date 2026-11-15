@@ -38,10 +38,10 @@ export function getDefaultScopeBehaviour(scopeBehaviour) {
 function makeDefaultScopedNameGenerator(hashPrefix) {
 	return function generateScopedNameDefault(name, filename, css) {
 		const i = css.indexOf(`.${name}`);
-		const lineNumber = css.substr(0, i).split(/[\r\n]/).length;
+		const lineNumber = css.slice(0, i).split(/[\r\n]/).length;
 		const hash = stringHash(`${hashPrefix || ""}${css}`)
 			.toString(36)
-			.substr(0, 5);
+			.slice(0, 5);
 
 		return `_${name}_${hash}_${lineNumber}`;
 	};
@@ -58,4 +58,21 @@ export function getScopedNameGenerator(generateScopedName, hashPrefix) {
 		context: process.cwd(),
 		hashPrefix: hashPrefix,
 	});
+}
+
+function isGlobalModule(globalModules, inputFile) {
+	return globalModules.some((regex) => inputFile.match(regex));
+}
+
+export function getDefaultPluginsList(opts, inputFile) {
+	const globalModules = opts.globalModulePaths || null;
+	const exportGlobals = opts.exportGlobals || false;
+	const generateScopedName = getScopedNameGenerator(opts.generateScopedName, opts.hashPrefix);
+	const configuredBehaviour = getDefaultScopeBehaviour(opts.scopeBehaviour);
+	const behaviour =
+		globalModules && isGlobalModule(globalModules, inputFile)
+			? behaviours.GLOBAL
+			: configuredBehaviour;
+
+	return getDefaultPlugins({ behaviour, generateScopedName, exportGlobals });
 }
