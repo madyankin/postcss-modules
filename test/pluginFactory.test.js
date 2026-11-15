@@ -120,3 +120,52 @@ it("awaits getJSON and passes its public arguments exactly once", async () => {
 	await processing;
 	expect(processingSettled).toBe(true);
 });
+
+function createMemoryFileSystem(files) {
+	const reads = [];
+	const writes = [];
+	return {
+		reads,
+		writes,
+		readFile(file, encoding, callback) {
+			reads.push({ file, encoding });
+			callback(null, files[file]);
+		},
+		writeFile(file, contents, callback) {
+			writes.push({ file, contents });
+			callback(null);
+		},
+	};
+}
+
+it("keeps filesystem dependencies isolated between plugin instances", async () => {
+	const firstFileSystem = createMemoryFileSystem({
+		"/first/dependency.css": ".shared {}",
+	});
+	const secondFileSystem = createMemoryFileSystem({
+		"/second/dependency.css": ".shared {}",
+	});
+	const source = '.button { composes: shared from "./dependency.css"; }';
+	const makeIsolatedPlugin = (prefix, fileSystem) =>
+		makePlugin({ generateScopedName: (name) => `${prefix}_${name}` }, { fileSystem });
+
+	await Promise.all([
+		postcss([makeIsolatedPlugin("first", firstFileSystem)]).process(source, {
+			from: "/first/input.css",
+		}),
+		postcss([makeIsolatedPlugin("second", secondFileSystem)]).process(source, {
+			from: "/second/input.css",
+		}),
+	]);
+
+	expect(firstFileSystem.reads).toEqual([{ file: "/first/dependency.css", encoding: "utf-8" }]);
+	expect(secondFileSystem.reads).toEqual([{ file: "/second/dependency.css", encoding: "utf-8" }]);
+	expect(firstFileSystem.writes.map(({ file }) => file)).toEqual(["/first/input.css.json"]);
+	expect(secondFileSystem.writes.map(({ file }) => file)).toEqual(["/second/input.css.json"]);
+	expect(JSON.parse(firstFileSystem.writes[0].contents)).toEqual({
+		button: "first_button first_shared",
+	});
+	expect(JSON.parse(secondFileSystem.writes[0].contents)).toEqual({
+		button: "second_button second_shared",
+	});
+});

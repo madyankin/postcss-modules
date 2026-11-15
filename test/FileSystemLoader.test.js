@@ -2,7 +2,6 @@ import fs from "fs";
 import os from "os";
 import path from "path";
 import FileSystemLoader from "../src/FileSystemLoader";
-import { setFileSystem } from "../src/fs";
 import { behaviours, getDefaultPlugins } from "../src/scoping";
 
 const nodeFileSystem = {
@@ -29,18 +28,16 @@ describe("FileSystemLoader compatibility", () => {
 
 	beforeEach(() => {
 		directory = fs.mkdtempSync(path.join(os.tmpdir(), "postcss-modules-loader-"));
-		setFileSystem(nodeFileSystem);
 	});
 
 	afterEach(() => {
-		setFileSystem(nodeFileSystem);
 		fs.rmSync(directory, { recursive: true, force: true });
 	});
 
 	it("resolves relative imports from the importing file", async () => {
 		const entry = writeCSS(directory, "entry");
 		const dependency = writeCSS(directory, "dependency");
-		const loader = new FileSystemLoader("/", makePlugins());
+		const loader = new FileSystemLoader("/", makePlugins(), undefined, nodeFileSystem);
 
 		await expect(loader.fetch("./dependency.css", entry, "A")).resolves.toEqual({
 			dependency: "_dependency",
@@ -52,7 +49,7 @@ describe("FileSystemLoader compatibility", () => {
 		const entry = writeCSS(directory, "entry");
 		const dependency = writeCSS(directory, "resolved");
 		const resolve = jest.fn(async () => dependency);
-		const loader = new FileSystemLoader("/ignored", makePlugins(), resolve);
+		const loader = new FileSystemLoader("/ignored", makePlugins(), resolve, nodeFileSystem);
 
 		await loader.fetch("alias", entry, "A");
 
@@ -62,7 +59,12 @@ describe("FileSystemLoader compatibility", () => {
 
 	it("rejects a relative path returned by a custom resolver", async () => {
 		const entry = writeCSS(directory, "entry");
-		const loader = new FileSystemLoader("/", makePlugins(), async () => "relative.css");
+		const loader = new FileSystemLoader(
+			"/",
+			makePlugins(),
+			async () => "relative.css",
+			nodeFileSystem,
+		);
 
 		await expect(loader.fetch("alias", entry, "A")).rejects.toThrow(
 			'The returned path from the "fileResolve" option must be absolute.',
@@ -73,7 +75,7 @@ describe("FileSystemLoader compatibility", () => {
 		const entry = writeCSS(directory, "entry");
 		const specifier = "istanbul-reports/lib/html/assets/base.css";
 		const dependency = require.resolve(specifier);
-		const loader = new FileSystemLoader("/", makePlugins());
+		const loader = new FileSystemLoader("/", makePlugins(), undefined, nodeFileSystem);
 
 		await loader.fetch(specifier, entry, "A");
 
@@ -84,14 +86,14 @@ describe("FileSystemLoader compatibility", () => {
 		const entry = writeCSS(directory, "entry");
 		const dependency = writeCSS(directory, "dependency");
 		let dependencyReads = 0;
-		setFileSystem({
+		const fileSystem = {
 			...nodeFileSystem,
 			readFile(filename, ...args) {
 				if (filename === dependency) dependencyReads += 1;
 				return fs.readFile(filename, ...args);
 			},
-		});
-		const loader = new FileSystemLoader("/", makePlugins());
+		};
+		const loader = new FileSystemLoader("/", makePlugins(), undefined, fileSystem);
 
 		const first = await loader.fetch("./dependency.css", entry, "A");
 		const second = await loader.fetch("./dependency.css", entry, "B");
@@ -106,7 +108,7 @@ describe("FileSystemLoader compatibility", () => {
 		const importer = writeCSS(directory, "importer", ".importer { order: importer; }");
 		const nested = writeCSS(directory, "nested", ".nested { order: nested; }");
 		const sibling = writeCSS(directory, "sibling", ".sibling { order: sibling; }");
-		const loader = new FileSystemLoader("/", makePlugins());
+		const loader = new FileSystemLoader("/", makePlugins(), undefined, nodeFileSystem);
 
 		await loader.fetch(nested, entry, "AA");
 		await loader.fetch(sibling, entry, "AB");

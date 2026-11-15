@@ -1,6 +1,5 @@
 // Initially copied from https://github.com/css-modules/css-modules-loader-core
 
-import { getFileSystem } from "./fs";
 import DependencyStore from "./DependencyStore";
 import { createImportedCSSProcessor } from "./processImportedCSS";
 import { normalizeRoot, resolveImport } from "./resolveImport";
@@ -13,12 +12,12 @@ export default class FileSystemLoader {
 	#root;
 	#store;
 
-	constructor(root, plugins, fileResolve) {
+	constructor(root, plugins, fileResolve, fileSystem) {
 		this.#root = normalizeRoot(root);
 		this.#fileResolve = fileResolve;
 		this.#processImportedCSS = createImportedCSSProcessor(plugins);
 		this.#store = new DependencyStore();
-		this.#fileSystem = getFileSystem();
+		this.#fileSystem = fileSystem;
 	}
 
 	async fetch(_request, relativeTo, _dependencyPath) {

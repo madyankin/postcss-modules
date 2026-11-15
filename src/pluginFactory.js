@@ -1,7 +1,7 @@
 import postcss from "postcss";
 import unquote from "./unquote";
 import Parser from "./Parser";
-import saveJSON from "./saveJSON";
+import createJSONWriter from "./saveJSON";
 import { makeLocalsConventionReducer } from "./localsConvention";
 import FileSystemLoader from "./FileSystemLoader";
 import { prependDependencySources } from "./prependDependencySources";
@@ -40,23 +40,23 @@ function getDefaultPluginsList(opts, inputFile) {
 	});
 }
 
-function getLoader(opts, plugins) {
+function getLoader(opts, plugins, fileSystem) {
 	const root = typeof opts.root === "undefined" ? "/" : opts.root;
 
 	return typeof opts.Loader === "function"
 		? new opts.Loader(root, plugins, opts.resolve)
-		: new FileSystemLoader(root, plugins, opts.resolve);
+		: new FileSystemLoader(root, plugins, opts.resolve, fileSystem);
 }
 
 function isOurPlugin(plugin) {
 	return plugin.postcssPlugin === PLUGIN_NAME;
 }
 
-export function makePlugin(opts) {
+export function makePlugin(opts, { fileSystem } = {}) {
 	return {
 		postcssPlugin: PLUGIN_NAME,
 		async OnceExit(css, { result }) {
-			const getJSON = opts.getJSON || saveJSON;
+			const getJSON = opts.getJSON || createJSONWriter(fileSystem.writeFile);
 			const inputFile = css.source.input.file;
 			const pluginList = getDefaultPluginsList(opts, inputFile);
 			const resultPluginIndex = result.processor.plugins.findIndex((plugin) =>
@@ -68,7 +68,7 @@ export function makePlugin(opts) {
 
 			const earlierPlugins = result.processor.plugins.slice(0, resultPluginIndex);
 			const loaderPlugins = [...earlierPlugins, ...pluginList];
-			const loader = getLoader(opts, loaderPlugins);
+			const loader = getLoader(opts, loaderPlugins, fileSystem);
 
 			const fetcher = async (file, relativeTo, dependencyPath) => {
 				const unquoteFile = unquote(file);
