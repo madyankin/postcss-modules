@@ -70,9 +70,9 @@ export function makePlugin(opts) {
 			const loaderPlugins = [...earlierPlugins, ...pluginList];
 			const loader = getLoader(opts, loaderPlugins);
 
-			const fetcher = async (file, relativeTo, depTrace) => {
+			const fetcher = async (file, relativeTo, dependencyPath) => {
 				const unquoteFile = unquote(file);
-				return loader.fetch.call(loader, unquoteFile, relativeTo, depTrace);
+				return loader.fetch.call(loader, unquoteFile, relativeTo, dependencyPath);
 			};
 			const parser = new Parser(fetcher);
 

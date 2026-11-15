@@ -4,12 +4,12 @@ const importRegexp = /^:import\((.+)\)$/;
 import { replaceSymbols } from "icss-utils";
 
 export default class Parser {
-	constructor(pathFetcher, trace) {
+	constructor(pathFetcher, dependencyPath) {
 		this.pathFetcher = pathFetcher;
 		this.plugin = this.plugin.bind(this);
 		this.exportTokens = {};
 		this.translations = {};
-		this.trace = trace;
+		this.dependencyPath = dependencyPath;
 	}
 
 	plugin() {
@@ -58,9 +58,9 @@ export default class Parser {
 
 	async fetchImport(importNode, relativeTo, depNr) {
 		const file = importNode.selector.match(importRegexp)[1];
-		const depTrace = this.trace + String.fromCharCode(depNr);
+		const childDependencyPath = this.dependencyPath + String.fromCharCode(depNr);
 
-		const exports = await this.pathFetcher(file, relativeTo, depTrace);
+		const exports = await this.pathFetcher(file, relativeTo, childDependencyPath);
 
 		try {
 			importNode.each((decl) => {

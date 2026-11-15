@@ -5,13 +5,17 @@ declare type GenerateScopedNameFunction = (name: string, filename: string, css: 
 declare type LocalsConventionFunction = (
 	originalClassName: string,
 	generatedClassName: string,
-	inputFile: string
+	inputFile: string,
 ) => string | string[];
 
 declare class Loader {
 	constructor(root: string, plugins: Plugin[]);
 
-	fetch(file: string, relativeTo: string, depTrace: string): Promise<{ [key: string]: string }>;
+	fetch(
+		file: string,
+		relativeTo: string,
+		dependencyPath: string,
+	): Promise<{ [key: string]: string }>;
 
 	finalSource?: string | undefined;
 }

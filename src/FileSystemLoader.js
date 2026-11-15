@@ -1,154 +1,91 @@
 // Initially copied from https://github.com/css-modules/css-modules-loader-core
 
-import postcss from "postcss";
-import path from "path";
-
-import Parser from "./Parser";
 import { getFileSystem } from "./fs";
-
-class Core {
-	constructor(plugins) {
-		this.plugins = plugins || Core.defaultPlugins;
-	}
-
-	async load(sourceString, sourcePath, trace, pathFetcher) {
-		const parser = new Parser(pathFetcher, trace);
-		const plugins = this.plugins.concat([parser.plugin()]);
-
-		const result = await postcss(plugins).process(sourceString, {
-			from: sourcePath,
-		});
-
-		return {
-			injectableSource: result.css,
-			exportTokens: parser.exportTokens,
-		};
-	}
-}
-
-// Sorts dependencies in the following way:
-// AAA comes before AA and A
-// AB comes after AA and before A
-// All Bs come after all As
-// This ensures that the files are always returned in the following order:
-// - In the order they were required, except
-// - After all their dependencies
-const traceKeySorter = (a, b) => {
-	if (a.length < b.length) {
-		return a < b.substring(0, a.length) ? -1 : 1;
-	}
-
-	if (a.length > b.length) {
-		return a.substring(0, b.length) <= b ? -1 : 1;
-	}
-
-	return a < b ? -1 : 1;
-};
+import DependencyStore from "./DependencyStore";
+import { createImportedCSSProcessor } from "./processImportedCSS";
+import { normalizeRoot, resolveImport } from "./resolveImport";
 
 export default class FileSystemLoader {
-	constructor(root, plugins, fileResolve) {
-		if (root === "/" && process.platform === "win32") {
-			const cwdDrive = process.cwd().slice(0, 3);
-			if (!/^[A-Za-z]:\\$/.test(cwdDrive)) {
-				throw new Error(`Failed to obtain root from "${process.cwd()}".`);
-			}
-			root = cwdDrive;
-		}
+	#fileResolve;
+	#fileSystem;
+	#nextImportIndex = 0;
+	#processImportedCSS;
+	#root;
+	#store;
 
-		this.root = root;
-		this.fileResolve = fileResolve;
-		this.sources = {};
-		this.traces = {};
-		this.importNr = 0;
-		this.core = new Core(plugins);
-		this.tokensByFile = {};
-		this.fs = getFileSystem();
+	constructor(root, plugins, fileResolve) {
+		this.#root = normalizeRoot(root);
+		this.#fileResolve = fileResolve;
+		this.#processImportedCSS = createImportedCSSProcessor(plugins);
+		this.#store = new DependencyStore();
+		this.#fileSystem = getFileSystem();
 	}
 
-	async fetch(_newPath, relativeTo, _trace) {
-		const newPath = _newPath.replace(/^["']|["']$/g, "");
-		const trace = _trace || String.fromCharCode(this.importNr++);
-		const useFileResolve = typeof this.fileResolve === "function";
+	async fetch(_request, relativeTo, _dependencyPath) {
+		const request = this.#normalizeRequest(_request);
+		const dependencyPath = this.#getOrCreateDependencyPath(_dependencyPath);
+		const { filePath, sourcePath } = await this.#resolvePaths(request, relativeTo);
+		const cachedTokens = this.#store.getTokens(filePath);
+		if (cachedTokens) return cachedTokens;
 
-		const fileResolvedPath = useFileResolve
-			? await this.fileResolve(newPath, relativeTo)
-			: await Promise.resolve();
+		const source = await this.#readFile(filePath);
+		const result = await this.#processSource(source, sourcePath, dependencyPath);
+		this.#recordDependency(filePath, dependencyPath, result);
 
-		if (fileResolvedPath && !path.isAbsolute(fileResolvedPath)) {
-			throw new Error('The returned path from the "fileResolve" option must be absolute.');
-		}
-
-		const relativeDir = path.dirname(relativeTo);
-
-		const rootRelativePath = fileResolvedPath || path.resolve(relativeDir, newPath);
-
-		let fileRelativePath =
-			fileResolvedPath || path.resolve(path.resolve(this.root, relativeDir), newPath);
-
-		// if the path is not relative or absolute, try to resolve it in node_modules
-		if (!useFileResolve && newPath[0] !== "." && !path.isAbsolute(newPath)) {
-			try {
-				fileRelativePath = require.resolve(newPath);
-			} catch {
-				// noop
-			}
-		}
-
-		const tokens = this.tokensByFile[fileRelativePath];
-		if (tokens) return tokens;
-
-		return new Promise((resolve, reject) => {
-			this.fs.readFile(fileRelativePath, "utf-8", async (err, source) => {
-				if (err) {
-					reject(err);
-					return;
-				}
-
-				try {
-					const { injectableSource, exportTokens } = await this.core.load(
-						source,
-						rootRelativePath,
-						trace,
-						this.fetch.bind(this),
-					);
-
-					this.sources[fileRelativePath] = injectableSource;
-					this.traces[trace] = fileRelativePath;
-					this.tokensByFile[fileRelativePath] = exportTokens;
-					resolve(exportTokens);
-				} catch (error) {
-					reject(error);
-				}
-			});
-		});
+		const { exportTokens } = result;
+		return exportTokens;
 	}
 
 	get finalSources() {
-		const traces = this.traces;
-		const sources = this.sources;
-		const written = new Set();
-
-		return Object.keys(traces)
-			.sort(traceKeySorter)
-			.map((key) => {
-				const filename = traces[key];
-				if (written.has(filename)) {
-					return null;
-				}
-				written.add(filename);
-
-				return { file: filename, source: sources[filename] };
-			})
-			.filter(Boolean);
+		return this.#store.finalSources;
 	}
 
 	// Files read through `composes` and `@value` imports, including nested ones,
 	// in the order their CSS is prepended.
 	get dependencies() {
-		return this.finalSources.map((entry) => entry.file);
+		return this.#store.dependencies;
 	}
 
 	get finalSource() {
-		return this.finalSources.map((entry) => entry.source).join("");
+		return this.#store.finalSource;
+	}
+
+	#normalizeRequest(request) {
+		return request.replace(/^["']|["']$/g, "");
+	}
+
+	#getOrCreateDependencyPath(dependencyPath) {
+		return dependencyPath || String.fromCharCode(this.#nextImportIndex++);
+	}
+
+	#resolvePaths(request, relativeTo) {
+		return resolveImport({
+			request,
+			relativeTo,
+			root: this.#root,
+			fileResolve: this.#fileResolve,
+		});
+	}
+
+	#readFile(filePath) {
+		return new Promise((resolve, reject) => {
+			this.#fileSystem.readFile(filePath, "utf-8", (error, contents) => {
+				if (error) reject(error);
+				else resolve(contents);
+			});
+		});
+	}
+
+	#processSource(source, sourcePath, dependencyPath) {
+		return this.#processImportedCSS(source, sourcePath, dependencyPath, this.fetch.bind(this));
+	}
+
+	#recordDependency(filePath, dependencyPath, { injectableSource, exportTokens }) {
+		this.#store.record({
+			file: filePath,
+			dependencyPath,
+			source: injectableSource,
+			tokens: exportTokens,
+		});
 	}
 }
