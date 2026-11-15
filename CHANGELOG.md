@@ -1,5 +1,15 @@
 # Changelog
 
+## 9.1.1
+
+### Fixed
+
+- Updated the custom loader TypeScript declaration to include the resolver argument and optional dependency source outputs already supported at runtime.
+
+### Internal
+
+- Split plugin orchestration, dependency processing, path resolution, graph storage, and filesystem access into focused modules without changing generated CSS, tokens, messages, or custom loader behavior.
+
 ## 9.1.0
 
 ### Added
