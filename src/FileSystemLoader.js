@@ -20,15 +20,21 @@ export default class FileSystemLoader {
 		this.#fileSystem = fileSystem;
 	}
 
-	async fetch(_request, relativeTo, _dependencyPath) {
+	async fetch(_request, relativeTo, _dependencyPath, ancestors = []) {
 		const request = this.#normalizeRequest(_request);
 		const dependencyPath = this.#getOrCreateDependencyPath(_dependencyPath);
 		const { filePath, sourcePath } = await this.#resolvePaths(request, relativeTo);
+		if (ancestors.includes(filePath)) {
+			throw new Error(`Circular dependency: ${[...ancestors, filePath].join(" -> ")}`);
+		}
 		const cachedTokens = this.#store.getTokens(filePath);
 		if (cachedTokens) return cachedTokens;
 
 		const source = await this.#readFile(filePath);
-		const result = await this.#processSource(source, sourcePath, dependencyPath);
+		const result = await this.#processSource(source, sourcePath, dependencyPath, [
+			...ancestors,
+			filePath,
+		]);
 		this.#recordDependency(filePath, dependencyPath, result);
 
 		const { exportTokens } = result;
@@ -75,8 +81,11 @@ export default class FileSystemLoader {
 		});
 	}
 
-	#processSource(source, sourcePath, dependencyPath) {
-		return this.#processImportedCSS(source, sourcePath, dependencyPath, this.fetch.bind(this));
+	#processSource(source, sourcePath, dependencyPath, ancestors) {
+		// Keep ancestry per branch: concurrent imports may share an acyclic dependency.
+		const fetch = (request, relativeTo, childDependencyPath) =>
+			this.fetch(request, relativeTo, childDependencyPath, ancestors);
+		return this.#processImportedCSS(source, sourcePath, dependencyPath, fetch);
 	}
 
 	#recordDependency(filePath, dependencyPath, { injectableSource, exportTokens }) {
