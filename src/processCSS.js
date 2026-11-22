@@ -1,8 +1,8 @@
 import postcss from "postcss";
-import { readFile, writeFile } from "fs";
+import { readFile, realpath, writeFile } from "fs";
 import { makePlugin } from "./pluginFactory";
 
-const fileSystem = { readFile, writeFile };
+const fileSystem = { readFile, realpath, writeFile };
 
 export async function processCSS(source, filename, opts = {}) {
 	let tokens = {};

@@ -24,8 +24,11 @@ export default class FileSystemLoader {
 		const request = this.#normalizeRequest(_request);
 		const dependencyPath = this.#getOrCreateDependencyPath(_dependencyPath);
 		const { filePath, sourcePath } = await this.#resolvePaths(request, relativeTo);
-		if (ancestors.includes(filePath)) {
-			throw new Error(`Circular dependency: ${[...ancestors, filePath].join(" -> ")}`);
+		const identity = await this.#fileIdentity(filePath);
+		if (ancestors.some((ancestor) => ancestor.identity === identity)) {
+			throw new Error(
+				`Circular dependency: ${[...ancestors.map((ancestor) => ancestor.path), filePath].join(" -> ")}`,
+			);
 		}
 		const cachedTokens = this.#store.getTokens(filePath);
 		if (cachedTokens) return cachedTokens;
@@ -33,7 +36,7 @@ export default class FileSystemLoader {
 		const source = await this.#readFile(filePath);
 		const result = await this.#processSource(source, sourcePath, dependencyPath, [
 			...ancestors,
-			filePath,
+			{ identity, path: filePath },
 		]);
 		this.#recordDependency(filePath, dependencyPath, result);
 
@@ -77,6 +80,16 @@ export default class FileSystemLoader {
 			this.#fileSystem.readFile(filePath, "utf-8", (error, contents) => {
 				if (error) reject(error);
 				else resolve(contents);
+			});
+		});
+	}
+
+	#fileIdentity(filePath) {
+		if (typeof this.#fileSystem.realpath !== "function") return filePath;
+		return new Promise((resolve, reject) => {
+			this.#fileSystem.realpath(filePath, (error, resolvedPath) => {
+				if (error) reject(error);
+				else resolve(resolvedPath);
 			});
 		});
 	}

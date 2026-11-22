@@ -6,6 +6,7 @@ import { behaviours, getDefaultPlugins } from "../src/scoping";
 
 const nodeFileSystem = {
 	readFile: fs.readFile,
+	realpath: fs.realpath,
 	writeFile: fs.writeFile,
 };
 
@@ -101,6 +102,20 @@ describe("FileSystemLoader compatibility", () => {
 		expect(second).toBe(first);
 		expect(dependencyReads).toBe(1);
 		expect(loader.finalSources).toHaveLength(1);
+	});
+
+	it("detects a cycle through a symlinked directory", async () => {
+		const entry = writeCSS(directory, "a", '.a { composes: a from "./alias/a.css"; }');
+		fs.symlinkSync(
+			directory,
+			path.join(directory, "alias"),
+			process.platform === "win32" ? "junction" : "dir",
+		);
+		const loader = new FileSystemLoader("/", makePlugins(), undefined, nodeFileSystem);
+
+		await expect(loader.fetch("./alias/a.css", entry, "A")).rejects.toThrow(
+			/Circular dependency: .*alias[/\\]a\.css -> .*alias[/\\]alias[/\\]a\.css/,
+		);
 	});
 
 	it("orders nested dependencies before importers and keeps all projections aligned", async () => {
