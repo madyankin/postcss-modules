@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+
+- Reject circular `composes` and `@value` imports with an error naming the dependency chain instead of loading the files repeatedly. [#175](https://github.com/madyankin/postcss-modules/issues/175)
+
 ## 9.1.1
 
 ### Fixed
