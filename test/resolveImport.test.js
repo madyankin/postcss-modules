@@ -21,8 +21,8 @@ it("resolves a relative request from its importer", async () => {
 			root: "/",
 		}),
 	).resolves.toEqual({
-		filePath: "/project/dependency.css",
-		sourcePath: "/project/dependency.css",
+		filePath: path.resolve("/project/dependency.css"),
+		sourcePath: path.resolve("/project/dependency.css"),
 	});
 });
 
@@ -34,8 +34,8 @@ it("keeps an absolute request as both paths", async () => {
 			root: "/",
 		}),
 	).resolves.toEqual({
-		filePath: "/shared/dependency.css",
-		sourcePath: "/shared/dependency.css",
+		filePath: path.resolve("/shared/dependency.css"),
+		sourcePath: path.resolve("/shared/dependency.css"),
 	});
 });
 
@@ -97,7 +97,7 @@ it("keeps the path fallback when Node cannot resolve a bare specifier", async ()
 			resolveModule,
 		}),
 	).resolves.toEqual({
-		filePath: "/project/missing/styles.css",
-		sourcePath: "/project/missing/styles.css",
+		filePath: path.resolve("/project/missing/styles.css"),
+		sourcePath: path.resolve("/project/missing/styles.css"),
 	});
 });

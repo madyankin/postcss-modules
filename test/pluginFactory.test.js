@@ -1,3 +1,4 @@
+import path from "path";
 import postcss from "postcss";
 import { makePlugin } from "../src/pluginFactory";
 
@@ -139,11 +140,15 @@ function createMemoryFileSystem(files) {
 }
 
 it("keeps filesystem dependencies isolated between plugin instances", async () => {
+	const firstInput = path.resolve("/first/input.css");
+	const secondInput = path.resolve("/second/input.css");
+	const firstDependency = path.resolve("/first/dependency.css");
+	const secondDependency = path.resolve("/second/dependency.css");
 	const firstFileSystem = createMemoryFileSystem({
-		"/first/dependency.css": ".shared {}",
+		[firstDependency]: ".shared {}",
 	});
 	const secondFileSystem = createMemoryFileSystem({
-		"/second/dependency.css": ".shared {}",
+		[secondDependency]: ".shared {}",
 	});
 	const source = '.button { composes: shared from "./dependency.css"; }';
 	const makeIsolatedPlugin = (prefix, fileSystem) =>
@@ -151,17 +156,17 @@ it("keeps filesystem dependencies isolated between plugin instances", async () =
 
 	await Promise.all([
 		postcss([makeIsolatedPlugin("first", firstFileSystem)]).process(source, {
-			from: "/first/input.css",
+			from: firstInput,
 		}),
 		postcss([makeIsolatedPlugin("second", secondFileSystem)]).process(source, {
-			from: "/second/input.css",
+			from: secondInput,
 		}),
 	]);
 
-	expect(firstFileSystem.reads).toEqual([{ file: "/first/dependency.css", encoding: "utf-8" }]);
-	expect(secondFileSystem.reads).toEqual([{ file: "/second/dependency.css", encoding: "utf-8" }]);
-	expect(firstFileSystem.writes.map(({ file }) => file)).toEqual(["/first/input.css.json"]);
-	expect(secondFileSystem.writes.map(({ file }) => file)).toEqual(["/second/input.css.json"]);
+	expect(firstFileSystem.reads).toEqual([{ file: firstDependency, encoding: "utf-8" }]);
+	expect(secondFileSystem.reads).toEqual([{ file: secondDependency, encoding: "utf-8" }]);
+	expect(firstFileSystem.writes.map(({ file }) => file)).toEqual([`${firstInput}.json`]);
+	expect(secondFileSystem.writes.map(({ file }) => file)).toEqual([`${secondInput}.json`]);
 	expect(JSON.parse(firstFileSystem.writes[0].contents)).toEqual({
 		button: "first_button first_shared",
 	});
