@@ -1,5 +1,15 @@
 # Changelog
 
+## 9.1.4
+
+### Fixed
+
+- Use synchronous Node module hooks where available so the CSS loader runs without the Node 26 `module.register` deprecation warning, while retaining support for Node 20.6.
+
+### Internal
+
+- Update vulnerable and outdated development dependencies, and use Node 26 for the default Docker build.
+
 ## 9.1.3
 
 ### Fixed
