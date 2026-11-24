@@ -43,20 +43,20 @@
 		"postcss": "^8.0.0"
 	},
 	"devDependencies": {
-		"@eslint/js": "^9.39.4",
+		"@eslint/js": "^9.39.5",
 		"@swc/cli": "^0.8.1",
-		"@swc/core": "^1.15.43",
+		"@swc/core": "^1.16.22",
 		"@swc/jest": "^0.2.39",
-		"autoprefixer": "^10.5.2",
-		"eslint": "^9.39.0",
+		"autoprefixer": "^10.7.0",
+		"eslint": "^9.39.5",
 		"eslint-plugin-import": "^2.32.0",
-		"eslint-plugin-jest": "^29.15.4",
-		"globals": "^17.7.0",
+		"eslint-plugin-jest": "^29.17.1",
+		"globals": "^17.14.0",
 		"husky": "^9.1.7",
-		"jest": "^30.4.2",
-		"lint-staged": "^17.0.8",
+		"jest": "30.4.2",
+		"lint-staged": "^17.6.2",
 		"postcss": "^8.5.16",
-		"prettier": "^3.9.4"
+		"prettier": "^3.10.1"
 	},
 	"engines": {
 		"node": ">=20.6"
