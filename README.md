@@ -185,7 +185,7 @@ declare module "*.css" {
 - **ESM only.** `require("./x.css")` is not supported; the underlying transform is async and cannot be expressed through `require.extensions`. Use a `.mjs` entrypoint, or `"type": "module"` in `package.json`.
 - **Tokens only, no CSS output.** The loader returns the class-name map but does not emit the transformed CSS. SSR setups that need the stylesheet should use a bundler or call `postcss([require("postcss-modules")(...)]).process(...)` directly to capture both.
 - **No HMR, no watch mode** — by design. Use a bundler for those.
-- **Node ≥ 20.6.** `module.register` stabilized there.
+- **Node ≥ 20.6.** The loader uses `module.registerHooks` where available and falls back to `module.register` on older Node releases.
 
 ### Generating scoped names
 

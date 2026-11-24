@@ -1,4 +1,4 @@
-import { execFileSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import { existsSync, mkdtempSync, writeFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
@@ -39,6 +39,25 @@ it("returns the token map for a CSS file via JS import", () => {
 	const tokens = JSON.parse(out);
 	expect(Object.keys(tokens).sort()).toEqual(["article", "title"]);
 	expect(tokens.title).toMatch(/title/);
+});
+
+it("avoids deprecated hook registration on Node 26", () => {
+	if (Number(process.versions.node.split(".")[0]) < 26) return;
+	const cssPath = path.join(fixturesIn, "classes.css");
+	const result = spawnSync(
+		process.execPath,
+		[
+			"--import",
+			loaderUrl,
+			"--input-type=module",
+			"-e",
+			`import s from ${JSON.stringify(toImportSpecifier(cssPath))}; process.stdout.write(JSON.stringify(s));`,
+		],
+		{ cwd: repoRoot, encoding: "utf8" },
+	);
+	expect(result.status).toBe(0);
+	expect(result.stderr).not.toContain("DEP0205");
+	expect(JSON.parse(result.stdout)).toHaveProperty("title");
 });
 
 it("composes tokens across imported CSS files", () => {

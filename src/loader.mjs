@@ -1,3 +1,8 @@
-import { register } from "node:module";
+import * as nodeModule from "node:module";
+import { load } from "./loaderHooksSync.mjs";
 
-register("./loaderHooks.mjs", import.meta.url);
+if (typeof nodeModule.registerHooks === "function") {
+	nodeModule.registerHooks({ load });
+} else {
+	nodeModule.register("./loaderHooks.mjs", import.meta.url);
+}

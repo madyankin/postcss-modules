@@ -1,5 +1,5 @@
 BUILD_DIR	= ./build
-NODE_IMAGE	= node:22
+NODE_IMAGE	= node:26
 USE_DOCKER	?= 1
 
 ifeq ($(USE_DOCKER),1)
